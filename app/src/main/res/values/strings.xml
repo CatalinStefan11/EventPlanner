@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">EventPlanner</string>
+
+    <string name="facebook_application_id" translatable="false">eventPlanner</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fbeventPlanner</string>
+
+    <string name="usernameReg">Username</string>
+    <string name="emailReg">Email</string>
+    <string name="passwordReg">Password</string>
+    <string name="sign_upReg">Sign up</string>
+    <string name="sign_inLog">Sign in</string>
+    <string name="signin_redirect">Already a member? Sign in!</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="signup_redirect">Don\'t have an account? Register here!</string>
+    <string name="errorEmptyEmail">Email field is empty.</string>
+    <string name="errorEmptyPassword">Password field is empty</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+</resources>

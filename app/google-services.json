@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1075399257138",
+    "firebase_url": "https://eventplanner-ace8a.firebaseio.com",
+    "project_id": "eventplanner-ace8a",
+    "storage_bucket": "eventplanner-ace8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075399257138:android:71a51bd4f56716e009602b",
+        "android_client_info": {
+          "package_name": "ro.ase.eventplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1075399257138-abkm40kcl9b98cki8sugqpsqc05aceof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXlztcqYzQboh5vka6LCDKOMbXfk8NG0w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1075399257138-abkm40kcl9b98cki8sugqpsqc05aceof.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
