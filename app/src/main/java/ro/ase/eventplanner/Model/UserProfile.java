@@ -1,21 +1,31 @@
 package ro.ase.eventplanner.Model;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserProfile {
 
     private String email;
     private String username;
-    private String password;
+
 
     public UserProfile() {
         //firebase constructor
     }
 
 
-    public UserProfile(String email, String username, String password) {
+    public UserProfile(String email, String username) {
         this.email = email;
         this.username = username;
-        this.password = password;
+
+    }
+
+    public Map<String, Object> UserToMap(){
+        Map<String,Object> userMap = new HashMap<>();
+        userMap.put("username", this.username);
+        userMap.put("email", this.email);
+        return userMap;
     }
 
     public String getEmail() {
@@ -34,11 +44,5 @@ public class UserProfile {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

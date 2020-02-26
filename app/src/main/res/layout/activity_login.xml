@@ -31,11 +31,16 @@
                 android:id="@+id/singInLogo"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:layout_marginBottom="150dp"
+                android:layout_marginBottom="30dp"
                 android:contentDescription="Sign in text on registration activity"
                 android:src="@drawable/sign_in" />
 
-
+            <ProgressBar
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:id="@+id/progressBar2"
+                android:layout_gravity = "center"
+                android:layout_centerInParent="true"/>
 
 
             <AutoCompleteTextView
