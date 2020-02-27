@@ -19,9 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import ro.ase.eventplanner.MainActivity2;
 import ro.ase.eventplanner.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -75,8 +73,8 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         user = mFirebaseAuth.getCurrentUser();
         if(user != null) {
-//            finish();
-//            startActivity(new Intent(LoginActivity.this, MainActivity2.class));
+            finish();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
         }
     }
