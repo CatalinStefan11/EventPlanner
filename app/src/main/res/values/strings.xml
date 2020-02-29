@@ -35,5 +35,8 @@
     <string name="photos">PHOTOS</string>
 
 
-    <string name="string_next">Next</string>
+    <string name="string_next">Save</string>
+    <string name="hint_offer_name">Name of your brand</string>
+    <string name="hint_offer_description">A short description of your offer</string>
+    <string name="hint_offer_location">Your brand location</string>
 </resources>

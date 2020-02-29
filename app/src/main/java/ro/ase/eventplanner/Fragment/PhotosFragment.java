@@ -1,6 +1,6 @@
 package ro.ase.eventplanner.Fragment;
 
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -11,24 +11,21 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
 import java.util.ArrayList;
+import java.util.List;
 
 import ro.ase.eventplanner.Activity.NewOfferActivity;
 import ro.ase.eventplanner.Adapter.GridImageAdapter;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.FilePaths;
 import ro.ase.eventplanner.Util.FileSearch;
+import ro.ase.eventplanner.Util.FirebaseMethods;
 
 
 public class PhotosFragment extends Fragment {
@@ -39,29 +36,34 @@ public class PhotosFragment extends Fragment {
     private static final int NUM_GRID_COLUMNS = 3;
 
 
+
     //widgets
     private GridView gridView;
-    private ImageView galleryImage;
-    private ProgressBar mProgressBar;
     private Spinner directorySpinner;
 
     //vars
     private ArrayList<String> directories;
     private String mAppend = "file:/";
     private String mSelectedImage;
+    public static List<String> mSelected = new ArrayList<>();
+
+
+
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photos, container, false);
-        galleryImage = (ImageView) view.findViewById(R.id.galleryImageView);
+
         gridView = (GridView) view.findViewById(R.id.gridView);
         directorySpinner = (Spinner) view.findViewById(R.id.spinnerDirectory);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        mProgressBar.setVisibility(View.GONE);
+
         directories = new ArrayList<>();
+
         Log.d(TAG, "onCreateView: started.");
+
+
 
         ImageView shareClose = (ImageView) view.findViewById(R.id.ivCloseShare);
         shareClose.setOnClickListener(new View.OnClickListener() {
@@ -77,36 +79,23 @@ public class PhotosFragment extends Fragment {
         nextScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: navigating to the final offer screen.");
+                Log.d(TAG, "onClick: save object to firebase.");
+                FirebaseMethods firebaseMethods= new FirebaseMethods(getContext());
+                firebaseMethods.addNewBallroom(NewOfferActivity.sBallroom, mSelected);
 
-//                if(isRootTask()){
-//                    Intent intent = new Intent(getActivity(), NextActivity.class);
-//                    intent.putExtra(getString(R.string.selected_image), mSelectedImage);
-//                    startActivity(intent);
-//                }else{
-//                    Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
-//                    intent.putExtra(getString(R.string.selected_image), mSelectedImage);
-//                    intent.putExtra(getString(R.string.return_to_fragment), getString(R.string.edit_profile_fragment));
-//                    startActivity(intent);
-//                    getActivity().finish();
-//                }
 
             }
         });
 
+
         init();
+
+
 
         return view;
     }
 
-    private boolean isRootTask(){
-        if(((NewOfferActivity)getActivity()).getTask() == 0){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
+
 
     private void init(){
         FilePaths filePaths = new FilePaths();
@@ -133,9 +122,8 @@ public class PhotosFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "onItemClick: selected: " + directories.get(position));
-
-                //setup our image grid for the directory chosen
                 setupGridView(directories.get(position));
+                mSelected = new ArrayList<>();
             }
 
             @Override
@@ -150,63 +138,60 @@ public class PhotosFragment extends Fragment {
         Log.d(TAG, "setupGridView: directory chosen: " + selectedDirectory);
         final ArrayList<String> imgURLs = FileSearch.getFilePaths(selectedDirectory);
 
-        //set the grid column width
+
         int gridWidth = getResources().getDisplayMetrics().widthPixels;
         int imageWidth = gridWidth/NUM_GRID_COLUMNS;
         gridView.setColumnWidth(imageWidth);
 
-        //use the grid adapter to adapter the images to gridview
+
         GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview, mAppend, imgURLs);
         gridView.setAdapter(adapter);
 
-        //set the first image to be displayed when the activity fragment view is inflated
+
         try{
-//            setImage(imgURLs.get(0), galleryImage, mAppend);
+
             mSelectedImage = imgURLs.get(0);
         }catch (ArrayIndexOutOfBoundsException e){
             Log.e(TAG, "setupGridView: ArrayIndexOutOfBoundsException: " +e.getMessage() );
         }
+
+
+        gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "onItemClick: selected an image: " + imgURLs.get(position));
 
-//                setImage(imgURLs.get(position), galleryImage, mAppend);
-                mSelectedImage = imgURLs.get(position);
+
+
+                if(mSelected.contains(imgURLs.get(position))){
+                    mSelected.remove(imgURLs.get(position));
+                    view.setAlpha(1.0F);
+                    view.setPadding(0,0,0,0);
+                    view.setBackgroundColor(Color.WHITE);
+
+
+                }else{
+                    mSelected.add(imgURLs.get(position));
+                    view.setAlpha(0.5F);
+                    view.setPadding(10,10,10,10);
+                    view.setBackgroundColor(Color.BLACK);
+
+
+                }
+
+
             }
         });
+
+
+
 
     }
 
 
-    private void setImage(String imgURL, ImageView image, String append){
-        Log.d(TAG, "setImage: setting image");
 
-        ImageLoader imageLoader = ImageLoader.getInstance();
-
-        imageLoader.displayImage(append + imgURL, image, new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                mProgressBar.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                mProgressBar.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-                mProgressBar.setVisibility(View.INVISIBLE);
-            }
-        });
-    }
 }
 
 

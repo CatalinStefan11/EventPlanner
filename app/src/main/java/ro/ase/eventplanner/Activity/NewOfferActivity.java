@@ -5,8 +5,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,9 +12,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.google.firebase.auth.FirebaseAuth;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
+import ro.ase.eventplanner.Model.BallroomFirebase;
 
 import ro.ase.eventplanner.Util.Permissons;
 
@@ -38,10 +41,14 @@ public class NewOfferActivity extends AppCompatActivity {
     private static final int ACTIVITY_NUM = 2;
     private static final int VERIFY_PERMISSIONS_REQUEST = 1;
 
+//    private ViewPager mViewPager;
     private ViewPager mViewPager;
     public static ImageLoader sImageLoader;
+    public static BallroomFirebase sBallroom = new BallroomFirebase();
 
     private Context mContext = NewOfferActivity.this;
+    private FirebaseAuth mFirebaseAuth;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +56,8 @@ public class NewOfferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_offer);
         Log.d(TAG, "onCreate: started.");
 
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        sBallroom.setCreator(mFirebaseAuth.getCurrentUser().getUid());
         sImageLoader = ImageLoader.getInstance();
         sImageLoader.init(ImageLoaderConfiguration.createDefault(getBaseContext()));
 
@@ -66,6 +75,10 @@ public class NewOfferActivity extends AppCompatActivity {
      * 1 = PhotoFragment
      * @return
      */
+//    public int getCurrentTabNumber(){
+//        return mViewPager.getCurrentItem();
+//    }
+
     public int getCurrentTabNumber(){
         return mViewPager.getCurrentItem();
     }
@@ -79,15 +92,54 @@ public class NewOfferActivity extends AppCompatActivity {
         adapter.addFragment(new PhotosFragment());
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager_container);
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(adapter);
 
+
+
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 1){
+
+                    sBallroom.setName(InformationsFragment.mTextInfoName.getText().toString());
+                    sBallroom.setDescription(InformationsFragment.mTextInfoDescription.getText().toString());
+                    sBallroom.setLocation(InformationsFragment.mTextInfoLocation.getText().toString());
+                    Log.d("INFO", sBallroom.toString());
+
+                }else if( position == 0){
+
+                    Log.d("INFO", sBallroom.toString());
+                }
+                Log.d("VIEW_PAGER", String.valueOf(position));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabsBottom);
+
         tabLayout.setupWithViewPager(mViewPager);
+//        tabLayout.setupWithViewPager(mViewPager);
 
         tabLayout.getTabAt(0).setText(getString(R.string.information));
         tabLayout.getTabAt(1).setText(getString(R.string.photos));
 
+
+
     }
+
+
 
     public int getTask(){
         Log.d(TAG, "getTask: TASK: " + getIntent().getFlags());
@@ -145,16 +197,8 @@ public class NewOfferActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * BottomNavigationView setup
-     */
-//    private void setupBottomNavigationView(){
-//        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-//        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
-//        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-//        BottomNavigationViewHelper.enableNavigation(mContext, this,bottomNavigationViewEx);
-//        Menu menu = bottomNavigationViewEx.getMenu();
-//        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-//        menuItem.setChecked(true);
-//    }
+
+
+
+
 }

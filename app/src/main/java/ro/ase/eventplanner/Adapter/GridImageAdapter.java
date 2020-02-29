@@ -3,6 +3,7 @@ package ro.ase.eventplanner.Adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import java.util.ArrayList;
@@ -47,6 +47,8 @@ public class GridImageAdapter extends ArrayAdapter<String> {
     private static class ViewHolder{
         SquareImageView image;
         ProgressBar mProgressBar;
+        boolean isSelected = false;
+
     }
 
     @NonNull
@@ -62,14 +64,15 @@ public class GridImageAdapter extends ArrayAdapter<String> {
             holder = new ViewHolder();
             holder.mProgressBar = (ProgressBar) convertView.findViewById(R.id.gridImageProgressbar);
             holder.image = (SquareImageView) convertView.findViewById(R.id.gridImageView);
-
             convertView.setTag(holder);
         }
         else{
             holder = (ViewHolder) convertView.getTag();
         }
 
+
         String imgURL = getItem(position);
+
 
 
 
@@ -104,6 +107,13 @@ public class GridImageAdapter extends ArrayAdapter<String> {
                 }
             }
         });
+
+
+        if(holder.isSelected){
+            final int PADDING = 16;
+            Log.d("GridImageAdapter", "position " + position + " is selected");
+
+        }
 
         return convertView;
     }

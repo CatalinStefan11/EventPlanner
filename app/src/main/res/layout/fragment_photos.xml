@@ -21,41 +21,43 @@
         android:orientation="vertical"
         android:layout_below="@id/relLayout1">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="60">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_weight="60">-->
 
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/galleryImageView"
-                android:scaleType="centerCrop"/>
+<!--            <ImageView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:id="@+id/galleryImageView"-->
+<!--                android:scaleType="centerCrop"/>-->
 
-            <ProgressBar
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/progressBar"
-                android:layout_centerInParent="true"/>
+<!--            <ProgressBar-->
+<!--                android:layout_width="100dp"-->
+<!--                android:layout_height="100dp"-->
+<!--                android:id="@+id/progressBar"-->
+<!--                android:layout_centerInParent="true"/>-->
 
-        </RelativeLayout>
+<!--        </RelativeLayout>-->
 
         <GridView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="40"
+            android:layout_weight="100"
             android:id="@+id/gridView"
             android:numColumns="3"
             android:verticalSpacing="1.5dp"
             android:horizontalSpacing="1.5dp"
             android:stretchMode="none"
             android:gravity="center"
-            android:layout_marginTop="1dp">
+            android:layout_marginTop="1dp"
+        >
 
 
 
         </GridView>
+
 
     </LinearLayout>
 
