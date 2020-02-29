@@ -5,19 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import ro.ase.eventplanner.Model.UserProfile;
 import ro.ase.eventplanner.R;
 
@@ -27,14 +30,16 @@ public class RegisterActivity extends AppCompatActivity {
     private Button mButtonSignUp;
     private TextView mTextSingIn;
     private FirebaseAuth mFirebaseAuth;
-    private FirebaseDatabase mFirebaseDatabase;
+    private FirebaseFirestore mFirestore;
+    private ProgressBar mProgressBar;
+    private static final String TAG = "RegisterActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         initializeUI();
-
+        mProgressBar.setVisibility(View.GONE);
 
         mButtonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,10 +49,14 @@ public class RegisterActivity extends AppCompatActivity {
                 final String inputEmail = mEmail.getText().toString().trim();
 
                 if (isValid(inputName, inputPw, inputEmail)) {
+                    mProgressBar.setVisibility(View.VISIBLE);
                     register(inputName, inputPw, inputEmail);
                 }
             }
         });
+
+
+
 
 
         mTextSingIn.setOnClickListener(new View.OnClickListener() {
@@ -66,10 +75,11 @@ public class RegisterActivity extends AppCompatActivity {
         mTextSingIn = findViewById(R.id.textYouHaveAccAlready);
         mButtonSignUp = findViewById(R.id.buttonSignUpReg);
         mFirebaseAuth = FirebaseAuth.getInstance();
+        mProgressBar = findViewById(R.id.progressBar);
     }
 
 
-    private void register(final String inputUsername, final String inputPass,
+    private void register(final String inputUsername, String inputPass,
                           final String inputEmail) {
 
         mFirebaseAuth.createUserWithEmailAndPassword(inputEmail, inputPass)
@@ -77,16 +87,20 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            sendUserData(inputEmail, inputUsername, inputPass);
+
+                            String userId = task.getResult().getUser().getUid();
                             Toast.makeText(RegisterActivity.this,
                                     "You've been registered successfully.",
                                     Toast.LENGTH_SHORT).show();
 
+                            mProgressBar.setVisibility(View.GONE);
+                            sendUserData(userId, inputEmail, inputUsername);
                             startActivity(new Intent(RegisterActivity.this,
                                     LoginActivity.class));
                         } else {
                             Toast.makeText(RegisterActivity.this,
                                     "Email already exists.", Toast.LENGTH_SHORT).show();
+                            mProgressBar.setVisibility(View.GONE);
                         }
 
 
@@ -96,12 +110,20 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void sendUserData(String email, String username, String password) {
+    private void sendUserData(String userId,String email, String username) {
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference users = mFirebaseDatabase.getReference("users");
-        UserProfile user = new UserProfile(email, username, password);
-        users.push().setValue(user);
+        mFirestore = FirebaseFirestore.getInstance();
+        UserProfile user = new UserProfile(email, username);
+
+        mFirestore.collection("users")
+                .document(userId).set(user)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+
     }
 
     private boolean isValid(String username, String password, String email) {

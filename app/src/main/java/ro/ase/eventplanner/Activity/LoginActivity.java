@@ -20,7 +20,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import ro.ase.eventplanner.MainActivity2;
 import ro.ase.eventplanner.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -30,12 +29,11 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mForgotPass;
     private TextView mSingUp;
     private Button mButtonSingIn;
-    private FirebaseAuth mFirebaseAuth;
+    public static FirebaseAuth mFirebaseAuth;
     private FirebaseUser user;
     private ImageView mImgSingIn;
     private ImageView mButtonFacebook;
     private ProgressBar mProgressBar;
-
 
 
     @Override
@@ -44,16 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         initializeUI();
-
-//        user = mFirebaseAuth.getCurrentUser();
-//
-//
-//        if(user != null){
-//            finish();
-//            startActivity(new Intent(LoginActivity.this, MainActivity2.class));
-//        }
-
-
+        mProgressBar.setVisibility(View.GONE);
         mButtonSingIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                 String passFromText = mPassword.getText().toString();
 
                 if(isValid(emailFromText,passFromText)){
+                    mProgressBar.setVisibility(View.VISIBLE);
                     singIn(emailFromText, passFromText);
                 }
             }
@@ -75,13 +65,23 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        user = mFirebaseAuth.getCurrentUser();
+        if(user != null) {
+            finish();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+        }
+    }
+
+
+
     private void singIn(String email, String password){
-
-
 
         mFirebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -89,11 +89,12 @@ public class LoginActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
 
                     Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
+                    mProgressBar.setVisibility(View.GONE);
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
                 else{
-
                     Toast.makeText(LoginActivity.this,"Invalid email or password",Toast.LENGTH_SHORT).show();
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
         });
@@ -110,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
         mImgSingIn = findViewById(R.id.singInLogo);
         mButtonFacebook = findViewById(R.id.imageFacebook);
         mFirebaseAuth = FirebaseAuth.getInstance();
+        mProgressBar = findViewById(R.id.progressBar2);
 
 
     }

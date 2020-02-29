@@ -4,6 +4,8 @@
     <string name="facebook_application_id" translatable="false">eventPlanner</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fbeventPlanner</string>
 
+    <string name="menu_action_add_offer">Add your offer</string>
+
     <string name="usernameReg">Username</string>
     <string name="emailReg">Email</string>
     <string name="passwordReg">Password</string>
@@ -28,4 +30,13 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+
+    <string name="information">INFO</string>
+    <string name="photos">PHOTOS</string>
+
+
+    <string name="string_next">Save</string>
+    <string name="hint_offer_name">Name of your brand</string>
+    <string name="hint_offer_description">A short description of your offer</string>
+    <string name="hint_offer_location">Your brand location</string>
 </resources>
