@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tabsBottom"
-            android:background="@color/white">
+            android:background="@color/white"
+            >
 
         </com.google.android.material.tabs.TabLayout>
 

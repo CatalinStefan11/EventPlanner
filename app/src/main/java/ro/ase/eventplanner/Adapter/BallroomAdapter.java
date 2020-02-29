@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import ro.ase.eventplanner.Model.Ballroom;
+import ro.ase.eventplanner.Model.Ballroom2;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.BallroomResult;
 
@@ -26,7 +26,7 @@ public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.Ballro
     private final LayoutInflater inflater;
     private View view;
     private BallroomViewHolder mBallroomViewHolder;
-    private List<Ballroom> mBallrooms;
+    private List<Ballroom2> mBallroom2s;
     private BallroomResult mBallroomResult = new BallroomResult();
 
     public BallroomAdapter(Context context) {
@@ -34,9 +34,9 @@ public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.Ballro
         inflater = LayoutInflater.from(context);
     }
 
-    public void setBallrooms(List<Ballroom> lists) {
-        this.mBallrooms = lists;
-        mBallroomResult.setBallroomList(mBallrooms);
+    public void setBallroom2s(List<Ballroom2> lists) {
+        this.mBallroom2s = lists;
+        mBallroomResult.setBallroom2List(mBallroom2s);
 
 
         notifyDataSetChanged();
@@ -58,12 +58,12 @@ public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.Ballro
     public void onBindViewHolder(@NonNull BallroomViewHolder holder, final int position) {
         Picasso
                 .with(context)
-                .load(Uri.parse(mBallrooms.get(position).getImageUrl()))
+                .load(Uri.parse(mBallroom2s.get(position).getImageUrl()))
                 .into(holder.ballroomImage);
 
-        holder.ballroomRatings.setText(mBallrooms.get(position).getRatings());
-        holder.ballroomName.setText(mBallrooms.get(position).getName());
-        holder.ballroomLikes.setText(mBallrooms.get(position).getLikes() + "\nLikes");
+        holder.ballroomRatings.setText(mBallroom2s.get(position).getRatings());
+        holder.ballroomName.setText(mBallroom2s.get(position).getName());
+        holder.ballroomLikes.setText(mBallroom2s.get(position).getLikes() + "\nLikes");
 
 
     }
@@ -71,7 +71,7 @@ public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.Ballro
 
     @Override
     public int getItemCount() {
-        return mBallrooms.size();
+        return mBallroom2s.size();
     }
 
     class BallroomViewHolder extends RecyclerView.ViewHolder {

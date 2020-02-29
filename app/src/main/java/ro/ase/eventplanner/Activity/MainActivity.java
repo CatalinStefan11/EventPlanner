@@ -17,10 +17,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
+import ro.ase.eventplanner.Model.BallroomFirebase;
 import ro.ase.eventplanner.R;
+import ro.ase.eventplanner.Util.FirebaseMethods;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,21 +41,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-//        mFirestore = FirebaseFirestore.getInstance();
-//        mFirestore.collection("users")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.d(TAG, document.getId() + " => " + document.getData());
-//                            }
-//                        } else {
-//                            Log.w(TAG, "Error getting documents.", task.getException());
-//                        }
-//                    }
-//                });
+        FirebaseMethods fb = new FirebaseMethods(this);
+        List<BallroomFirebase> ballroomFirebase = fb.getAllBallroomsFirebase();
+       Log.d("SIZE:", String.valueOf(ballroomFirebase.size()));
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

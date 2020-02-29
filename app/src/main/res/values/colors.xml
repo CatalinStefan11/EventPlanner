@@ -8,4 +8,8 @@
     <color name="black">#000000</color>
     <color name="link_blue">#4d94ff</color>
     <color name="grey">#bfbfbf</color>
+
+
+    <color name="backgroundPink">#FEEAE6</color>
+    <color name="brown">#442C2E</color>
 </resources>

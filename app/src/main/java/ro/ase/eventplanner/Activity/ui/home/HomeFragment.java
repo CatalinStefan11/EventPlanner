@@ -4,13 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import ro.ase.eventplanner.Adapter.BallroomAdapter;
-import ro.ase.eventplanner.Model.Ballroom;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.BallroomResult;
 
@@ -49,7 +44,7 @@ public class HomeFragment extends Fragment {
         mBallroomResult = gson.fromJson(br, BallroomResult.class);
 
 
-        ballroomAdapter.setBallrooms(mBallroomResult.getBallroomList());
+        ballroomAdapter.setBallroom2s(mBallroomResult.getBallroom2List());
         mBallroomRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBallroomRecyclerView.setAdapter(ballroomAdapter);
 

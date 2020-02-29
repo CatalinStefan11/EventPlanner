@@ -88,11 +88,13 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
+                            String userId = task.getResult().getUser().getUid();
                             Toast.makeText(RegisterActivity.this,
                                     "You've been registered successfully.",
                                     Toast.LENGTH_SHORT).show();
+
                             mProgressBar.setVisibility(View.GONE);
-                            sendUserData(inputEmail, inputUsername);
+                            sendUserData(userId, inputEmail, inputUsername);
                             startActivity(new Intent(RegisterActivity.this,
                                     LoginActivity.class));
                         } else {
@@ -108,19 +110,13 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void sendUserData(String email, String username) {
+    private void sendUserData(String userId,String email, String username) {
 
         mFirestore = FirebaseFirestore.getInstance();
         UserProfile user = new UserProfile(email, username);
 
-        mFirestore.collection("users").add(user.UserToMap())
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " +
-                                documentReference.getId());
-                    }
-                })
+        mFirestore.collection("users")
+                .document(userId).set(user)
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {

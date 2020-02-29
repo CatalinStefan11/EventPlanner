@@ -3,8 +3,11 @@ package ro.ase.eventplanner.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
 import java.util.List;
 
+@IgnoreExtraProperties
 public class BallroomFirebase implements Parcelable {
 
     private String name;
@@ -13,9 +16,10 @@ public class BallroomFirebase implements Parcelable {
     private String creator;
     private List<String> images_links;
 
-    public BallroomFirebase(){
-
+    public BallroomFirebase()
+    {
     }
+
 
     public BallroomFirebase(String name, String description, String location, String creator, List<String> images_links) {
         this.name = name;
