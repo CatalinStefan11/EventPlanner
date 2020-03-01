@@ -30,21 +30,31 @@ import ro.ase.eventplanner.Model.BallroomFirebase;
 
 public class FirebaseMethods {
 
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseFirestore mFirestore;
-    private String userId;
-    private FirebaseStorage mStorageReference;
-    private Context mContext;
+    private static FirebaseMethods ourInstance = null;
+    private static FirebaseAuth mFirebaseAuth;
+    private static FirebaseFirestore mFirestore;
+    private static String userId;
+    private static FirebaseStorage mStorageReference;
+    private static Context mContext;
+    private String TAG = "FirebaseMethods";
 
-    public FirebaseMethods(Context context) {
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirestore = FirebaseFirestore.getInstance();
-        mContext = context;
-        mStorageReference = FirebaseStorage.getInstance();
 
-        if (mFirebaseAuth.getCurrentUser() != null) {
-            userId = mFirebaseAuth.getCurrentUser().getUid();
+    public static FirebaseMethods getInstance(Context context) {
+
+        if (ourInstance == null) {
+            ourInstance = new FirebaseMethods();
+            mContext = context;
+            mFirebaseAuth = FirebaseAuth.getInstance();
+            mFirestore = FirebaseFirestore.getInstance();
+            mContext = context;
+            mStorageReference = FirebaseStorage.getInstance();
+
+            if (mFirebaseAuth.getCurrentUser() != null) {
+                userId = mFirebaseAuth.getCurrentUser().getUid();
+            }
+
         }
+        return ourInstance;
     }
 
 
@@ -102,94 +112,39 @@ public class FirebaseMethods {
         }
     }
 
-    public List<BallroomFirebase> getAllBallroomsFirebase() {
+
+    public void readBallrooms(final Callbacks myCallback) {
 
         final List<BallroomFirebase> mList = new ArrayList<>();
 
-        Task<QuerySnapshot> task = mFirestore.collection("ballrooms").get();
+        mFirestore.collection("ballrooms")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
 
-
-        task.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                            for(QueryDocumentSnapshot document : task.getResult()){
-
-                                Log.d("DOCUMENT",
-                                        document.getId() + " => " + document.getData());
+                                Log.d(TAG, document.getId() + " => " + document.getData());
                                 mList.add(document.toObject(BallroomFirebase.class));
 
 
                             }
-                            Log.d("SIZE FROM INSIDE",  String.valueOf(mList.size()));
-
-                            Log.d("OBJECT", mList.toString());
+                        myCallback.OnGetAllBallrooms(mList);
+                        }else {
+                            Log.d(TAG, "Error getting data!!!");
                         }
-
-
-
-            }
-        });
-
-        return mList;
-
-    }
-
-
-//        mFirestore.collection("ballrooms")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if(task.isSuccessful()) {
-//                            for(QueryDocumentSnapshot document : task.getResult()){
-//
-//                                Log.d("DOCUMENT",
-//                                        document.getId() + " => " + document.getData());
-//                                mList.add(document.toObject(BallroomFirebase.class));
-//
-//
-//                            }
-//                            Log.d("SIZE FROM INSIDE",  String.valueOf(mList.size()));
-//
-//                            Log.d("OBJECT", mList.toString());
-//                        }
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(mContext, "Error getting data!!!", Toast.LENGTH_LONG).show();
-//                    }
-//                });
-
-
-    public List<Ballroom> getBallrooms(List<BallroomFirebase> mList) {
-
-        List<Ballroom> ballrooms = new ArrayList<>();
-
-
-        for (int i = 0; i < mList.size(); i++) {
-
-            BallroomFirebase blFromDB = mList.get(i);
-            List<String> image_lins = blFromDB.getImages_links();
-
-            for (int j = 0; j < image_lins.size(); j++) {
-                StorageReference photoReference =
-                        mStorageReference.getReference(image_lins.get(j));
-
-                photoReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onSuccess(Uri uri) {
-                        Log.d("URI:", uri.toString());
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(mContext, "Error getting data!!!", Toast.LENGTH_LONG).show();
                     }
                 });
 
-            }
-        }
-        return ballrooms;
-
     }
+
 
 
 }

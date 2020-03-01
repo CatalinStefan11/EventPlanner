@@ -21,16 +21,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ro.ase.eventplanner.Model.BallroomFirebase;
 import ro.ase.eventplanner.R;
+import ro.ase.eventplanner.Util.Callbacks;
 import ro.ase.eventplanner.Util.FirebaseMethods;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore mFirestore;
     private AppBarConfiguration mAppBarConfiguration;
+
     private static final String TAG = "MainActivity";
 
     @Override
@@ -41,10 +44,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        FirebaseMethods fb = new FirebaseMethods(this);
-        List<BallroomFirebase> ballroomFirebase = fb.getAllBallroomsFirebase();
-       Log.d("SIZE:", String.valueOf(ballroomFirebase.size()));
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+
+
+
 
 
 
@@ -89,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+
 
 
 }

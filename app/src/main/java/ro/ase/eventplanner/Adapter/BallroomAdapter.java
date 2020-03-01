@@ -4,6 +4,7 @@ package ro.ase.eventplanner.Adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +12,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.squareup.picasso.Picasso;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 import java.util.List;
 
 import ro.ase.eventplanner.Model.Ballroom2;
+import ro.ase.eventplanner.Model.BallroomFirebase;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.BallroomResult;
 
@@ -26,20 +35,17 @@ public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.Ballro
     private final LayoutInflater inflater;
     private View view;
     private BallroomViewHolder mBallroomViewHolder;
-    private List<Ballroom2> mBallroom2s;
-    private BallroomResult mBallroomResult = new BallroomResult();
+    private List<BallroomFirebase> mBallrooms;
+    private StorageReference mStorageReference;
+    private final RequestManager glide;
 
-    public BallroomAdapter(Context context) {
+
+    public BallroomAdapter(Context context, List<BallroomFirebase> ballrooms, RequestManager manager) {
         this.context = context;
         inflater = LayoutInflater.from(context);
-    }
+        mBallrooms = ballrooms;
+        this.glide = manager;
 
-    public void setBallroom2s(List<Ballroom2> lists) {
-        this.mBallroom2s = lists;
-        mBallroomResult.setBallroom2List(mBallroom2s);
-
-
-        notifyDataSetChanged();
     }
 
 
@@ -55,15 +61,29 @@ public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.Ballro
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BallroomViewHolder holder, final int position) {
-        Picasso
-                .with(context)
-                .load(Uri.parse(mBallroom2s.get(position).getImageUrl()))
-                .into(holder.ballroomImage);
+    public void onBindViewHolder(@NonNull final BallroomViewHolder holder, final int position) {
 
-        holder.ballroomRatings.setText(mBallroom2s.get(position).getRatings());
-        holder.ballroomName.setText(mBallroom2s.get(position).getName());
-        holder.ballroomLikes.setText(mBallroom2s.get(position).getLikes() + "\nLikes");
+
+
+        mStorageReference = FirebaseStorage
+                .getInstance()
+                .getReference(mBallrooms.get(position).getImages_links().get(0));
+        mStorageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                RequestOptions options = new RequestOptions();
+                options.centerCrop();
+                Uri downloadUri = task.getResult();
+                glide.load(downloadUri).apply(options).into(holder.ballroomImage);
+            }
+        });
+
+
+
+//
+//        holder.ballroomRatings.setText(mBallrooms.get(position).getRatings());
+        holder.ballroomName.setText(mBallrooms.get(position).getName());
+//        holder.ballroomLikes.setText(mBallrooms.get(position).getLikes() + "\nLikes");
 
 
     }
@@ -71,7 +91,7 @@ public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.Ballro
 
     @Override
     public int getItemCount() {
-        return mBallroom2s.size();
+        return mBallrooms.size();
     }
 
     class BallroomViewHolder extends RecyclerView.ViewHolder {
@@ -82,9 +102,10 @@ public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.Ballro
         public BallroomViewHolder(@NonNull View itemView) {
             super(itemView);
             ballroomImage = itemView.findViewById(R.id.ballroomImage);
-            ballroomRatings = itemView.findViewById(R.id.ratings);
+//            ballroomRatings = itemView.findViewById(R.id.ratings);
             ballroomName = itemView.findViewById(R.id.ballroomNamet);
-            ballroomLikes = itemView.findViewById(R.id.ballroomLikes);
+//            ballroomLikes = itemView.findViewById(R.id.ballroomLikes);
+
 
 
         }
