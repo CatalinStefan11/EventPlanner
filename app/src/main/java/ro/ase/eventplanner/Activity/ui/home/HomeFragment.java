@@ -1,6 +1,7 @@
 package ro.ase.eventplanner.Activity.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import java.io.InputStreamReader;
 import ro.ase.eventplanner.Adapter.BallroomAdapter;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.BallroomResult;
+import ro.ase.eventplanner.Util.FirebaseMethods;
 
 public class HomeFragment extends Fragment {
 
@@ -49,7 +51,11 @@ public class HomeFragment extends Fragment {
         mBallroomRecyclerView.setAdapter(ballroomAdapter);
 
 
+
         return root;
+
+
+
     }
 
 

@@ -20,7 +20,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.List;
+
+import ro.ase.eventplanner.Model.BallroomFirebase;
 import ro.ase.eventplanner.R;
+import ro.ase.eventplanner.Util.FirebaseMethods;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -73,6 +77,8 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         user = mFirebaseAuth.getCurrentUser();
         if(user != null) {
+            FirebaseMethods fb = new FirebaseMethods(getApplicationContext());
+            fb.getAllBallroomsFirebase();
             finish();
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
@@ -87,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+
 
                     Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
                     mProgressBar.setVisibility(View.GONE);

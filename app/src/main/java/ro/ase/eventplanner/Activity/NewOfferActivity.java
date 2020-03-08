@@ -21,6 +21,7 @@ import java.util.Arrays;
 
 import ro.ase.eventplanner.Model.BallroomFirebase;
 
+import ro.ase.eventplanner.Util.FirebaseMethods;
 import ro.ase.eventplanner.Util.Permissons;
 
 
@@ -66,6 +67,8 @@ public class NewOfferActivity extends AppCompatActivity {
         }else{
             verifyPermissions(Permissons.PERMISSIONS);
         }
+
+
 
     }
 

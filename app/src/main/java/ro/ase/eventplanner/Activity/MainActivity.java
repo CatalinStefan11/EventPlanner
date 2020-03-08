@@ -41,13 +41,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        FirebaseMethods fb = new FirebaseMethods(this);
-        List<BallroomFirebase> ballroomFirebase = fb.getAllBallroomsFirebase();
-       Log.d("SIZE:", String.valueOf(ballroomFirebase.size()));
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
-
-
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -61,6 +54,18 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
+        FirebaseMethods firebaseMethods = new FirebaseMethods(getApplicationContext());
+        firebaseMethods.getAllBallroomsFirebase();
+
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d("PLM", FirebaseMethods.mList.toString());
+
+        super.onResume();
     }
 
     @Override
