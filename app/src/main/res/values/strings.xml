@@ -39,4 +39,12 @@
     <string name="hint_offer_name">Name of your brand</string>
     <string name="hint_offer_description">A short description of your offer</string>
     <string name="hint_offer_location">Your brand location</string>
+
+
+
+    <string-array name="spinnerServicesArray">
+        <item>Ballroom</item>
+        <item>Photographer</item>
+        <item>Decorations</item>
+    </string-array>
 </resources>

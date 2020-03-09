@@ -16,12 +16,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
+import ro.ase.eventplanner.Model.ServiceProvided;
 
-import ro.ase.eventplanner.Model.BallroomFirebase;
-
-import ro.ase.eventplanner.Util.FirebaseMethods;
 import ro.ase.eventplanner.Util.Permissons;
 
 
@@ -45,7 +41,7 @@ public class NewOfferActivity extends AppCompatActivity {
 //    private ViewPager mViewPager;
     private ViewPager mViewPager;
     public static ImageLoader sImageLoader;
-    public static BallroomFirebase sBallroom = new BallroomFirebase();
+    public static ServiceProvided sServiceProvided = new ServiceProvided();
 
     private Context mContext = NewOfferActivity.this;
     private FirebaseAuth mFirebaseAuth;
@@ -58,7 +54,7 @@ public class NewOfferActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: started.");
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-        sBallroom.setCreator(mFirebaseAuth.getCurrentUser().getUid());
+        sServiceProvided.setCreator(mFirebaseAuth.getCurrentUser().getUid());
         sImageLoader = ImageLoader.getInstance();
         sImageLoader.init(ImageLoaderConfiguration.createDefault(getBaseContext()));
 
@@ -111,14 +107,14 @@ public class NewOfferActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 if(position == 1){
 
-                    sBallroom.setName(InformationsFragment.mTextInfoName.getText().toString());
-                    sBallroom.setDescription(InformationsFragment.mTextInfoDescription.getText().toString());
-                    sBallroom.setLocation(InformationsFragment.mTextInfoLocation.getText().toString());
-                    Log.d("INFO", sBallroom.toString());
+                    sServiceProvided.setName(InformationsFragment.mTextInfoName.getText().toString());
+                    sServiceProvided.setDescription(InformationsFragment.mTextInfoDescription.getText().toString());
+                    sServiceProvided.setLocation(InformationsFragment.mTextInfoLocation.getText().toString());
+                    Log.d("INFO", sServiceProvided.toString());
 
                 }else if( position == 0){
 
-                    Log.d("INFO", sBallroom.toString());
+                    Log.d("INFO", sServiceProvided.toString());
                 }
                 Log.d("VIEW_PAGER", String.valueOf(position));
             }

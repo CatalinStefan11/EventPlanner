@@ -17,20 +17,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.List;
-
-import ro.ase.eventplanner.Model.BallroomFirebase;
 import ro.ase.eventplanner.R;
-import ro.ase.eventplanner.Util.FirebaseMethods;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore mFirestore;
     private AppBarConfiguration mAppBarConfiguration;
+
     private static final String TAG = "MainActivity";
 
     @Override
@@ -39,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+
+
+
+
+
 
 
 
@@ -54,18 +57,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-
-        FirebaseMethods firebaseMethods = new FirebaseMethods(getApplicationContext());
-        firebaseMethods.getAllBallroomsFirebase();
-
-    }
-
-    @Override
-    protected void onResume() {
-        Log.d("PLM", FirebaseMethods.mList.toString());
-
-        super.onResume();
     }
 
     @Override
@@ -94,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+
 
 
 }
