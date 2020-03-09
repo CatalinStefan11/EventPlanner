@@ -72,11 +72,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         user = mFirebaseAuth.getCurrentUser();
-//        if(user != null) {
-//            finish();
-//            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//
-//        }
+        if(user != null) {
+            finish();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+        }
     }
 
 
