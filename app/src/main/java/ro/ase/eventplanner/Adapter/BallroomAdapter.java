@@ -4,7 +4,6 @@ package ro.ase.eventplanner.Adapter;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,10 +22,8 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
-import ro.ase.eventplanner.Model.Ballroom2;
-import ro.ase.eventplanner.Model.BallroomFirebase;
+import ro.ase.eventplanner.Model.ServiceProvided;
 import ro.ase.eventplanner.R;
-import ro.ase.eventplanner.Util.BallroomResult;
 
 public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.BallroomViewHolder> {
 
@@ -35,15 +31,15 @@ public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.Ballro
     private final LayoutInflater inflater;
     private View view;
     private BallroomViewHolder mBallroomViewHolder;
-    private List<BallroomFirebase> mBallrooms;
+    private List<ServiceProvided> mServiceProvideds;
     private StorageReference mStorageReference;
     private final RequestManager glide;
 
 
-    public BallroomAdapter(Context context, List<BallroomFirebase> ballrooms, RequestManager manager) {
+    public BallroomAdapter(Context context, List<ServiceProvided> serviceProvideds, RequestManager manager) {
         this.context = context;
         inflater = LayoutInflater.from(context);
-        mBallrooms = ballrooms;
+        mServiceProvideds = serviceProvideds;
         this.glide = manager;
 
     }
@@ -67,7 +63,7 @@ public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.Ballro
 
         mStorageReference = FirebaseStorage
                 .getInstance()
-                .getReference(mBallrooms.get(position).getImages_links().get(0));
+                .getReference(mServiceProvideds.get(position).getImages_links().get(0));
         mStorageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
@@ -81,9 +77,9 @@ public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.Ballro
 
 
 //
-//        holder.ballroomRatings.setText(mBallrooms.get(position).getRatings());
-        holder.ballroomName.setText(mBallrooms.get(position).getName());
-//        holder.ballroomLikes.setText(mBallrooms.get(position).getLikes() + "\nLikes");
+//        holder.ballroomRatings.setText(mServiceProvideds.get(position).getRatings());
+        holder.ballroomName.setText(mServiceProvideds.get(position).getName());
+//        holder.ballroomLikes.setText(mServiceProvideds.get(position).getLikes() + "\nLikes");
 
 
     }
@@ -91,7 +87,7 @@ public class BallroomAdapter extends RecyclerView.Adapter<BallroomAdapter.Ballro
 
     @Override
     public int getItemCount() {
-        return mBallrooms.size();
+        return mServiceProvideds.size();
     }
 
     class BallroomViewHolder extends RecyclerView.ViewHolder {

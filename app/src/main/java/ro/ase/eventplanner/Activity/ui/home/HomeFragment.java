@@ -12,25 +12,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import ro.ase.eventplanner.Adapter.BallroomAdapter;
-import ro.ase.eventplanner.Model.BallroomFirebase;
+import ro.ase.eventplanner.Model.ServiceProvided;
 import ro.ase.eventplanner.R;
-import ro.ase.eventplanner.Util.BallroomResult;
 import ro.ase.eventplanner.Util.Callbacks;
 import ro.ase.eventplanner.Util.FirebaseMethods;
+import ro.ase.eventplanner.Util.FirebaseTag;
 
 public class HomeFragment extends Fragment {
 
     private BallroomAdapter mBallroomAdapter;
     private RecyclerView mBallroomRecyclerView;
-    private BallroomResult mBallroomResult;
     private HomeFragment thisFragment = this;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -40,43 +35,35 @@ public class HomeFragment extends Fragment {
         mBallroomRecyclerView = root.findViewById(R.id.ballroomRecyclerView);
 
 
-
-
         initUI();
 
 
         return root;
 
 
-
-
     }
 
     @Override
     public void onResume() {
-       initUI();
+        initUI();
         super.onResume();
     }
 
-    private void initUI(){
+    private void initUI() {
 
         FirebaseMethods fb = FirebaseMethods.getInstance(getContext());
-        fb.readBallrooms(new Callbacks() {
+        fb.readServices(new Callbacks() {
             @Override
-            public void OnGetAllBallrooms(List<BallroomFirebase> ballrooms) {
-                Log.d("MAIN", ballrooms.toString());
+            public void onGetServices(List<ServiceProvided> serviceProvideds) {
+                Log.d("MAIN", serviceProvideds.toString());
 
-                mBallroomAdapter = new BallroomAdapter(getContext(), ballrooms, Glide.with(thisFragment));
+                mBallroomAdapter = new BallroomAdapter(getContext(), serviceProvideds, Glide.with(thisFragment));
                 mBallroomRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 mBallroomRecyclerView.setAdapter(mBallroomAdapter);
 
             }
-        });
+        }, FirebaseTag.TAG_BALLROOM);
     }
-
-
-
-
 
 
 }

@@ -81,7 +81,7 @@ public class PhotosFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: save object to firebase.");
                 FirebaseMethods firebaseMethods= FirebaseMethods.getInstance(getContext());
-                firebaseMethods.addNewBallroom(NewOfferActivity.sBallroom, mSelected);
+                firebaseMethods.addNewService(NewOfferActivity.sServiceProvided, mSelected);
 
 
             }

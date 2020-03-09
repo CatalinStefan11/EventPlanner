@@ -19,9 +19,6 @@ import androidx.fragment.app.Fragment;
 import ro.ase.eventplanner.R;
 
 
-/**
- * Created by User on 5/28/2017.
- */
 
 public class InformationsFragment extends Fragment {
     private static final String TAG = "InfoFragment";

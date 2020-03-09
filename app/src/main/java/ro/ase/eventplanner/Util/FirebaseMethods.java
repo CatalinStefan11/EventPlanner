@@ -2,7 +2,6 @@ package ro.ase.eventplanner.Util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,8 +24,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.List;
 
-import ro.ase.eventplanner.Model.Ballroom;
-import ro.ase.eventplanner.Model.BallroomFirebase;
+import ro.ase.eventplanner.Model.ServiceProvided;
 
 public class FirebaseMethods {
 
@@ -58,31 +56,25 @@ public class FirebaseMethods {
     }
 
 
-    public void addNewBallroom(BallroomFirebase ballroomFirebase, final List<String> imageUrls) {
+    public void addNewService(ServiceProvided serviceProvided, final List<String> imageUrls,
+                              final String path_collection_tag) {
 
 
-        ballroomFirebase.setImages_links(null);
-        mFirestore.collection("ballrooms")
-                .add(ballroomFirebase)
+        serviceProvided.setImages_links(null);
+        mFirestore.collection(path_collection_tag)
+                .add(serviceProvided)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
 
-                        String ballroomdId = documentReference.getId();
-                        addBallroomToUSer(ballroomdId);
+                        String serviceId = documentReference.getId();
+                        DocumentReference userRef = mFirestore.collection("users")
+                                .document(userId);
+                        userRef.update(path_collection_tag, FieldValue.arrayUnion(serviceId));
 
-                        uploadPhotos(FirebaseTag.TAG_BALLROOM, ballroomdId, imageUrls);
+                        uploadPhotos(path_collection_tag, serviceId, imageUrls);
                     }
                 });
-
-
-    }
-
-
-    public void addBallroomToUSer(String ballroomId) {
-
-        DocumentReference userRef = mFirestore.collection("users").document(userId);
-        userRef.update("ballrooms", FieldValue.arrayUnion(ballroomId));
 
     }
 
@@ -113,11 +105,11 @@ public class FirebaseMethods {
     }
 
 
-    public void readBallrooms(final Callbacks myCallback) {
+    public void readServices(final Callbacks myCallback, String path_tag) {
 
-        final List<BallroomFirebase> mList = new ArrayList<>();
+        final List<ServiceProvided> mList = new ArrayList<>();
 
-        mFirestore.collection("ballrooms")
+        mFirestore.collection(path_tag)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -126,12 +118,12 @@ public class FirebaseMethods {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                mList.add(document.toObject(BallroomFirebase.class));
+                                mList.add(document.toObject(ServiceProvided.class));
 
 
                             }
-                        myCallback.OnGetAllBallrooms(mList);
-                        }else {
+                            myCallback.onGetServices(mList);
+                        } else {
                             Log.d(TAG, "Error getting data!!!");
                         }
                     }
@@ -144,7 +136,6 @@ public class FirebaseMethods {
                 });
 
     }
-
 
 
 }

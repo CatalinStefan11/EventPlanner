@@ -2,8 +2,8 @@ package ro.ase.eventplanner.Util;
 
 import java.util.List;
 
-import ro.ase.eventplanner.Model.BallroomFirebase;
+import ro.ase.eventplanner.Model.ServiceProvided;
 
 public interface Callbacks {
-    void OnGetAllBallrooms(List<BallroomFirebase> ballrooms);
+    void onGetServices(List<ServiceProvided> serviceProvideds);
 }

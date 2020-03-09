@@ -8,7 +8,7 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 import java.util.List;
 
 @IgnoreExtraProperties
-public class BallroomFirebase implements Parcelable {
+public class ServiceProvided implements Parcelable {
 
     private String name;
     private String description;
@@ -16,12 +16,12 @@ public class BallroomFirebase implements Parcelable {
     private String creator;
     private List<String> images_links;
 
-    public BallroomFirebase()
+    public ServiceProvided()
     {
     }
 
 
-    public BallroomFirebase(String name, String description, String location, String creator, List<String> images_links) {
+    public ServiceProvided(String name, String description, String location, String creator, List<String> images_links) {
         this.name = name;
         this.description = description;
         this.location = location;
@@ -29,7 +29,7 @@ public class BallroomFirebase implements Parcelable {
         this.images_links = images_links;
     }
 
-    protected BallroomFirebase(Parcel in) {
+    protected ServiceProvided(Parcel in) {
         name = in.readString();
         description = in.readString();
         location = in.readString();
@@ -37,15 +37,15 @@ public class BallroomFirebase implements Parcelable {
         images_links = in.createStringArrayList();
     }
 
-    public static final Creator<BallroomFirebase> CREATOR = new Creator<BallroomFirebase>() {
+    public static final Creator<ServiceProvided> CREATOR = new Creator<ServiceProvided>() {
         @Override
-        public BallroomFirebase createFromParcel(Parcel in) {
-            return new BallroomFirebase(in);
+        public ServiceProvided createFromParcel(Parcel in) {
+            return new ServiceProvided(in);
         }
 
         @Override
-        public BallroomFirebase[] newArray(int size) {
-            return new BallroomFirebase[size];
+        public ServiceProvided[] newArray(int size) {
+            return new ServiceProvided[size];
         }
     };
 
@@ -105,7 +105,7 @@ public class BallroomFirebase implements Parcelable {
 
     @Override
     public String toString() {
-        return "BallroomFirebase{" +
+        return "ServiceProvided{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
