@@ -3,41 +3,120 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_ballrooms">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="ro.ase.eventplanner.Activity.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_ballrooms"
+        android:name="ro.ase.eventplanner.Fragment.BallroomsFragment"
+        android:label="@string/navigation_ballrooms"
+        tools:layout="@layout/fragment_ballrooms" >
+
+        <action
+            android:id="@+id/action_nav_ballrooms_to_serviceActivity"
+            app:destination="@id/serviceActivity" >
+
+            <argument
+                android:name="service_name_arg"
+                app:argType="string" />
+            <argument
+                android:name="service_creator_arg"
+                app:argType="string" />
+            <argument
+                android:name="path_tag_arg"
+                app:argType="string" />
+        </action>
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="ro.ase.eventplanner.Activity.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_photographers"
+        android:name="ro.ase.eventplanner.Fragment.PhotographersFragment"
+        android:label="@string/navigation_photographers"
+        tools:layout="@layout/fragment_photographers" >
+
+        <action
+            android:id="@+id/action_nav_photographers_to_serviceActivity"
+            app:destination="@id/serviceActivity" >
+            <argument
+                android:name="service_name_arg"
+                app:argType="string" />
+            <argument
+                android:name="service_creator_arg"
+                app:argType="string" />
+            <argument
+                android:name="path_tag_arg"
+                app:argType="string" />
+
+        </action>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/nav_decorations"
+        android:name="ro.ase.eventplanner.Fragment.DecorationsFragment"
+        android:label="@string/navigation_decorations" >
+
+        <action
+            android:id="@+id/action_nav_decorations_to_serviceActivity"
+            app:destination="@id/serviceActivity" >
+
+            <argument
+                android:name="service_name_arg"
+                app:argType="string" />
+            <argument
+                android:name="service_creator_arg"
+                app:argType="string" />
+            <argument
+                android:name="path_tag_arg"
+                app:argType="string" />
+
+        </action>
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="ro.ase.eventplanner.Activity.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_slideshow">
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_tools"
         android:name="ro.ase.eventplanner.Activity.ui.tools.ToolsFragment"
         android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        tools:layout="@layout/fragment_tools">
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_share"
         android:name="ro.ase.eventplanner.Activity.ui.share.ShareFragment"
         android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
+        tools:layout="@layout/fragment_share">
 
-    <fragment
-        android:id="@+id/nav_send"
-        android:name="ro.ase.eventplanner.Activity.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
+    </fragment>
+
+
+
+        <activity
+            android:id="@+id/serviceActivity"
+            android:name="ro.ase.eventplanner.Activity.ServiceActivity"
+            tools:layout="@layout/activity_service">
+            <argument
+                android:name="service_name_arg"
+                app:argType="string" />
+            <argument
+                android:name="service_creator_arg"
+                app:argType="string" />
+            <argument
+                android:name="path_tag_arg"
+                app:argType="string" />
+        </activity>
+
+
+
+
+
+
 </navigation>

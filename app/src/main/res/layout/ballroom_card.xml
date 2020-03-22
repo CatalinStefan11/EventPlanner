@@ -10,7 +10,7 @@
     android:clipToPadding="false"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="6dp"
-    android:layout_margin="6dp"
+    android:layout_margin="3dp"
     app:cardElevation="4dp">
 
 
@@ -29,7 +29,7 @@
                 android:id="@+id/ballroomImage"
                 android:layout_width="match_parent"
                 android:scaleType="centerCrop"
-                android:layout_height="130dp" />
+                android:layout_height="180dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

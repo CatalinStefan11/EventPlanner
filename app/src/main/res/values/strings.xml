@@ -24,12 +24,12 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
+    <string name="navigation_ballrooms">Ballrooms</string>
+    <string name="navigation_photographers">Photographers</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="navigation_decorations">Decorations</string>
 
     <string name="information">INFO</string>
     <string name="photos">PHOTOS</string>
@@ -39,7 +39,8 @@
     <string name="hint_offer_name">Name of your brand</string>
     <string name="hint_offer_description">A short description of your offer</string>
     <string name="hint_offer_location">Your brand location</string>
-
+    <string name="view_service_fragment">view_service_fragment</string>
+    <string name="Details">Details</string>
 
 
     <string-array name="spinnerServicesArray">

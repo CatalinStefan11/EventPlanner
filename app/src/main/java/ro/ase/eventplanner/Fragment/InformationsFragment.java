@@ -30,7 +30,8 @@ public class InformationsFragment extends Fragment {
     public static EditText mTextInfoName;
     public static EditText mTextInfoDescription;
     public static EditText mTextInfoLocation;
-    public static Spinner mSpinnerService;
+    public Spinner mSpinnerService;
+    public static int mServiceStringPosition = 0;
 
 
 
@@ -52,12 +53,14 @@ public class InformationsFragment extends Fragment {
         mSpinnerService.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                parent.setSelection(position);
+                mServiceStringPosition = position;
 
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                parent.setSelection(mServiceStringPosition);
             }
         });
         return view;

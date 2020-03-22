@@ -18,6 +18,7 @@ public class ServiceProvided implements Parcelable {
 
     public ServiceProvided()
     {
+
     }
 
 

@@ -1,5 +1,6 @@
 package ro.ase.eventplanner.Fragment;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -26,6 +27,7 @@ import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.FilePaths;
 import ro.ase.eventplanner.Util.FileSearch;
 import ro.ase.eventplanner.Util.FirebaseMethods;
+import ro.ase.eventplanner.Util.FirebaseTag;
 
 
 public class PhotosFragment extends Fragment {
@@ -54,7 +56,7 @@ public class PhotosFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_photos, container, false);
+        final View view = inflater.inflate(R.layout.fragment_photos, container, false);
 
         gridView = (GridView) view.findViewById(R.id.gridView);
         directorySpinner = (Spinner) view.findViewById(R.id.spinnerDirectory);
@@ -74,14 +76,24 @@ public class PhotosFragment extends Fragment {
             }
         });
 
+        final FirebaseMethods firebaseMethods= FirebaseMethods.getInstance(getContext());
 
         TextView nextScreen = (TextView) view.findViewById(R.id.tvNext);
+
         nextScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: save object to firebase.");
-                FirebaseMethods firebaseMethods= FirebaseMethods.getInstance(getContext());
-//                firebaseMethods.addNewService(NewOfferActivity.sServiceProvided, mSelected);
+
+                int mStringPosition = NewOfferActivity.mStringPosition;
+
+                if(mStringPosition == 0){
+                    firebaseMethods.addNewService(NewOfferActivity.sServiceProvided, mSelected,FirebaseTag.TAG_BALLROOM);
+                }else if(mStringPosition == 1){
+                    firebaseMethods.addNewService(NewOfferActivity.sServiceProvided, mSelected,FirebaseTag.TAG_PHOTOGRAPHERS);
+                }else if(mStringPosition == 2){
+                    firebaseMethods.addNewService(NewOfferActivity.sServiceProvided, mSelected,FirebaseTag.TAG_DECORATIONS);
+                }
 
 
             }

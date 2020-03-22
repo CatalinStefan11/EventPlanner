@@ -42,6 +42,7 @@ public class NewOfferActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     public static ImageLoader sImageLoader;
     public static ServiceProvided sServiceProvided = new ServiceProvided();
+    public static int mStringPosition;
 
     private Context mContext = NewOfferActivity.this;
     private FirebaseAuth mFirebaseAuth;
@@ -68,12 +69,7 @@ public class NewOfferActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * return the current tab number
-     * 0 = GalleryFragment
-     * 1 = PhotoFragment
-     * @return
-     */
+
 //    public int getCurrentTabNumber(){
 //        return mViewPager.getCurrentItem();
 //    }
@@ -110,6 +106,7 @@ public class NewOfferActivity extends AppCompatActivity {
                     sServiceProvided.setName(InformationsFragment.mTextInfoName.getText().toString());
                     sServiceProvided.setDescription(InformationsFragment.mTextInfoDescription.getText().toString());
                     sServiceProvided.setLocation(InformationsFragment.mTextInfoLocation.getText().toString());
+                    mStringPosition  = InformationsFragment.mServiceStringPosition;
                     Log.d("INFO", sServiceProvided.toString());
 
                 }else if( position == 0){

@@ -47,6 +47,8 @@ public class FirebaseMethods {
             mContext = context;
             mStorageReference = FirebaseStorage.getInstance();
 
+
+
             if (mFirebaseAuth.getCurrentUser() != null) {
                 userId = mFirebaseAuth.getCurrentUser().getUid();
             }
@@ -105,9 +107,12 @@ public class FirebaseMethods {
     }
 
 
-    public void readServices(final Callbacks myCallback, String path_tag) {
+    public void readServices(final CallbackServiceList myCallback, String path_tag) {
 
         final List<ServiceProvided> mList = new ArrayList<>();
+
+
+
 
         mFirestore.collection(path_tag)
                 .get()
@@ -115,7 +120,9 @@ public class FirebaseMethods {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+
                             for (QueryDocumentSnapshot document : task.getResult()) {
+
 
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 mList.add(document.toObject(ServiceProvided.class));
@@ -134,6 +141,33 @@ public class FirebaseMethods {
                         Toast.makeText(mContext, "Error getting data!!!", Toast.LENGTH_LONG).show();
                     }
                 });
+
+    }
+
+    public void getServiceByName(final CallbackGetServiceByName myCallback, String service_name, String service_creator, String path_tag) {
+
+        final List<ServiceProvided> mList = new ArrayList<>();
+
+        mFirestore.collection(path_tag).whereEqualTo("name", service_name)
+                .whereEqualTo("creator", service_creator).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<ServiceProvided> serviceProvided = task.getResult().toObjects(ServiceProvided.class);
+                    Log.d("SIZE SERVICEPROVIDED: ", String.valueOf(serviceProvided.size()));
+                    ServiceProvided mService = serviceProvided.get(0);
+                    myCallback.onGetServiceById(mService);
+                } else {
+                    Log.d(TAG, "Error getting data!!!");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(mContext, "Error getting data!!!", Toast.LENGTH_LONG).show();
+            }
+        });
+
 
     }
 
