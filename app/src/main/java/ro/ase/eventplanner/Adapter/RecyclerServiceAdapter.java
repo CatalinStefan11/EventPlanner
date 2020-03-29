@@ -28,7 +28,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
-import ro.ase.eventplanner.Activity.ServiceActivity;
+
 import ro.ase.eventplanner.Fragment.BallroomsFragment;
 import ro.ase.eventplanner.Fragment.BallroomsFragmentDirections;
 import ro.ase.eventplanner.Fragment.PhotographersFragment;
@@ -138,20 +138,23 @@ public class RecyclerServiceAdapter extends RecyclerView.Adapter<RecyclerService
                   bundle.putString(Constants.SERVICE_CREATOR, mServiceCreator);
                   bundle.putString(Constants.PATH_TAG, collection_path);
 
-                    if(collection_path.equals(FirebaseTag.TAG_DECORATIONS)){
-                        restore_id = R.id.nav_decorations;
-                        Navigation.findNavController(view)
-                                .navigate(R.id.action_nav_decorations_to_serviceActivity, bundle);
-                    }else if(collection_path.equals(FirebaseTag.TAG_PHOTOGRAPHERS)){
-                        restore_id = R.id.nav_photographers;
-                        Navigation.findNavController(view)
-                                .navigate(R.id.action_nav_photographers_to_serviceActivity, bundle);
 
-                    }else if(collection_path.equals(FirebaseTag.TAG_BALLROOM)){
-                        restore_id = R.id.nav_ballrooms;
-                        Navigation.findNavController(view)
-                                .navigate(R.id.action_nav_ballrooms_to_serviceActivity, bundle);
-                    }
+                  Navigation.findNavController(view).
+                          navigate(R.id.action_global_viewServiceFragment, bundle);
+//                    if(collection_path.equals(FirebaseTag.TAG_DECORATIONS)){
+//                        restore_id = R.id.nav_decorations;
+//                        Navigation.findNavController(view)
+//                                .navigate(R.id.action_nav_decorations_to_serviceActivity, bundle);
+//                    }else if(collection_path.equals(FirebaseTag.TAG_PHOTOGRAPHERS)){
+//                        restore_id = R.id.nav_photographers;
+//                        Navigation.findNavController(view)
+//                                .navigate(R.id.action_nav_photographers_to_serviceActivity, bundle);
+//
+//                    }else if(collection_path.equals(FirebaseTag.TAG_BALLROOM)){
+//                        restore_id = R.id.nav_ballrooms;
+//                        Navigation.findNavController(view)
+//                                .navigate(R.id.action_nav_ballrooms_to_serviceActivity, bundle);
+//                    }
 
 
                 }

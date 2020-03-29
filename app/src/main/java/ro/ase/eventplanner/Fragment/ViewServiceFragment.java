@@ -1,5 +1,7 @@
 package ro.ase.eventplanner.Fragment;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,19 +9,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
+import ro.ase.eventplanner.Activity.MainActivity;
 import ro.ase.eventplanner.Adapter.SliderAdapter;
 import ro.ase.eventplanner.Model.ServiceProvided;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.CallbackGetServiceByName;
 import ro.ase.eventplanner.Util.Constants;
 import ro.ase.eventplanner.Util.FirebaseMethods;
+
 
 public class ViewServiceFragment extends Fragment {
 
@@ -40,6 +47,21 @@ public class ViewServiceFragment extends Fragment {
         textLocation = root.findViewById(R.id.location);
         textDescription = root.findViewById(R.id.description);
 
+
+
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Navigation.findNavController(getView()).navigateUp();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
+
+//       Activity activity = (AppCompatActivity)getActivity();
+//       activity.getActionBar();
+
         initUI();
 
 
@@ -53,6 +75,9 @@ public class ViewServiceFragment extends Fragment {
         initUI();
         super.onResume();
     }
+
+
+
 
 
     private void initUI() {
@@ -88,6 +113,8 @@ public class ViewServiceFragment extends Fragment {
 
     }
 
-
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }

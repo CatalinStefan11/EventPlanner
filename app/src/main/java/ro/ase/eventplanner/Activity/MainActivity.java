@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
@@ -22,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import ro.ase.eventplanner.Adapter.RecyclerServiceAdapter;
 import ro.ase.eventplanner.R;
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_ballrooms, R.id.nav_photographers, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_decorations, R.id.fragment_container_view_tag, R.id.serviceActivity)
+                R.id.nav_tools, R.id.nav_share, R.id.nav_decorations, R.id.fragment_container_view_tag)
                 .setDrawerLayout(drawer)
                 .build();
 
@@ -67,26 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         mNavController = Navigation.findNavController(this, R.id.nav_host_fragment);
-
-
-
-
-
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(mNavigationView, mNavController);
 
-        mNavController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-            @Override
-            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                if(destination.getId() == R.id.nav_slideshow){
-                    toolbar.setEnabled();
-                }
-            }
-        });
 
-        if(RecyclerServiceAdapter.restore_id != 0){
-            mNavController.navigate(RecyclerServiceAdapter.restore_id);
-        }
+
 
     }
 

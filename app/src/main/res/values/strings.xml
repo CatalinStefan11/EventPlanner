@@ -39,7 +39,7 @@
     <string name="hint_offer_name">Name of your brand</string>
     <string name="hint_offer_description">A short description of your offer</string>
     <string name="hint_offer_location">Your brand location</string>
-    <string name="view_service_fragment">view_service_fragment</string>
+    <string name="view_service_fragment">Details</string>
     <string name="Details">Details</string>
 
 
