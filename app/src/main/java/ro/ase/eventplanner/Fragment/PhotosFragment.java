@@ -94,8 +94,6 @@ public class PhotosFragment extends Fragment {
                 }else if(mStringPosition == 2){
                     firebaseMethods.addNewService(NewOfferActivity.sServiceProvided, mSelected,FirebaseTag.TAG_DECORATIONS);
                 }
-
-
             }
         });
 

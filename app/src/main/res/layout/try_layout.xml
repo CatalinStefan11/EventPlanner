@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E0E0E0"
+   >
+
+    <RelativeLayout
+        android:id="@+id/service_top_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp">
+
+
+        <com.smarteist.autoimageslider.SliderView
+            android:id="@+id/service_image_slider"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:alpha="1.0"
+            android:scaleType="centerCrop"
+            app:sliderAnimationDuration="600"
+            app:sliderAutoCycleDirection="back_and_forth"
+            app:sliderAutoCycleEnabled="true"
+            app:sliderIndicatorAnimationDuration="600"
+            app:sliderIndicatorGravity="center_horizontal|bottom"
+            app:sliderIndicatorMargin="15dp"
+            app:sliderIndicatorOrientation="horizontal"
+            app:sliderIndicatorPadding="3dp"
+            app:sliderIndicatorRadius="2dp"
+            app:sliderIndicatorSelectedColor="#5A5A5A"
+            app:sliderIndicatorUnselectedColor="#FFF"
+            app:sliderScrollTimeInSec="1"
+            app:sliderStartAutoCycle="true"/>
+<!--        <ImageView-->
+<!--         -->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="300dp"-->
+<!--            android:alpha="1.0"-->
+<!--            android:scaleType="centerCrop"-->
+<!--           />-->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@drawable/gradient_up" />
+
+        <!-- Back button -->
+<!--        <ImageView-->
+<!--            android:id="@+id/restaurant_button_back"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="?attr/selectableItemBackground"-->
+<!--            android:layout_alignLeft="@+id/restaurant_name"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            app:srcCompat="@drawable/ic_close_white_24px" />-->
+
+
+        <TextView
+            android:id="@+id/service_name"
+            style="@style/AppTheme.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/service_rating"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            tools:text="Some service" />
+
+        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+            android:id="@+id/service_rating"
+            style="@style/Widget.MaterialRatingBar.RatingBar.Indicator"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_above="@+id/service_location"
+            android:layout_alignLeft="@+id/service_name"
+            app:mrb_progressTint="@android:color/white"
+            app:mrb_secondaryProgressTint="@android:color/white" />
+
+        <TextView
+            android:id="@+id/service_num_ratings"
+            style="@style/AppTheme.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/service_rating"
+            android:layout_alignTop="@+id/service_rating"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/service_rating"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            tools:text="(10)" />
+
+        <TextView
+            android:id="@+id/service_location"
+            style="@style/AppTheme.Subheader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/service_name"
+            android:layout_alignBottom="@+id/service_image_slider"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="@android:color/white"
+            tools:text="Constanta" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/restaurant_city_divider"-->
+<!--            style="@style/AppTheme.TextDivider"-->
+<!--            android:layout_alignTop="@+id/restaurant_category"-->
+<!--            android:layout_toRightOf="@+id/restaurant_category"-->
+<!--            android:text="@string/divider_bullet"-->
+<!--            android:textColor="@android:color/white" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/restaurant_city"-->
+<!--            style="@style/AppTheme.Subheader"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignTop="@+id/restaurant_category"-->
+<!--            android:layout_below="@+id/restaurant_category"-->
+<!--            android:layout_toRightOf="@+id/restaurant_city_divider"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            tools:text="San Francisco" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/restaurant_price"-->
+<!--            style="@style/AppTheme.Body1"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:layout_alignTop="@+id/restaurant_name"-->
+<!--            android:layout_marginRight="8dp"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            android:textStyle="bold"-->
+<!--            tools:text="$$$" />-->
+
+    </RelativeLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_show_rating_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/service_top_card"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="-28dp"
+        android:layout_marginRight="16dp"
+        app:srcCompat="@drawable/ic_add_white_24px" />
+
+    <!-- Ratings -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_ratings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/service_top_card"
+        android:background="@android:color/transparent"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        android:paddingTop="28dp"
+        android:visibility="gone"
+        tools:listitem="@layout/item_rating" />
+
+    <!-- View for empty ratings -->
+    <LinearLayout
+        android:id="@+id/view_empty_ratings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/service_top_card"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+<!--        <ImageView-->
+<!--            android:src="@drawable/pizza_monster"-->
+<!--            style="@style/AppTheme.PizzaGuy" />-->
+
+        <TextView
+            style="@style/AppTheme.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/message_no_reviews"
+            android:textColor="@color/greyDisabled" />
+
+    </LinearLayout>
+
+</RelativeLayout>

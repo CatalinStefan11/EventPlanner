@@ -1,34 +1,52 @@
 package ro.ase.eventplanner.Fragment;
 
-import android.app.ActionBar;
-import android.app.Activity;
+
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
+import androidx.annotation.NonNull;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.Transaction;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
-import ro.ase.eventplanner.Activity.MainActivity;
+
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+import ro.ase.eventplanner.Adapter.RatingAdapter;
 import ro.ase.eventplanner.Adapter.SliderAdapter;
+import ro.ase.eventplanner.Model.Rating;
 import ro.ase.eventplanner.Model.ServiceProvided;
 import ro.ase.eventplanner.R;
-import ro.ase.eventplanner.Util.CallbackGetServiceByName;
 import ro.ase.eventplanner.Util.Constants;
-import ro.ase.eventplanner.Util.FirebaseMethods;
 
 
-public class ViewServiceFragment extends Fragment {
+public class ViewServiceFragment extends Fragment implements EventListener<DocumentSnapshot>,
+        RatingDialogFragment.RatingListener {
 
     private SliderView sliderView;
     private SliderAdapter adapter;
@@ -36,71 +54,124 @@ public class ViewServiceFragment extends Fragment {
     private TextView textLocation;
     private TextView textDescription;
 
+    private MaterialRatingBar mRatingIndicator;
+    private TextView mNumRatingsView;
+    private RecyclerView mRatingsRecycler;
+
+    private RatingDialogFragment mRatingDialog;
+    private ListenerRegistration mServiceRegistration;
+    private RatingAdapter mRatingAdapter;
+
+    private FirebaseFirestore mFirestore;
+    private DocumentReference mServiceRef;
+
+    private static final String TAG = "ViewServiceFragment";
+
+    private ViewGroup mEmptyView;
+    private View mRoot;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_view_service, container, false);
+        mRoot = inflater.inflate(R.layout.try_layout, container, false);
 
-        sliderView = root.findViewById(R.id.imageSlider);
-        textName = root.findViewById(R.id.display_name);
-        textLocation = root.findViewById(R.id.location);
-        textDescription = root.findViewById(R.id.description);
+        sliderView = mRoot.findViewById(R.id.service_image_slider);
+        textName = mRoot.findViewById(R.id.service_name);
+        textLocation = mRoot.findViewById(R.id.service_location);
+
+        mRatingIndicator = mRoot.findViewById(R.id.service_rating);
+        mNumRatingsView = mRoot.findViewById(R.id.service_num_ratings);
+        mRatingsRecycler = mRoot.findViewById(R.id.recycler_ratings);
+        mEmptyView = mRoot.findViewById(R.id.view_empty_ratings);
 
 
-
-
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+        mRoot.findViewById(R.id.fab_show_rating_dialog).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void handleOnBackPressed() {
-                Navigation.findNavController(getView()).navigateUp();
+            public void onClick(View v) {
+                onAddRatingClicked(v);
             }
-        };
-        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+        });
 
 
-//       Activity activity = (AppCompatActivity)getActivity();
-//       activity.getActionBar();
+
+
+
+        //todo
+//        textDescription = root.findViewById(R.id.description);
 
         initUI();
 
 
-        return root;
+        return mRoot;
 
 
+    }
+
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mRatingAdapter.startListening();
+        mServiceRegistration = mServiceRef.addSnapshotListener(this);
     }
 
     @Override
-    public void onResume() {
-        initUI();
-        super.onResume();
+    public void onStop() {
+        super.onStop();
+
+        mRatingAdapter.stopListening();
+
+        if (mServiceRegistration != null) {
+            mServiceRegistration.remove();
+            mServiceRegistration = null;
+        }
     }
 
 
 
+
+    public void onAddRatingClicked(View view) {
+        mRatingDialog.show(ViewServiceFragment.this.getChildFragmentManager(), RatingDialogFragment.TAG);
+    }
 
 
     private void initUI() {
 
         Bundle bundle = this.getArguments();
-        String service_name = bundle.getString(Constants.SERVICE_NAME);
-        String service_creator = bundle.getString(Constants.SERVICE_CREATOR);
+
         String collection_path = bundle.getString(Constants.PATH_TAG);
+        String service_id = bundle.getString("service_id");
 
 
-        FirebaseMethods fb = FirebaseMethods.getInstance(getContext());
-        fb.getServiceByName(new CallbackGetServiceByName() {
+        mFirestore = FirebaseFirestore.getInstance();
+        mServiceRef = mFirestore.collection(collection_path).document(service_id);
+        Query raitingsQuery = mServiceRef.collection("ratings")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(3);
+
+
+        mRatingAdapter = new RatingAdapter(raitingsQuery){
             @Override
-            public void onGetServiceById(ServiceProvided serviceProvided) {
-                adapter = new SliderAdapter(getContext(), serviceProvided.getImages_links());
-                sliderView.setSliderAdapter(adapter);
-                textName.setText(serviceProvided.getName());
-                textLocation.setText(serviceProvided.getLocation());
-                textDescription.setText(serviceProvided.getDescription());
-
+            protected void onDataChanged() {
+                if(getItemCount() == 0){
+                    mRatingsRecycler.setVisibility(View.GONE);
+                    mEmptyView.setVisibility(View.VISIBLE);
+                } else {
+                    mRatingsRecycler.setVisibility(View.VISIBLE);
+                    mEmptyView.setVisibility(View.GONE);
+                }
+                super.onDataChanged();
             }
-        }, service_name, service_creator, collection_path);
+        };
 
+
+        mRatingsRecycler.setLayoutManager(new LinearLayoutManager(ViewServiceFragment.this.getContext()));
+        mRatingsRecycler.setAdapter(mRatingAdapter);
+
+        mRatingDialog = new RatingDialogFragment();
 
         sliderView.setIndicatorAnimation(IndicatorAnimations.THIN_WORM);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
@@ -113,8 +184,97 @@ public class ViewServiceFragment extends Fragment {
 
     }
 
+
+    private void hideKeyboard() {
+
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
+                    .hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+
+    private void onServiceLoaded(ServiceProvided serviceProvided){
+        adapter = new SliderAdapter(getContext(), serviceProvided.getImages_links());
+        sliderView.setSliderAdapter(adapter);
+        mRatingIndicator.setRating((float)serviceProvided.getAvgRating());
+        textName.setText(serviceProvided.getName());
+        textLocation.setText(serviceProvided.getLocation());
+//        textDescription.setText(serviceProvided.getDescription());
+    }
+
+
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+        if(e != null){
+            Log.w(TAG, "restaurant:onEvent", e);
+            return;
+        }
+        onServiceLoaded(snapshot.toObject(ServiceProvided.class));
+
+    }
+
+    private Task<Void> addRating(final DocumentReference documentReference, final Rating rating) {
+        // Create reference for new rating, for use inside the transaction
+        final DocumentReference ratingRef = documentReference.collection("ratings")
+                .document();
+
+        // In a transaction, add the new rating and update the aggregate totals
+        return mFirestore.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction)
+                    throws FirebaseFirestoreException {
+
+                ServiceProvided serviceProvided = transaction.get(documentReference)
+                        .toObject(ServiceProvided.class);
+
+                // Compute new number of ratings
+                int newNumRatings = serviceProvided.getNumRatings() + 1;
+
+                // Compute new average rating
+                double oldRatingTotal = serviceProvided.getAvgRating() *
+                        serviceProvided.getNumRatings();
+                double newAvgRating = (oldRatingTotal + rating.getRating()) /
+                        newNumRatings;
+
+                // Set new restaurant info
+                serviceProvided.setNumRatings(newNumRatings);
+                serviceProvided.setAvgRating(newAvgRating);
+
+                // Commit to Firestore
+                transaction.set(documentReference, serviceProvided);
+                transaction.set(ratingRef, rating);
+
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void onRating(Rating rating) {
+        // In a transaction, add the new rating and update the aggregate totals
+        addRating(mServiceRef, rating)
+                .addOnSuccessListener(getActivity(), new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Rating added");
+
+                        // Hide keyboard and scroll to top
+                        hideKeyboard();
+                        mRatingsRecycler.smoothScrollToPosition(0);
+                    }
+                })
+                .addOnFailureListener(getActivity(), new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Add rating failed", e);
+
+                        // Show failure message and hide keyboard
+                        hideKeyboard();
+                        Snackbar.make(mRoot.findViewById(android.R.id.content), "Failed to add rating",
+                                Snackbar.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

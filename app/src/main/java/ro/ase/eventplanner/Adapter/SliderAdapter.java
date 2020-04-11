@@ -1,7 +1,6 @@
 package ro.ase.eventplanner.Adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,15 +45,9 @@ public class SliderAdapter extends
     public void onBindViewHolder(final SliderAdapterVH viewHolder, final int position) {
 
 
-//       List<String> imageLinks =  mServiceProvided.getImages_links();
 
        String image_link = mServiceProvided.get(position);
-//
-//        viewHolder.textViewDescription.setText(mServiceProvided.getName());
-//        viewHolder.textViewDescription.setTextSize(16);
-//        viewHolder.textViewDescription.setTextColor(Color.WHITE);
 
-//        for(int i = 0; i < imageLinks.size(); i++){
             mStorageReference = FirebaseStorage
                     .getInstance()
                     .getReference(image_link);
@@ -72,12 +65,6 @@ public class SliderAdapter extends
                 }
             });
 
-//        }
-
-
-
-
-
 
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +77,6 @@ public class SliderAdapter extends
 
     @Override
     public int getCount() {
-        //slider view count could be dynamic size
         return mServiceProvided.size();
     }
 

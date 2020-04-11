@@ -13,6 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -25,11 +26,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import ro.ase.eventplanner.Adapter.RecyclerServiceAdapter;
-import ro.ase.eventplanner.R;
-import ro.ase.eventplanner.Util.FirebaseTag;
 
-public class MainActivity extends AppCompatActivity {
+import ro.ase.eventplanner.R;
+
+public class MainActivity extends AppCompatActivity{
 
     private FirebaseFirestore mFirestore;
     private AppBarConfiguration mAppBarConfiguration;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+        FirebaseFirestore.setLoggingEnabled(true);
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_tools, R.id.nav_share, R.id.nav_decorations, R.id.fragment_container_view_tag)
                 .setDrawerLayout(drawer)
                 .build();
-
 
 
 
@@ -120,6 +119,5 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = savedInstanceState.getBundle("state");
         mNavController.restoreState(bundle);
     }
-
 
 }

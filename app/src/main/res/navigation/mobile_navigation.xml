@@ -11,20 +11,7 @@
         android:label="@string/navigation_ballrooms"
         tools:layout="@layout/fragment_ballrooms" >
 
-<!--        <action-->
-<!--            android:id="@+id/action_nav_ballrooms_to_serviceActivity"-->
-<!--            app:destination="@id/serviceActivity" >-->
 
-<!--            <argument-->
-<!--                android:name="service_name_arg"-->
-<!--                app:argType="string" />-->
-<!--            <argument-->
-<!--                android:name="service_creator_arg"-->
-<!--                app:argType="string" />-->
-<!--            <argument-->
-<!--                android:name="path_tag_arg"-->
-<!--                app:argType="string" />-->
-<!--        </action>-->
     </fragment>
 
     <fragment
@@ -33,20 +20,7 @@
         android:label="@string/navigation_photographers"
         tools:layout="@layout/fragment_photographers" >
 
-<!--        <action-->
-<!--            android:id="@+id/action_nav_photographers_to_serviceActivity"-->
-<!--            app:destination="@id/serviceActivity" >-->
-<!--            <argument-->
-<!--                android:name="service_name_arg"-->
-<!--                app:argType="string" />-->
-<!--            <argument-->
-<!--                android:name="service_creator_arg"-->
-<!--                app:argType="string" />-->
-<!--            <argument-->
-<!--                android:name="path_tag_arg"-->
-<!--                app:argType="string" />-->
 
-<!--        </action>-->
     </fragment>
 
 
@@ -55,21 +29,6 @@
         android:name="ro.ase.eventplanner.Fragment.DecorationsFragment"
         android:label="@string/navigation_decorations" >
 
-<!--        <action-->
-<!--            android:id="@+id/action_nav_decorations_to_serviceActivity"-->
-<!--            app:destination="@id/serviceActivity" >-->
-
-<!--            <argument-->
-<!--                android:name="service_name_arg"-->
-<!--                app:argType="string" />-->
-<!--            <argument-->
-<!--                android:name="service_creator_arg"-->
-<!--                app:argType="string" />-->
-<!--            <argument-->
-<!--                android:name="path_tag_arg"-->
-<!--                app:argType="string" />-->
-
-<!--        </action>-->
 
     </fragment>
 
@@ -99,26 +58,17 @@
 
 
 
-<!--        <activity-->
-<!--            android:id="@+id/serviceActivity"-->
-<!--            android:name="ro.ase.eventplanner.Activity.ServiceActivity"-->
-<!--            tools:layout="@layout/activity_service">-->
-<!--            <argument-->
-<!--                android:name="service_name_arg"-->
-<!--                app:argType="string" />-->
-<!--            <argument-->
-<!--                android:name="service_creator_arg"-->
-<!--                app:argType="string" />-->
-<!--            <argument-->
-<!--                android:name="path_tag_arg"-->
-<!--                app:argType="string" />-->
-<!--        </activity>-->
     <fragment
         android:id="@+id/viewServiceFragment"
         android:name="ro.ase.eventplanner.Fragment.ViewServiceFragment"
         android:label="@string/Details"
 
         tools:layout="@layout/fragment_view_service" /><action android:id="@+id/action_global_viewServiceFragment" app:destination="@id/viewServiceFragment"/>
+    <fragment
+        android:id="@+id/viewService"
+        android:name="ro.ase.eventplanner.Fragment.ViewServiceFragment"
+        android:label="try_layout"
+        tools:layout="@layout/try_layout" /><action android:id="@+id/action_global_viewService" app:destination="@id/viewService"/>
 
 
 </navigation>

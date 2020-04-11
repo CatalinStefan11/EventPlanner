@@ -15,8 +15,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -24,6 +26,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.List;
 
+import ro.ase.eventplanner.Model.Rating;
 import ro.ase.eventplanner.Model.ServiceProvided;
 
 public class FirebaseMethods {
@@ -112,8 +115,6 @@ public class FirebaseMethods {
         final List<ServiceProvided> mList = new ArrayList<>();
 
 
-
-
         mFirestore.collection(path_tag)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -167,8 +168,41 @@ public class FirebaseMethods {
                 Toast.makeText(mContext, "Error getting data!!!", Toast.LENGTH_LONG).show();
             }
         });
+    }
 
+    private Task<Void> addRating(final DocumentReference serviceRef, final Rating rating) {
+        // Create reference for new rating, for use inside the transaction
+        final DocumentReference ratingRef = serviceRef.collection("ratings")
+                .document();
 
+        // In a transaction, add the new rating and update the aggregate totals
+        return mFirestore.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction)
+                    throws FirebaseFirestoreException {
+
+                ServiceProvided service = transaction.get(serviceRef)
+                        .toObject(ServiceProvided.class);
+
+                // Compute new number of ratings
+                int newNumRatings = service.getNumRatings() + 1;
+
+                // Compute new average rating
+                double oldRatingTotal = service.getAvgRating() *
+                        service.getNumRatings();
+                double newAvgRating = (oldRatingTotal + rating.getRating()) /
+                        newNumRatings;
+
+                // Set new restaurant info
+                service.setNumRatings(newNumRatings);
+                service.setAvgRating(newAvgRating);
+
+                // Commit to Firestore
+                transaction.set(serviceRef, service);
+                transaction.set(ratingRef, rating);
+                return null;
+            }
+        });
     }
 
 

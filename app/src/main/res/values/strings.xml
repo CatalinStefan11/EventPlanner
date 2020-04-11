@@ -33,7 +33,8 @@
 
     <string name="information">INFO</string>
     <string name="photos">PHOTOS</string>
-
+    <string name="divider_bullet">•</string>
+    <string name="message_no_reviews">Be the first to leave a review!</string>
 
     <string name="string_next">Save</string>
     <string name="hint_offer_name">Name of your brand</string>
@@ -41,6 +42,11 @@
     <string name="hint_offer_location">Your brand location</string>
     <string name="view_service_fragment">Details</string>
     <string name="Details">Details</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="hint_review">How was your experience?</string>
+    <string name="submit">Submit</string>
+    <string name="filter_add_review">Add review</string>
 
 
     <string-array name="spinnerServicesArray">

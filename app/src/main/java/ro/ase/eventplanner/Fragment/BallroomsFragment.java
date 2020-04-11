@@ -9,25 +9,26 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
-import java.util.List;
 
-import ro.ase.eventplanner.Adapter.RecyclerServiceAdapter;
-import ro.ase.eventplanner.Model.ServiceProvided;
+import ro.ase.eventplanner.Adapter.RecyclerAdapter;
 import ro.ase.eventplanner.R;
-import ro.ase.eventplanner.Util.CallbackServiceList;
-import ro.ase.eventplanner.Util.FirebaseMethods;
+import ro.ase.eventplanner.Util.Constants;
 import ro.ase.eventplanner.Util.FirebaseTag;
 
-public class BallroomsFragment extends Fragment {
+public class BallroomsFragment extends Fragment implements RecyclerAdapter.OnServiceSelectedListener  {
 
-    private RecyclerServiceAdapter mRecyclerServiceAdapter;
     private RecyclerView mBallroomRecyclerView;
-    private BallroomsFragment thisFragment = this;
+    private FirebaseFirestore mFirestore;
+    private RecyclerAdapter mRecyclerAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -35,7 +36,26 @@ public class BallroomsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_ballrooms, container, false);
         mBallroomRecyclerView = root.findViewById(R.id.ballroomsRecyclerView);
 
-        initUI();
+        mFirestore = FirebaseFirestore.getInstance();
+        Query query = mFirestore.collection(FirebaseTag.TAG_BALLROOM)
+                .orderBy("creator", Query.Direction.DESCENDING)
+                .limit(10);
+        mRecyclerAdapter = new RecyclerAdapter(query,this, Glide.with(this)){
+            @Override
+            protected void onDataChanged() {
+                if (getItemCount() == 0) {
+                    mBallroomRecyclerView.setVisibility(View.GONE);
+
+                } else {
+                    mBallroomRecyclerView.setVisibility(View.VISIBLE);
+
+                }
+            }
+        };
+        mBallroomRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mBallroomRecyclerView.setAdapter(mRecyclerAdapter);
+
+
 
         return root;
 
@@ -44,27 +64,34 @@ public class BallroomsFragment extends Fragment {
 
 
 
+
+
     @Override
-    public void onResume() {
-        initUI();
-        super.onResume();
-    }
+    public void onStart() {
+        super.onStart();
 
-    private void initUI() {
-
-        FirebaseMethods fb = FirebaseMethods.getInstance(getContext());
-        fb.readServices(new CallbackServiceList() {
-            @Override
-            public void onGetServices(List<ServiceProvided> serviceProvideds) {
-                Log.d("MAIN", serviceProvideds.toString());
-
-                mRecyclerServiceAdapter = new RecyclerServiceAdapter(getContext(), serviceProvideds, Glide.with(thisFragment), FirebaseTag.TAG_BALLROOM);
-                mBallroomRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                mBallroomRecyclerView.setAdapter(mRecyclerServiceAdapter);
-
-            }
-        }, FirebaseTag.TAG_BALLROOM);
+        if(mRecyclerAdapter != null){
+            mRecyclerAdapter.startListening();
+        }
     }
 
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mRecyclerAdapter != null){
+            mRecyclerAdapter.stopListening();
+        }
+    }
+
+    @Override
+    public void onServiceSelected(DocumentSnapshot service) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.PATH_TAG, FirebaseTag.TAG_BALLROOM);
+        bundle.putString("service_id", service.getId());
+        Navigation.findNavController(getView()).
+                navigate(R.id.action_global_viewService, bundle);
+
+    }
 }

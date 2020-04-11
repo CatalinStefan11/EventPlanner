@@ -8,13 +8,15 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 import java.util.List;
 
 @IgnoreExtraProperties
-public class ServiceProvided implements Parcelable {
+public class ServiceProvided{
 
     private String name;
     private String description;
     private String location;
     private String creator;
     private List<String> images_links;
+    private int numRatings;
+    private double avgRating;
 
     public ServiceProvided()
     {
@@ -28,27 +30,11 @@ public class ServiceProvided implements Parcelable {
         this.location = location;
         this.creator = creator;
         this.images_links = images_links;
+        this.numRatings = 0;
+        this.avgRating = 0;
     }
 
-    protected ServiceProvided(Parcel in) {
-        name = in.readString();
-        description = in.readString();
-        location = in.readString();
-        creator = in.readString();
-        images_links = in.createStringArrayList();
-    }
 
-    public static final Creator<ServiceProvided> CREATOR = new Creator<ServiceProvided>() {
-        @Override
-        public ServiceProvided createFromParcel(Parcel in) {
-            return new ServiceProvided(in);
-        }
-
-        @Override
-        public ServiceProvided[] newArray(int size) {
-            return new ServiceProvided[size];
-        }
-    };
 
     public String getName() {
         return name;
@@ -90,19 +76,23 @@ public class ServiceProvided implements Parcelable {
         this.images_links = images_links;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public int getNumRatings() {
+        return numRatings;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeString(location);
-        dest.writeString(creator);
-        dest.writeStringList(images_links);
+    public void setNumRatings(int numRatings) {
+        this.numRatings = numRatings;
     }
+
+    public double getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(double avgRating) {
+        this.avgRating = avgRating;
+    }
+
+
 
     @Override
     public String toString() {

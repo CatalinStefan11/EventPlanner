@@ -10,25 +10,28 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
-import java.util.List;
 
-import ro.ase.eventplanner.Adapter.RecyclerServiceAdapter;
-import ro.ase.eventplanner.Model.ServiceProvided;
+import ro.ase.eventplanner.Adapter.RecyclerAdapter;
 import ro.ase.eventplanner.R;
-import ro.ase.eventplanner.Util.CallbackServiceList;
-import ro.ase.eventplanner.Util.FirebaseMethods;
+import ro.ase.eventplanner.Util.Constants;
 import ro.ase.eventplanner.Util.FirebaseTag;
 
-public class DecorationsFragment extends Fragment {
+public class DecorationsFragment extends Fragment implements RecyclerAdapter.OnServiceSelectedListener {
 
-    private RecyclerServiceAdapter mRecyclerServiceAdapter;
+
     private RecyclerView mDecorationsRecyclerView;
     private DecorationsFragment thisFragment = this;
+    private FirebaseFirestore mFirestore;
+    private RecyclerAdapter mRecyclerAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -36,34 +39,43 @@ public class DecorationsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_decorations, container, false);
         mDecorationsRecyclerView = root.findViewById(R.id.decorationsRecyclerView);
 
-       ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
+        mFirestore = FirebaseFirestore.getInstance();
+        Query query = mFirestore.collection(FirebaseTag.TAG_DECORATIONS);
+        mRecyclerAdapter = new RecyclerAdapter(query,this, Glide.with(this));
+        mDecorationsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mDecorationsRecyclerView.setAdapter(mRecyclerAdapter);
 
 
         return root;
     }
 
+
     @Override
-    public void onResume() {
-        initUI();
-        super.onResume();
+    public void onServiceSelected(DocumentSnapshot service) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.PATH_TAG, FirebaseTag.TAG_DECORATIONS);
+        bundle.putString("service_id", service.getId());
+        Navigation.findNavController(getView()).
+                navigate(R.id.action_global_viewService, bundle);
+
     }
 
-    private void initUI() {
+    @Override
+    public void onStart() {
+        super.onStart();
 
-        FirebaseMethods fb = FirebaseMethods.getInstance(getContext());
-        fb.readServices(new CallbackServiceList() {
-            @Override
-            public void onGetServices(List<ServiceProvided> serviceProvideds) {
+        if(mRecyclerAdapter != null){
+            mRecyclerAdapter.startListening();
+        }
+    }
 
-                mRecyclerServiceAdapter =
-                        new RecyclerServiceAdapter(getContext(), serviceProvideds,
-                        Glide.with(thisFragment), FirebaseTag.TAG_DECORATIONS);
-                mDecorationsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                mDecorationsRecyclerView.setAdapter(mRecyclerServiceAdapter);
 
-            }
-        }, FirebaseTag.TAG_DECORATIONS);
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mRecyclerAdapter != null){
+            mRecyclerAdapter.stopListening();
+        }
     }
 }
