@@ -24,12 +24,6 @@ public class UserProfile {
 
     }
 
-//    public Map<String, Object> UserToMap(){
-//        Map<String,Object> userMap = new HashMap<>();
-//        userMap.put("username", this.username);
-//        userMap.put("email", this.email);
-//        return userMap;
-//    }
 
     public String getEmail() {
         return email;

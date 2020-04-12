@@ -110,100 +110,100 @@ public class FirebaseMethods {
     }
 
 
-    public void readServices(final CallbackServiceList myCallback, String path_tag) {
-
-        final List<ServiceProvided> mList = new ArrayList<>();
-
-
-        mFirestore.collection(path_tag)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-
-
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                mList.add(document.toObject(ServiceProvided.class));
-
-
-                            }
-                            myCallback.onGetServices(mList);
-                        } else {
-                            Log.d(TAG, "Error getting data!!!");
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(mContext, "Error getting data!!!", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-    }
-
-    public void getServiceByName(final CallbackGetServiceByName myCallback, String service_name, String service_creator, String path_tag) {
-
-        final List<ServiceProvided> mList = new ArrayList<>();
-
-        mFirestore.collection(path_tag).whereEqualTo("name", service_name)
-                .whereEqualTo("creator", service_creator).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    List<ServiceProvided> serviceProvided = task.getResult().toObjects(ServiceProvided.class);
-                    Log.d("SIZE SERVICEPROVIDED: ", String.valueOf(serviceProvided.size()));
-                    ServiceProvided mService = serviceProvided.get(0);
-                    myCallback.onGetServiceById(mService);
-                } else {
-                    Log.d(TAG, "Error getting data!!!");
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(mContext, "Error getting data!!!", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private Task<Void> addRating(final DocumentReference serviceRef, final Rating rating) {
-        // Create reference for new rating, for use inside the transaction
-        final DocumentReference ratingRef = serviceRef.collection("ratings")
-                .document();
-
-        // In a transaction, add the new rating and update the aggregate totals
-        return mFirestore.runTransaction(new Transaction.Function<Void>() {
-            @Override
-            public Void apply(Transaction transaction)
-                    throws FirebaseFirestoreException {
-
-                ServiceProvided service = transaction.get(serviceRef)
-                        .toObject(ServiceProvided.class);
-
-                // Compute new number of ratings
-                int newNumRatings = service.getNumRatings() + 1;
-
-                // Compute new average rating
-                double oldRatingTotal = service.getAvgRating() *
-                        service.getNumRatings();
-                double newAvgRating = (oldRatingTotal + rating.getRating()) /
-                        newNumRatings;
-
-                // Set new restaurant info
-                service.setNumRatings(newNumRatings);
-                service.setAvgRating(newAvgRating);
-
-                // Commit to Firestore
-                transaction.set(serviceRef, service);
-                transaction.set(ratingRef, rating);
-                return null;
-            }
-        });
-    }
+//    public void readServices(final CallbackServiceList myCallback, String path_tag) {
+//
+//        final List<ServiceProvided> mList = new ArrayList<>();
+//
+//
+//        mFirestore.collection(path_tag)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//
+//
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
+//                                mList.add(document.toObject(ServiceProvided.class));
+//
+//
+//                            }
+//                            myCallback.onGetServices(mList);
+//                        } else {
+//                            Log.d(TAG, "Error getting data!!!");
+//                        }
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Toast.makeText(mContext, "Error getting data!!!", Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//
+//    }
+//
+//    public void getServiceByName(final CallbackGetServiceByName myCallback, String service_name, String service_creator, String path_tag) {
+//
+//        final List<ServiceProvided> mList = new ArrayList<>();
+//
+//        mFirestore.collection(path_tag).whereEqualTo("name", service_name)
+//                .whereEqualTo("creator", service_creator).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    List<ServiceProvided> serviceProvided = task.getResult().toObjects(ServiceProvided.class);
+//                    Log.d("SIZE SERVICEPROVIDED: ", String.valueOf(serviceProvided.size()));
+//                    ServiceProvided mService = serviceProvided.get(0);
+//                    myCallback.onGetServiceById(mService);
+//                } else {
+//                    Log.d(TAG, "Error getting data!!!");
+//                }
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(mContext, "Error getting data!!!", Toast.LENGTH_LONG).show();
+//            }
+//        });
+//    }
+//
+//    private Task<Void> addRating(final DocumentReference serviceRef, final Rating rating) {
+//        // Create reference for new rating, for use inside the transaction
+//        final DocumentReference ratingRef = serviceRef.collection("ratings")
+//                .document();
+//
+//        // In a transaction, add the new rating and update the aggregate totals
+//        return mFirestore.runTransaction(new Transaction.Function<Void>() {
+//            @Override
+//            public Void apply(Transaction transaction)
+//                    throws FirebaseFirestoreException {
+//
+//                ServiceProvided service = transaction.get(serviceRef)
+//                        .toObject(ServiceProvided.class);
+//
+//                // Compute new number of ratings
+//                int newNumRatings = service.getNumRatings() + 1;
+//
+//                // Compute new average rating
+//                double oldRatingTotal = service.getAvgRating() *
+//                        service.getNumRatings();
+//                double newAvgRating = (oldRatingTotal + rating.getRating()) /
+//                        newNumRatings;
+//
+//                // Set new restaurant info
+//                service.setNumRatings(newNumRatings);
+//                service.setAvgRating(newAvgRating);
+//
+//                // Commit to Firestore
+//                transaction.set(serviceRef, service);
+//                transaction.set(ratingRef, rating);
+//                return null;
+//            }
+//        });
+//    }
 
 
 }

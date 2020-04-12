@@ -34,11 +34,11 @@ import ro.ase.eventplanner.Util.SectionsPagerAdapter;
 public class NewOfferActivity extends AppCompatActivity {
     private static final String TAG = "NewOfferActivity";
 
-    //constants
+
     private static final int ACTIVITY_NUM = 2;
     private static final int VERIFY_PERMISSIONS_REQUEST = 1;
 
-//    private ViewPager mViewPager;
+
     private ViewPager mViewPager;
     public static ImageLoader sImageLoader;
     public static ServiceProvided sServiceProvided = new ServiceProvided();
@@ -70,9 +70,6 @@ public class NewOfferActivity extends AppCompatActivity {
     }
 
 
-//    public int getCurrentTabNumber(){
-//        return mViewPager.getCurrentItem();
-//    }
 
     public int getCurrentTabNumber(){
         return mViewPager.getCurrentItem();

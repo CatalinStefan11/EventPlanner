@@ -1,7 +1,6 @@
 package ro.ase.eventplanner.Adapter;
 
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,12 +45,13 @@ public class RecyclerAdapter extends FirestoreAdapter<RecyclerAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new ViewHolder(inflater.inflate(R.layout.ballroom_card, parent, false));
+        return new ViewHolder(inflater.inflate(R.layout.service_provided_card, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bind(getSnapshot(position), mListener);
+
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

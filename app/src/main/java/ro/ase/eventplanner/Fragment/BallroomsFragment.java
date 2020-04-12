@@ -1,5 +1,6 @@
 package ro.ase.eventplanner.Fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+
+import java.lang.ref.WeakReference;
 
 import ro.ase.eventplanner.Adapter.RecyclerAdapter;
 import ro.ase.eventplanner.R;
@@ -94,4 +97,7 @@ public class BallroomsFragment extends Fragment implements RecyclerAdapter.OnSer
                 navigate(R.id.action_global_viewService, bundle);
 
     }
+
+
 }
+
