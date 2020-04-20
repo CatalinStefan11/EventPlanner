@@ -78,7 +78,7 @@ public class PhotosFragment extends Fragment {
 
         final FirebaseMethods firebaseMethods= FirebaseMethods.getInstance(getContext());
 
-        TextView nextScreen = (TextView) view.findViewById(R.id.tvNext);
+        TextView nextScreen = view.findViewById(R.id.tvNext);
 
         nextScreen.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -37,16 +37,15 @@ public class PhotographersFragment extends Fragment implements RecyclerAdapter.O
         View root = inflater.inflate(R.layout.fragment_photographers, container, false);
         mPhotographersRecyclerView = root.findViewById(R.id.photographersRecyclerView);
         mFirestore = FirebaseFirestore.getInstance();
-        Query query = mFirestore.collection(FirebaseTag.TAG_PHOTOGRAPHERS);
+        Query query = mFirestore.collection(FirebaseTag.TAG_PHOTOGRAPHERS)
+                .orderBy("avgRating", Query.Direction.DESCENDING)
+                .limit(10);;
         mRecyclerAdapter = new RecyclerAdapter(query,this, Glide.with(this));
         mPhotographersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mPhotographersRecyclerView.setAdapter(mRecyclerAdapter);
 
         return root;
     }
-
-
-
 
     @Override
     public void onServiceSelected(DocumentSnapshot service) {

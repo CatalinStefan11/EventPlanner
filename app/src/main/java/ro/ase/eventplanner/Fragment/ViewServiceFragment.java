@@ -79,6 +79,8 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
         sliderView = mRoot.findViewById(R.id.service_image_slider);
         textName = mRoot.findViewById(R.id.service_name);
         textLocation = mRoot.findViewById(R.id.service_location);
+        textDescription = mRoot.findViewById(R.id.description);
+
 
         mRatingIndicator = mRoot.findViewById(R.id.service_rating);
         mNumRatingsView = mRoot.findViewById(R.id.service_num_ratings);
@@ -95,13 +97,7 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
 
 
 
-
-
-        //todo
-//        textDescription = root.findViewById(R.id.description);
-
         initUI();
-
 
         return mRoot;
 
@@ -201,7 +197,9 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
         mRatingIndicator.setRating((float)serviceProvided.getAvgRating());
         textName.setText(serviceProvided.getName());
         textLocation.setText(serviceProvided.getLocation());
-//        textDescription.setText(serviceProvided.getDescription());
+        textDescription.setText(serviceProvided.getDescription());
+        mNumRatingsView.setText("(" + serviceProvided.getNumRatings() + ")");
+
     }
 
 

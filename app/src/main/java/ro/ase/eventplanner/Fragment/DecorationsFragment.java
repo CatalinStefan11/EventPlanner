@@ -40,7 +40,9 @@ public class DecorationsFragment extends Fragment implements RecyclerAdapter.OnS
         mDecorationsRecyclerView = root.findViewById(R.id.decorationsRecyclerView);
 
         mFirestore = FirebaseFirestore.getInstance();
-        Query query = mFirestore.collection(FirebaseTag.TAG_DECORATIONS);
+        Query query = mFirestore.collection(FirebaseTag.TAG_DECORATIONS)
+                .orderBy("avgRating", Query.Direction.DESCENDING)
+                .limit(10);
         mRecyclerAdapter = new RecyclerAdapter(query,this, Glide.with(this));
         mDecorationsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mDecorationsRecyclerView.setAdapter(mRecyclerAdapter);

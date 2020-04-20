@@ -41,7 +41,7 @@ public class BallroomsFragment extends Fragment implements RecyclerAdapter.OnSer
 
         mFirestore = FirebaseFirestore.getInstance();
         Query query = mFirestore.collection(FirebaseTag.TAG_BALLROOM)
-                .orderBy("creator", Query.Direction.DESCENDING)
+                .orderBy("avgRating", Query.Direction.DESCENDING)
                 .limit(10);
         mRecyclerAdapter = new RecyclerAdapter(query,this, Glide.with(this)){
             @Override
@@ -57,8 +57,6 @@ public class BallroomsFragment extends Fragment implements RecyclerAdapter.OnSer
         };
         mBallroomRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBallroomRecyclerView.setAdapter(mRecyclerAdapter);
-
-
 
         return root;
 

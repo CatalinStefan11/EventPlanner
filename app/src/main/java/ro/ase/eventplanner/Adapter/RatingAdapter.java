@@ -30,9 +30,7 @@ import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import ro.ase.eventplanner.Model.Rating;
 import ro.ase.eventplanner.R;
 
-/**
- * RecyclerView adapter for a bunch of Ratings.
- */
+
 public class RatingAdapter extends FirestoreAdapter<RatingAdapter.ViewHolder> {
 
     public RatingAdapter(Query query) {
@@ -62,6 +60,7 @@ public class RatingAdapter extends FirestoreAdapter<RatingAdapter.ViewHolder> {
             nameView = itemView.findViewById(R.id.rating_item_name);
             ratingBar = itemView.findViewById(R.id.rating_item_rating);
             textView = itemView.findViewById(R.id.rating_item_text);
+
         }
 
         public void bind(Rating rating) {

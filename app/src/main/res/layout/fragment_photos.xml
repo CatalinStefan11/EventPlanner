@@ -19,8 +19,7 @@
         android:layout_height="match_parent"
         android:weightSum="100"
         android:orientation="vertical"
-        android:layout_below="@id/relLayout1"
-        >
+        android:layout_below="@id/relLayout1">
 
 
 
@@ -34,10 +33,7 @@
             android:horizontalSpacing="1.5dp"
             android:stretchMode="none"
             android:gravity="center"
-            android:layout_marginTop="1dp"
-        >
-
-
+            android:layout_marginTop="1dp">
 
         </GridView>
 
