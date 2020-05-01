@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.stats.GCoreWakefulBroadcastReceiver;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -57,6 +58,7 @@ public class BallroomsFragment extends Fragment implements RecyclerAdapter.OnSer
         };
         mBallroomRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBallroomRecyclerView.setAdapter(mRecyclerAdapter);
+
 
         return root;
 
