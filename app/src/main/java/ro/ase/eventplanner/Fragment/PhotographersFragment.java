@@ -39,7 +39,7 @@ public class PhotographersFragment extends Fragment implements RecyclerAdapter.O
         mFirestore = FirebaseFirestore.getInstance();
         Query query = mFirestore.collection(FirebaseTag.TAG_PHOTOGRAPHERS)
                 .orderBy("avgRating", Query.Direction.DESCENDING)
-                .limit(10);;
+                .limit(10);
         mRecyclerAdapter = new RecyclerAdapter(query,this, Glide.with(this));
         mPhotographersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mPhotographersRecyclerView.setAdapter(mRecyclerAdapter);

@@ -42,11 +42,9 @@
 
     <fragment
         android:id="@+id/nav_tools"
-        android:name="ro.ase.eventplanner.Activity.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools">
-
-    </fragment>
+        android:name="ro.ase.eventplanner.Fragment.MyNotesFragment"
+        android:label="@string/menu_notes"
+        tools:layout="@layout/fragment_tools"/>
 
     <fragment
         android:id="@+id/nav_share"
@@ -62,6 +60,13 @@
         android:name="ro.ase.eventplanner.Fragment.ViewServiceFragment"
         android:label="@string/Details"
         tools:layout="@layout/try_layout" /><action android:id="@+id/action_global_viewService" app:destination="@id/viewService"/>
+
+    <fragment
+        android:id="@+id/noteFragment"
+        android:name="ro.ase.eventplanner.Fragment.NoteFragment"
+        android:label="Note"
+        tools:layout="@layout/activity_create_or_edit_note" />
+    <action android:id="@+id/action_global_noteFragment" app:destination="@id/noteFragment" />
 
 
 </navigation>

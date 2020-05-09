@@ -12,6 +12,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -47,11 +49,13 @@ public class MainActivity extends AppCompatActivity{
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        final FloatingActionMenu floatingActionMenu = findViewById(R.id.floating_menu);
+        floatingActionMenu.setClosedOnTouchOutside(true);
+        com.github.clans.fab.FloatingActionButton addAlert = findViewById(R.id.add_alert);
+        com.github.clans.fab.FloatingActionButton addNote = findViewById(R.id.add_note);
 
 
 
-
-        FirebaseFirestore.setLoggingEnabled(true);
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -71,6 +75,15 @@ public class MainActivity extends AppCompatActivity{
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(mNavigationView, mNavController);
 
+
+
+        addNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                floatingActionMenu.close(false);
+                mNavController.navigate(R.id.action_global_noteFragment);
+            }
+        });
 
 
 
@@ -108,7 +121,6 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-
         super.onSaveInstanceState(outState);
         outState.putBundle("state", mNavController.saveState());
     }
@@ -119,5 +131,6 @@ public class MainActivity extends AppCompatActivity{
         Bundle bundle = savedInstanceState.getBundle("state");
         mNavController.restoreState(bundle);
     }
+
 
 }
