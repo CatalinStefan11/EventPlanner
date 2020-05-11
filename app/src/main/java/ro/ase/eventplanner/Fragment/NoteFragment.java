@@ -3,7 +3,6 @@ package ro.ase.eventplanner.Fragment;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +10,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.ActionOnlyNavDirections;
+
 import ro.ase.eventplanner.Model.ReminderItem;
 import ro.ase.eventplanner.R;
+
 import android.net.Uri;
 import android.widget.EditText;
-import androidx.appcompat.app.AlertDialog;
+
 import ro.ase.eventplanner.Util.ReminderContract;
 import ro.ase.eventplanner.Util.ReminderType;
 
@@ -28,7 +30,6 @@ public class NoteFragment extends Fragment {
     private boolean isNewNote;
 
 
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -37,6 +38,14 @@ public class NoteFragment extends Fragment {
 
         mContentResolver = getActivity().getContentResolver();
 
+
+        Bundle bundle = this.getArguments();
+
+        if (bundle != null) {
+            mData = bundle.getParcelable("data");
+        } else {
+            mData = null;
+        }
 
         mContent = root.findViewById(R.id.note_content);
         mTitle = root.findViewById(R.id.note_title);
@@ -52,29 +61,10 @@ public class NoteFragment extends Fragment {
             mData = new ReminderItem();
 
         }
-
         return root;
 
     }
 
-
-    private AlertDialog deleteDialog(final ReminderItem item) {
-        return new AlertDialog.Builder(getActivity())
-                .setTitle("Confirm")
-                .setMessage("Do you want to delete?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int i) {
-                        deleteNote(item);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.dismiss();
-
-                    }
-                })
-                .create();
-    }
 
     @Override
     public void onPause() {
@@ -86,7 +76,7 @@ public class NoteFragment extends Fragment {
     private void promptSave() {
         mData.setTitle(mTitle.getText().toString());
         mData.setContent(mContent.getText().toString());
-        if (!mData.getTitle().equalsIgnoreCase(" ")) {
+        if (!mData.getTitle().equals("") && !mData.getContent().equals("")) {
             saveNote(mData);
         }
     }
@@ -108,10 +98,5 @@ public class NoteFragment extends Fragment {
         }
     }
 
-    private void deleteNote(ReminderItem item) {
-        if (item != null) {
-            Uri uri = ContentUris.withAppendedId(ReminderContract.Notes.CONTENT_URI, item.getId());
-            mContentResolver.delete(uri, null, null);
-        }
-    }
+
 }

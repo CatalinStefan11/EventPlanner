@@ -29,6 +29,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 
+import java.util.Calendar;
+
+import ro.ase.eventplanner.Model.ReminderItem;
 import ro.ase.eventplanner.R;
 
 public class MainActivity extends AppCompatActivity{
@@ -39,8 +42,6 @@ public class MainActivity extends AppCompatActivity{
     private static final String TAG = "MainActivity";
     private NavController mNavController;
     private NavigationView mNavigationView;
-    private static int restore_id;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +59,15 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+
+
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_ballrooms, R.id.nav_photographers, R.id.nav_slideshow,
+                R.id.nav_ballrooms, R.id.nav_photographers, R.id.nav_alarms,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_decorations, R.id.fragment_container_view_tag)
                 .setDrawerLayout(drawer)
                 .build();
@@ -85,7 +89,19 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        addAlert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                floatingActionMenu.close(false);
+                mNavController.navigate(R.id.action_global_alarmFragment);
+            }
+        });
 
+        Intent intent = getIntent();
+        int id = intent.getIntExtra("_id", -1);
+        if(id != -1){
+            mNavController.navigate(R.id.nav_alarms);
+        }
 
     }
 

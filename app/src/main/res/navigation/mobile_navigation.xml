@@ -19,9 +19,13 @@
         android:name="ro.ase.eventplanner.Fragment.PhotographersFragment"
         android:label="@string/navigation_photographers"
         tools:layout="@layout/fragment_photographers" >
-
-
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_alarms"
+        android:name="ro.ase.eventplanner.Fragment.MyAlarmsFragment"
+        android:label="@string/navigation_alarms"
+        tools:layout="@layout/fragment_my_alarms" />
 
 
     <fragment
@@ -44,7 +48,7 @@
         android:id="@+id/nav_tools"
         android:name="ro.ase.eventplanner.Fragment.MyNotesFragment"
         android:label="@string/menu_notes"
-        tools:layout="@layout/fragment_tools"/>
+        tools:layout="@layout/fragment_my_notes"/>
 
     <fragment
         android:id="@+id/nav_share"
@@ -65,8 +69,21 @@
         android:id="@+id/noteFragment"
         android:name="ro.ase.eventplanner.Fragment.NoteFragment"
         android:label="Note"
-        tools:layout="@layout/activity_create_or_edit_note" />
+        tools:layout="@layout/activity_create_or_edit_note" >
+        <argument
+            android:name="reminder"
+            app:argType="ro.ase.eventplanner.Model.ReminderItem"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <action android:id="@+id/action_global_noteFragment" app:destination="@id/noteFragment" />
+    <fragment
+        android:id="@+id/alarmFragment"
+        android:name="ro.ase.eventplanner.Fragment.AlarmFragment"
+        android:label="Reminder"
+        tools:layout="@layout/alert_fragment" />
+    <action android:id="@+id/action_global_alarmFragment" app:destination="@id/alarmFragment" />
+
 
 
 </navigation>

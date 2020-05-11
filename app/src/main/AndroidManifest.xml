@@ -17,8 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.NoteActivity"
-            android:parentActivityName=".Activity.MainActivity"></activity>
 
         <activity android:name=".Activity.NewOfferActivity" />
         <activity
@@ -40,6 +38,14 @@
             android:grantUriPermissions="true" android:label="LentItemsProvider"
             android:readPermission="ro.ase.eventplanner.READ"
             android:writePermission="ro.ase.eventplanner.WRITE" />
+
+        <receiver android:name=".Util.AlarmSetter">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".Util.AlarmReceiver" android:enabled="true" />
+        <service android:name=".Util.AlarmService" android:enabled="true" />
     </application>
 
 </manifest>

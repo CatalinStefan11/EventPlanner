@@ -1,9 +1,9 @@
 package ro.ase.eventplanner.Fragment;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,21 +23,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-
 import java.util.ArrayList;
 import java.util.List;
-
-
-import ro.ase.eventplanner.Util.ReminderContract;
 
 import ro.ase.eventplanner.Adapter.ReminderAdapter;
 import ro.ase.eventplanner.Adapter.ReminderViewHolder;
 import ro.ase.eventplanner.Model.ReminderItem;
 import ro.ase.eventplanner.R;
-
+import ro.ase.eventplanner.Util.AlarmService;
+import ro.ase.eventplanner.Util.ReminderContract;
+import ro.ase.eventplanner.Util.ReminderParams;
 import ro.ase.eventplanner.Util.ReminderType;
 
-public class MyNotesFragment extends Fragment implements
+public class MyAlarmsFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor>,
         SwipeRefreshLayout.OnRefreshListener {
 
@@ -68,15 +66,11 @@ public class MyNotesFragment extends Fragment implements
 
                 int position = holder.getAdapterPosition();
                 ReminderItem item = mAdapter.getItemAtPosition(position);
-                if (item.getType().equals(ReminderType.ALERT.getName())) {
-
-                } else {
-
-
+                if (item.getType().getName().equalsIgnoreCase(ReminderType.ALERT.getName())) {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("data", item);
                     Navigation.findNavController(mMView)
-                            .navigate(R.id.action_global_noteFragment, bundle);
+                            .navigate(R.id.action_global_alarmFragment, bundle);
                 }
 
             }
@@ -100,8 +94,7 @@ public class MyNotesFragment extends Fragment implements
             }
         };
 
-//        mType = getArguments() != null ? (ReminderType) getArguments()
-//                .getSerializable(ReminderParams.TYPE) : null;
+
 
         mReminderItems = new ArrayList<>();
         getLoaderManager().initLoader(0, null, this);
@@ -114,7 +107,7 @@ public class MyNotesFragment extends Fragment implements
         if (getContext() == null) {
             return null;
         }
-        return new CursorLoader(getContext(), ReminderContract.Notes.CONTENT_URI, null, null,
+        return new CursorLoader(getContext(), ReminderContract.Alerts.CONTENT_URI, null, null,
                 null, null);
     }
 
@@ -136,7 +129,7 @@ public class MyNotesFragment extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        mMView = inflater.inflate(R.layout.fragment_my_notes, container, false);
+        mMView = inflater.inflate(R.layout.fragment_my_alarms, container, false);
         mRecyclerView = mMView.findViewById(R.id.reminder_list);
         mEmptyView = mMView.findViewById(R.id.empty);
         mRefreshLayout = mMView.findViewById(R.id.refresh_layout);
@@ -219,10 +212,11 @@ public class MyNotesFragment extends Fragment implements
         ReminderType type = item.getType();
 
         if (type.equals(ReminderType.ALERT)) {
+            Intent delete = new Intent(getContext(), AlarmService.class);
+            delete.putExtra(ReminderParams.ID, id);
+            delete.setAction(AlarmService.DELETE);
+            getContext().startService(delete);
 
-        } else {
-            uri = ContentUris.withAppendedId(ReminderContract.Alerts.CONTENT_URI, id);
-            getContext().getContentResolver().delete(uri, null, null);
         }
     }
 
