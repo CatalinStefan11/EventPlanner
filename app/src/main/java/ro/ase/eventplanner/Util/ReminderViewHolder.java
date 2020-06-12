@@ -1,4 +1,4 @@
-package ro.ase.eventplanner.Adapter;
+package ro.ase.eventplanner.Util;
 
 
 import android.view.View;
@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
-import com.bignerdranch.android.multiselector.MultiSelector;
 import com.bignerdranch.android.multiselector.SwappingHolder;
 
 import ro.ase.eventplanner.R;

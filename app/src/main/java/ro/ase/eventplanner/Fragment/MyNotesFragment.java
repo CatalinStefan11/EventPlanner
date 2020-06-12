@@ -31,7 +31,7 @@ import java.util.List;
 import ro.ase.eventplanner.Util.ReminderContract;
 
 import ro.ase.eventplanner.Adapter.ReminderAdapter;
-import ro.ase.eventplanner.Adapter.ReminderViewHolder;
+import ro.ase.eventplanner.Util.ReminderViewHolder;
 import ro.ase.eventplanner.Model.ReminderItem;
 import ro.ase.eventplanner.R;
 

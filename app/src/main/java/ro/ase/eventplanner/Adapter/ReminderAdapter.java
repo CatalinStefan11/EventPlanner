@@ -13,7 +13,7 @@ import java.util.List;
 import ro.ase.eventplanner.Model.ReminderItem;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.ReminderType;
-
+import ro.ase.eventplanner.Util.ReminderViewHolder;
 
 
 public class ReminderAdapter extends RecyclerView.Adapter<ReminderViewHolder> {

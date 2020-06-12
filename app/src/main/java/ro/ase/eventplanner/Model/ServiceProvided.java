@@ -1,10 +1,7 @@
 package ro.ase.eventplanner.Model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
-
 import java.util.List;
 
 @IgnoreExtraProperties

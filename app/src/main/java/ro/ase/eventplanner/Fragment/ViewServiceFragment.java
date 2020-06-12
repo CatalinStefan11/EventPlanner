@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -64,6 +66,8 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
 
     private FirebaseFirestore mFirestore;
     private DocumentReference mServiceRef;
+    private Button startChat;
+
 
     private static final String TAG = "ViewServiceFragment";
 
@@ -86,6 +90,15 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
         mNumRatingsView = mRoot.findViewById(R.id.service_num_ratings);
         mRatingsRecycler = mRoot.findViewById(R.id.recycler_ratings);
         mEmptyView = mRoot.findViewById(R.id.view_empty_ratings);
+        startChat = mRoot.findViewById(R.id.start_chat);
+
+        startChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(getView()).
+                        navigate(R.id.action_global_chatFragment);
+            }
+        });
 
 
         mRoot.findViewById(R.id.fab_show_rating_dialog).setOnClickListener(new View.OnClickListener() {
@@ -96,14 +109,12 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
         });
 
 
-
         initUI();
 
         return mRoot;
 
 
     }
-
 
 
     @Override
@@ -127,8 +138,6 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
     }
 
 
-
-
     public void onAddRatingClicked(View view) {
         mRatingDialog.show(ViewServiceFragment.this.getChildFragmentManager(), RatingDialogFragment.TAG);
     }
@@ -149,10 +158,10 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
                 .limit(3);
 
 
-        mRatingAdapter = new RatingAdapter(raitingsQuery){
+        mRatingAdapter = new RatingAdapter(raitingsQuery) {
             @Override
             protected void onDataChanged() {
-                if(getItemCount() == 0){
+                if (getItemCount() == 0) {
                     mRatingsRecycler.setVisibility(View.GONE);
                     mEmptyView.setVisibility(View.VISIBLE);
                 } else {
@@ -191,10 +200,10 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
     }
 
 
-    private void onServiceLoaded(ServiceProvided serviceProvided){
+    private void onServiceLoaded(ServiceProvided serviceProvided) {
         adapter = new SliderAdapter(getContext(), serviceProvided.getImages_links());
         sliderView.setSliderAdapter(adapter);
-        mRatingIndicator.setRating((float)serviceProvided.getAvgRating());
+        mRatingIndicator.setRating((float) serviceProvided.getAvgRating());
         textName.setText(serviceProvided.getName());
         textLocation.setText(serviceProvided.getLocation());
         textDescription.setText(serviceProvided.getDescription());
@@ -205,7 +214,7 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
 
     @Override
     public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-        if(e != null){
+        if (e != null) {
             Log.w(TAG, "restaurant:onEvent", e);
             return;
         }
