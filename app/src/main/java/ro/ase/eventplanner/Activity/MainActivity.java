@@ -2,39 +2,26 @@ package ro.ase.eventplanner.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-
-
-import java.util.Calendar;
-
-import ro.ase.eventplanner.Model.ReminderItem;
 import ro.ase.eventplanner.R;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore mFirestore;
     private AppBarConfiguration mAppBarConfiguration;
@@ -56,12 +43,6 @@ public class MainActivity extends AppCompatActivity{
         com.github.clans.fab.FloatingActionButton addNote = findViewById(R.id.add_note);
 
 
-
-
-
-
-
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -73,12 +54,9 @@ public class MainActivity extends AppCompatActivity{
                 .build();
 
 
-
-
         mNavController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(mNavigationView, mNavController);
-
 
 
         addNote.setOnClickListener(new View.OnClickListener() {
@@ -99,13 +77,11 @@ public class MainActivity extends AppCompatActivity{
 
         Intent intent = getIntent();
         int id = intent.getIntExtra("_id", -1);
-        if(id != -1){
+        if (id != -1) {
             mNavController.navigate(R.id.nav_alarms);
         }
 
     }
-
-
 
 
     @Override
@@ -120,7 +96,7 @@ public class MainActivity extends AppCompatActivity{
 
         int id = item.getItemId();
 
-        if(id == R.id.action_add_service){
+        if (id == R.id.action_add_service) {
             startActivity(new Intent(MainActivity.this, NewOfferActivity.class));
         }
 

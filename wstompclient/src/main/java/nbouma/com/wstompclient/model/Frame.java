@@ -25,8 +25,8 @@ public class Frame {
     public Frame setConnection(final String destination) { // sets default connection frame
         this.command = Command.CONNECT;
         this.append("host", destination);
-        this.append("accept-version", "1.1");
-        this.append("heart-beat", "60000,0");
+        this.append("accept-version", "1.1,1.0");
+        this.append("heart-beat", "10000,10000");
         return this;
     }
 

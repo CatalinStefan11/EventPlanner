@@ -6,28 +6,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import nbouma.com.wstompclient.implementation.StompClient;
-import nbouma.com.wstompclient.model.Frame;
-import okhttp3.OkHttpClient;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.Random;
+
 import ro.ase.eventplanner.R;
+import tech.gusavila92.websocketclient.WebSocketClient;
 
 
 public class ChatFragment extends Fragment {
 
     private View mRoot;
-    private Button start;
-    private TextView output;
-    private StompClient stompClient;
+    private Button send;
+    private TextView chatHistory;
+    private WebSocketClient webSocketClient;
+    private EditText inputText;
+    private GsonBuilder builder = new GsonBuilder();
+    private Gson gson = builder.create();
 
-
-
-
+    private String senderId = String.valueOf(new Random().nextInt(10));
 
     @Nullable
     @Override
@@ -35,79 +43,116 @@ public class ChatFragment extends Fragment {
 
         mRoot = inflater.inflate(R.layout.chat_fragment, container, false);
 
-        start =  mRoot.findViewById(R.id.start);
-        output = mRoot.findViewById(R.id.output);
+        send = mRoot.findViewById(R.id.start);
+        chatHistory = mRoot.findViewById(R.id.chatHistory);
+        inputText = mRoot.findViewById(R.id.inputText);
+
+        System.out.println("SENDER: " + senderId);
 
 
-
-        stompClient = new StompClient("ws://10.0.2.2:8080/websocket/websocket") { //example "ws://localhost:8080/message-server"
-            @Override
-            protected void onStompError(String errorMessage) {
-                Log.i("WEBSOCKET", "error : " + errorMessage);
-            }
-
-            @Override
-            protected void onConnection(boolean connected) {
-                Log.i("WEBSOCKET", "connected : ----------" + String.valueOf(connected));
-            }
-
-            @Override
-            protected void onDisconnection(String reason) {
-                Log.i("WEBSOCKET", "disconnected : " + reason);
-            }
-
-            @Override
-            protected void onStompMessage(Frame frame) {
-                Log.i("WEBSOCKET","prrimit msg");
-                output.setText(frame.getBody());
-            }
-
-        };
-
-//        stompClient.subscribe("/topic/send");
-        stompClient.subscribe("/topic/send","");
-//        stompClient.sendMessage("/topic/send","sd");
-
-
-
-
-        start.setOnClickListener(new View.OnClickListener() {
+        send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("WEBSOCKET", new Message("aa","22").toString());
-                stompClient.sendMessage("/app/send", new Message("aa","22").toString());
+                Log.i("WEBSOCKET", inputText.getText().toString());
+                chatHistory.append(inputText.getText().toString() + "\n");
+                String re = Arrays.asList(inputText.getText().toString().split(":")).get(0);
+                inputText.setText("");
+                webSocketClient.send(new Message(inputText.getText().toString(), senderId, re).toString());
             }
         });
 
-//
-//        stompClient.sendMessage("/topic/send", "MESSI");
-
-
+        createWebSocketClient();
         return mRoot;
     }
 
 
-
-
-public class Message{
+    public class Message {
         String message;
-        String sender;
+        String senderID;
+        String recipientId;
 
-    public Message(String message, String sender) {
-        this.message = message;
-        this.sender = sender;
+        public Message(String message, String senderID, String recipientId) {
+            this.message = message;
+            this.senderID = senderID;
+            this.recipientId = recipientId;
+        }
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "\"message\":" + "\"" + message + "\"" +
+                    ", " +
+                    "\"senderId\":" + "\"" + senderID + "\"" +
+                    ", " +
+                    "\"recipientId\":" + "\"" + recipientId + "\"" +
+                    '}';
+        }
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "\"message\":" + "\""  + message +"\"" +
-                ", " +
-                "\"sender\":" + "\"" +sender  + "\"" +
-                '}';
+    private void createWebSocketClient() {
+        URI uri;
+        try {
+            // Connect to local host
+            uri = new URI("ws://10.0.2.2:8080/websocket");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return;
+        }
+        webSocketClient = new WebSocketClient(uri) {
+            @Override
+            public void onOpen() {
+                Log.i("WebSocket", "Session is starting");
+                webSocketClient.send("Connected");
+            }
+
+            @Override
+            public void onTextReceived(String s) {
+                Log.i("WebSocket", "Message received");
+                final String message = s;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+//                            Message msg = gson.fromJson(message, Message.class);
+//                            chatHistory.append(msg.toString());
+                            chatHistory.append(message + "\n");
+                            System.out.println(message);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onBinaryReceived(byte[] data) {
+            }
+
+            @Override
+            public void onPingReceived(byte[] data) {
+            }
+
+            @Override
+            public void onPongReceived(byte[] data) {
+            }
+
+            @Override
+            public void onException(Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            @Override
+            public void onCloseReceived() {
+                Log.i("WebSocket", "Closed ");
+                System.out.println("DisConnected");
+            }
+        };
+        webSocketClient.setConnectTimeout(Integer.MAX_VALUE);
+        webSocketClient.setReadTimeout(60000);
+        //TODO think about it
+//        webSocketClient.enableAutomaticReconnection(5000);
+        webSocketClient.connect();
     }
-}
-
-
 
 }
