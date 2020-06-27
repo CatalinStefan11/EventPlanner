@@ -73,11 +73,6 @@ public class ChatFragment extends Fragment {
         System.out.println("SENDER: " + senderId);
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-
-
-
-
-
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +82,6 @@ public class ChatFragment extends Fragment {
                 inputText.setText("");
             }
         });
-
 
         createWebSocketClient();
         return mRoot;
@@ -110,9 +104,9 @@ public class ChatFragment extends Fragment {
         );
     }
 
+    // to retrieve historuy of conversaations
     public void retrieveCustomerCode(ServiceProvided serviceProvided){
         senderId = serviceProvided.getCreator();
-
 
         String URL = "http://10.0.2.2:8080/%s/%s/";
 
@@ -146,6 +140,40 @@ public class ChatFragment extends Fragment {
         });
     }
 
+    public void getAllConversationMissed(ServiceProvided serviceProvided){
+
+        String URL = "http://10.0.2.2:8080/%s/";
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(String.format(URL, mFirebaseAuth.getUid()))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+
+        Call<List<String> > contactedPersons = jsonPlaceHolderApi.getPersonsWhoContactedMe();
+
+        //TODO it should be paginated
+        contactedPersons.enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                if (!response.body().isEmpty())
+                {
+                    //iaici e lista de stringuri
+                    System.out.println(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                Log.i("RETRIEVE HISTORY", "no history to retrieve");
+            }
+        });
+    }
+
+
+
 
 
     private void createWebSocketClient() {
@@ -176,7 +204,7 @@ public class ChatFragment extends Fragment {
                             Message msg = gson.fromJson(message, Message.class);
                             chatHistory.append(msg.getMessage());
                             chatHistory.append("\n");
-                            System.out.println(message);
+//                            System.out.println(msg.toString());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -210,7 +238,7 @@ public class ChatFragment extends Fragment {
         webSocketClient.setConnectTimeout(Integer.MAX_VALUE);
         webSocketClient.setReadTimeout(60000);
         //TODO think about it
-//        webSocketClient.enableAutomaticReconnection(5000);
+        webSocketClient.enableAutomaticReconnection(5000);
         webSocketClient.connect();
     }
 

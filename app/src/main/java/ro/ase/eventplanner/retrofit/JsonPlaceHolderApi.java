@@ -10,4 +10,7 @@ public interface JsonPlaceHolderApi {
 
     @GET("messages")
     Call<List<Message>> getMessages();
+
+    @GET("contacts")
+    Call<List<String>> getPersonsWhoContactedMe();
 }
