@@ -19,9 +19,16 @@ import com.google.gson.GsonBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import ro.ase.eventplanner.R;
+import ro.ase.eventplanner.retrofit.JsonPlaceHolderApi;
 import tech.gusavila92.websocketclient.WebSocketClient;
 
 
@@ -49,6 +56,38 @@ public class ChatFragment extends Fragment {
 
         System.out.println("SENDER: " + senderId);
 
+        String URL = "http://10.0.2.2:8080/%s/%s/";
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(String.format(URL, "1","2"))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+
+        Call<List<Message> > call = jsonPlaceHolderApi.getMessages();
+
+        //TODO it should be paginated
+        call.enqueue(new Callback<List<Message>>() {
+            @Override
+            public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
+                if (!response.body().isEmpty())
+                {
+                    response.body().forEach(el -> {
+                        chatHistory.append(el.message);
+                        chatHistory.append("\n");
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Message>> call, Throwable t) {
+                Log.i("RETRIEVE HISTORY", "no history to retrieve");
+            }
+        });
+
+
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +100,15 @@ public class ChatFragment extends Fragment {
             }
         });
 
+
+//        requestQueue.start();
+//
+//        for(Message message: messageList.messages)
+//        {
+//            chatHistory.append(message.message);
+//            chatHistory.append("\n");
+//        }
+
         createWebSocketClient();
         return mRoot;
     }
@@ -70,11 +118,13 @@ public class ChatFragment extends Fragment {
         String message;
         String senderID;
         String recipientId;
+        String uuid;
 
         public Message(String message, String senderID, String recipientId) {
             this.message = message;
             this.senderID = senderID;
             this.recipientId = recipientId;
+            this.uuid = "";
         }
 
         @Override
@@ -153,6 +203,18 @@ public class ChatFragment extends Fragment {
         //TODO think about it
 //        webSocketClient.enableAutomaticReconnection(5000);
         webSocketClient.connect();
+    }
+
+    public class MessageDTO{
+        private List<Message> messages;
+
+        public MessageDTO(List<Message> messages) {
+            this.messages = messages;
+        }
+
+        public MessageDTO() {
+        }
+
     }
 
 }
