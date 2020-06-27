@@ -4,10 +4,10 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import ro.ase.eventplanner.Fragment.ChatFragment;
+import ro.ase.eventplanner.Model.Message;
 
 public interface JsonPlaceHolderApi {
 
     @GET("messages")
-    Call<List<ChatFragment.Message>> getMessages();
+    Call<List<Message>> getMessages();
 }

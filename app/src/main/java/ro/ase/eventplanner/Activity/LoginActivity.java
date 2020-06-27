@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mForgotPass;
     private TextView mSingUp;
     private Button mButtonSingIn;
-    public static FirebaseAuth mFirebaseAuth;
+    public  FirebaseAuth mFirebaseAuth;
     private FirebaseUser user;
     private ImageView mImgSingIn;
     private ImageView mButtonFacebook;

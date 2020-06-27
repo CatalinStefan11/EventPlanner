@@ -92,13 +92,7 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
         mEmptyView = mRoot.findViewById(R.id.view_empty_ratings);
         startChat = mRoot.findViewById(R.id.start_chat);
 
-        startChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(getView()).
-                        navigate(R.id.action_global_chatFragment);
-            }
-        });
+
 
 
         mRoot.findViewById(R.id.fab_show_rating_dialog).setOnClickListener(new View.OnClickListener() {
@@ -156,6 +150,12 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
         Query raitingsQuery = mServiceRef.collection("ratings")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(3);
+
+
+        startChat.setOnClickListener(v -> Navigation.findNavController(getView()).
+                navigate(R.id.action_global_chatFragment, bundle)
+        );
+
 
 
         mRatingAdapter = new RatingAdapter(raitingsQuery) {
