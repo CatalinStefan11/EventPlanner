@@ -60,38 +60,29 @@ public class MyAlarmsFragment extends Fragment implements
         super.onCreate(savedInstanceState);
 
 
-        mEditListener = new EditListener() {
-            @Override
-            public void navigateToNoteEdit(RecyclerView.ViewHolder holder) {
+        mEditListener = holder -> {
 
-                int position = holder.getAdapterPosition();
-                ReminderItem item = mAdapter.getItemAtPosition(position);
-                if (item.getType().getName().equalsIgnoreCase(ReminderType.ALERT.getName())) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("data", item);
-                    Navigation.findNavController(mMView)
-                            .navigate(R.id.action_global_alarmFragment, bundle);
-                }
-
+            int position = holder.getAdapterPosition();
+            ReminderItem item = mAdapter.getItemAtPosition(position);
+            if (item.getType().getName().equalsIgnoreCase(ReminderType.ALERT.getName())) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("data", item);
+                Navigation.findNavController(mMView)
+                        .navigate(R.id.action_global_alarmFragment, bundle);
             }
+
         };
 
-        mOnItemClickListener = new ReminderViewHolder.OnClickListener() {
-            @Override
-            public void onClick(ReminderViewHolder holder) {
-                mEditListener.navigateToNoteEdit(holder);
-                mAdapter.notifyItemChanged(holder.getAdapterPosition());
-            }
+        mOnItemClickListener = holder -> {
+            mEditListener.navigateToNoteEdit(holder);
+            mAdapter.notifyItemChanged(holder.getAdapterPosition());
         };
 
-        mOnItemLongClickListener = new ReminderViewHolder.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(ReminderViewHolder holder) {
-                int position = holder.getAdapterPosition();
-                ReminderItem item = mAdapter.getItemAtPosition(position);
-                deleteDialog(item).show();
-                return false;
-            }
+        mOnItemLongClickListener = holder -> {
+            int position = holder.getAdapterPosition();
+            ReminderItem item = mAdapter.getItemAtPosition(position);
+            deleteDialog(item).show();
+            return false;
         };
 
 
@@ -175,18 +166,11 @@ public class MyAlarmsFragment extends Fragment implements
         return new AlertDialog.Builder(getContext())
                 .setTitle(R.string.confirm)
                 .setMessage(R.string.delete_prompt)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int i) {
-                        deleteSelected(item);
-                        dialog.dismiss();
-                    }
+                .setPositiveButton(R.string.yes, (dialog, i) -> {
+                    deleteSelected(item);
+                    dialog.dismiss();
                 })
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.dismiss();
-
-                    }
-                })
+                .setNegativeButton(R.string.no, (dialog, i) -> dialog.dismiss())
                 .create();
 
     }

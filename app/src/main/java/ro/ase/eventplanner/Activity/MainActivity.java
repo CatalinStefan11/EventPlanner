@@ -7,10 +7,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private NavController mNavController;
     private NavigationView mNavigationView;
+    private FloatingActionMenu mFloatingActionMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final FloatingActionMenu floatingActionMenu = findViewById(R.id.floating_menu);
-        floatingActionMenu.setClosedOnTouchOutside(true);
+        mFloatingActionMenu = findViewById(R.id.floating_menu);
+        mFloatingActionMenu.setClosedOnTouchOutside(true);
         com.github.clans.fab.FloatingActionButton addAlert = findViewById(R.id.add_alert);
         com.github.clans.fab.FloatingActionButton addNote = findViewById(R.id.add_note);
 
@@ -58,11 +61,21 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(mNavigationView, mNavController);
 
+        mNavController.addOnDestinationChangedListener(((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.chatFragment) {
+                mFloatingActionMenu.setVisibility(View.INVISIBLE);
+            } else if (destination.getId() == R.id.viewService) {
+                mFloatingActionMenu.setVisibility(View.INVISIBLE);
+            } else {
+                mFloatingActionMenu.setVisibility(View.VISIBLE);
+            }
+        }));
+
 
         addNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                floatingActionMenu.close(false);
+                mFloatingActionMenu.close(false);
                 mNavController.navigate(R.id.action_global_noteFragment);
             }
         });
@@ -70,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         addAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                floatingActionMenu.close(false);
+                mFloatingActionMenu.close(false);
                 mNavController.navigate(R.id.action_global_alarmFragment);
             }
         });

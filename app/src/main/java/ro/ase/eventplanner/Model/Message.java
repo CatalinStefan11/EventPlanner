@@ -4,14 +4,14 @@ import com.google.gson.annotations.Expose;
 
 public class Message {
     String message;
-    String senderID;
+    String senderId;
     String recipientId;
     @Expose(serialize = false, deserialize = false)
     String uuid;
 
-    public Message(String message, String senderID, String recipientId) {
+    public Message(String message, String senderId, String recipientId) {
         this.message = message;
-        this.senderID = senderID;
+        this.senderId = senderId;
         this.recipientId = recipientId;
         this.uuid = "";
     }
@@ -24,12 +24,12 @@ public class Message {
         this.message = message;
     }
 
-    public String getSenderID() {
-        return senderID;
+    public String getSenderId() {
+        return senderId;
     }
 
-    public void setSenderID(String senderID) {
-        this.senderID = senderID;
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
     public String getRecipientId() {
@@ -53,7 +53,7 @@ public class Message {
         return "{" +
                 "\"message\":" + "\"" + message + "\"" +
                 ", " +
-                "\"senderId\":" + "\"" + senderID + "\"" +
+                "\"senderId\":" + "\"" + senderId + "\"" +
                 ", " +
                 "\"recipientId\":" + "\"" + recipientId + "\"" +
                 '}';

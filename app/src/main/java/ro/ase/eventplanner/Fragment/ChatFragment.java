@@ -7,11 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -21,14 +25,16 @@ import com.google.gson.GsonBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ro.ase.eventplanner.Adapter.MessageAdapter;
 import ro.ase.eventplanner.Model.Message;
 import ro.ase.eventplanner.Model.ServiceProvided;
 import ro.ase.eventplanner.R;
@@ -48,9 +54,13 @@ public class ChatFragment extends Fragment {
     private Gson gson = builder.create();
     private FirebaseFirestore mFirestore;
     private DocumentReference mServiceRef;
-    public FirebaseAuth mFirebaseAuth;
-
+    private FirebaseAuth mFirebaseAuth;
     private String senderId;
+    private CircleImageView profile_image;
+    private ImageButton btn_send;
+    private EditText text_send;
+    private MessageAdapter messageAdapter;
+    private RecyclerView recyclerView;
 
 
     @Override
@@ -66,29 +76,54 @@ public class ChatFragment extends Fragment {
 
         mRoot = inflater.inflate(R.layout.chat_fragment, container, false);
 
-        send = mRoot.findViewById(R.id.start);
-        chatHistory = mRoot.findViewById(R.id.chatHistory);
-        inputText = mRoot.findViewById(R.id.inputText);
+//        send = mRoot.findViewById(R.id.start);
+//        chatHistory = mRoot.findViewById(R.id.chatHistory);
+//        inputText = mRoot.findViewById(R.id.inputText);
 
-        System.out.println("SENDER: " + senderId);
+
         mFirebaseAuth = FirebaseAuth.getInstance();
+        senderId = mFirebaseAuth.getUid();
 
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("WEBSOCKET", inputText.getText().toString());
-                chatHistory.append(inputText.getText().toString() + "\n");
-                webSocketClient.send(new Message(inputText.getText().toString(), senderId, mFirebaseAuth.getUid()).toString());
-                inputText.setText("");
+
+        recyclerView = mRoot.findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+
+        profile_image = mRoot.findViewById(R.id.profile_image);
+        btn_send = mRoot.findViewById(R.id.btn_send);
+        text_send = mRoot.findViewById(R.id.text_send);
+
+
+        messageAdapter = new MessageAdapter(getContext(), new ArrayList<Message>());
+        recyclerView.setAdapter(messageAdapter);
+
+
+        btn_send.setOnClickListener(v -> {
+            String msg = text_send.getText().toString();
+            if (!msg.equals("")) {
+
+
+                Message message = new Message(text_send.getText().toString(), senderId, mFirebaseAuth.getUid());
+
+                webSocketClient.send(message.toString());
+                text_send.setText("");
+                messageAdapter.appendMessage(message);
+                Log.i("WEBSOCKET", text_send.getText().toString());
+
+
+            } else {
+                Toast.makeText(getContext(), "You can't send empty message", Toast.LENGTH_SHORT).show();
             }
         });
-
         createWebSocketClient();
         return mRoot;
     }
 
 
-    public void getCurentClientId(){
+    public void getCurentClientId() {
         Bundle bundle = this.getArguments();
 
         String collection_path = bundle.getString(Constants.PATH_TAG);
@@ -97,39 +132,44 @@ public class ChatFragment extends Fragment {
 
         mFirestore = FirebaseFirestore.getInstance();
         mServiceRef = mFirestore.collection(collection_path).document(service_id);
-        mServiceRef.addSnapshotListener((x,y) -> {
-            ServiceProvided service = x.toObject(ServiceProvided.class);
-            retrieveCustomerCode(service);
+        mServiceRef.addSnapshotListener((x, y) -> {
+                    ServiceProvided service = x.toObject(ServiceProvided.class);
+                    retrieveCustomerCode(service);
                 }
         );
     }
 
+
     // to retrieve historuy of conversaations
-    public void retrieveCustomerCode(ServiceProvided serviceProvided){
+    public void retrieveCustomerCode(ServiceProvided serviceProvided) {
         senderId = serviceProvided.getCreator();
 
         String URL = "http://10.0.2.2:8080/%s/%s/";
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(String.format(URL, senderId, mFirebaseAuth.getUid().toString()))
+                .baseUrl(String.format(URL, senderId, mFirebaseAuth.getUid()))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
 
-        Call<List<Message> > call = jsonPlaceHolderApi.getMessages();
+        Call<List<Message>> call = jsonPlaceHolderApi.getMessages();
 
         //TODO it should be paginated
         call.enqueue(new Callback<List<Message>>() {
             @Override
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
-                if (!response.body().isEmpty())
-                {
-                    response.body().forEach(el -> {
-                        chatHistory.append(el.getMessage());
-                        chatHistory.append("\n");
-                    });
+                if (!response.body().isEmpty()) {
+
+                    messageAdapter = new MessageAdapter(getContext(), response.body());
+                    recyclerView.setAdapter(messageAdapter);
+//                    response.body().forEach(el -> {
+//
+//
+//                        chatHistory.append(el.getMessage());
+//                        chatHistory.append("\n");
+//                    });
                 }
             }
 
@@ -140,7 +180,7 @@ public class ChatFragment extends Fragment {
         });
     }
 
-    public void getAllConversationMissed(ServiceProvided serviceProvided){
+    public void getAllConversationMissed(ServiceProvided serviceProvided) {
 
         String URL = "http://10.0.2.2:8080/%s/";
 
@@ -152,14 +192,13 @@ public class ChatFragment extends Fragment {
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
 
-        Call<List<String> > contactedPersons = jsonPlaceHolderApi.getPersonsWhoContactedMe();
+        Call<List<String>> contactedPersons = jsonPlaceHolderApi.getPersonsWhoContactedMe();
 
         //TODO it should be paginated
         contactedPersons.enqueue(new Callback<List<String>>() {
             @Override
             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-                if (!response.body().isEmpty())
-                {
+                if (!response.body().isEmpty()) {
                     //iaici e lista de stringuri
                     System.out.println(response.body());
                 }
@@ -171,9 +210,6 @@ public class ChatFragment extends Fragment {
             }
         });
     }
-
-
-
 
 
     private void createWebSocketClient() {
@@ -202,8 +238,7 @@ public class ChatFragment extends Fragment {
                         try {
 
                             Message msg = gson.fromJson(message, Message.class);
-                            chatHistory.append(msg.getMessage());
-                            chatHistory.append("\n");
+                            messageAdapter.appendMessage(msg);
 //                            System.out.println(msg.toString());
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -243,3 +278,4 @@ public class ChatFragment extends Fragment {
     }
 
 }
+
