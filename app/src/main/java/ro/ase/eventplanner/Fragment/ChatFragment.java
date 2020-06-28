@@ -189,7 +189,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onOpen() {
                 Log.i("WebSocket", "Session is starting");
-                webSocketClient.send("Connected");
+                webSocketClient.send(new Message("Connected", mFirebaseAuth.getUid(), "").toString());
             }
 
             @Override
@@ -236,9 +236,9 @@ public class ChatFragment extends Fragment {
             }
         };
         webSocketClient.setConnectTimeout(Integer.MAX_VALUE);
-        webSocketClient.setReadTimeout(60000);
+        webSocketClient.setReadTimeout(Integer.MAX_VALUE);
         //TODO think about it
-        webSocketClient.enableAutomaticReconnection(5000);
+//        webSocketClient.enableAutomaticReconnection(5000);
         webSocketClient.connect();
     }
 

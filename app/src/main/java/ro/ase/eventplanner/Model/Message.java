@@ -1,9 +1,12 @@
 package ro.ase.eventplanner.Model;
 
+import com.google.gson.annotations.Expose;
+
 public class Message {
     String message;
     String senderID;
     String recipientId;
+    @Expose(serialize = false, deserialize = false)
     String uuid;
 
     public Message(String message, String senderID, String recipientId) {
