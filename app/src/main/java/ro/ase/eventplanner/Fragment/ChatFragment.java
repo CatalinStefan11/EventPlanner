@@ -102,11 +102,11 @@ public class ChatFragment extends Fragment {
 
 
         btn_send.setOnClickListener(v -> {
-            String msg = text_send.getText().toString();
+            String msg = text_send.getText().toString().replace("(\\r|\\n|\\r\\n)+", "\\\\n");
             if (!msg.equals("")) {
 
 
-                Message message = new Message(text_send.getText().toString(), senderId, mFirebaseAuth.getUid());
+                Message message = new Message(msg, senderId, mFirebaseAuth.getUid());
 
                 webSocketClient.send(message.toString());
                 text_send.setText("");
