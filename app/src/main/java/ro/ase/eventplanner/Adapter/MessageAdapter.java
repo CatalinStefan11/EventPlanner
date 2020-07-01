@@ -84,7 +84,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public int getItemViewType(int position) {
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        if (mChat.get(position).getSenderId().equalsIgnoreCase(fuser.getUid())) {
+        if (mChat.get(position).getRecipientId().equalsIgnoreCase(fuser.getUid())) {
             return MSG_TYPE_LEFT;
         } else {
             return MSG_TYPE_RIGHT;

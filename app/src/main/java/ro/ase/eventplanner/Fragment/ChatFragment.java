@@ -55,7 +55,7 @@ public class ChatFragment extends Fragment {
     private FirebaseFirestore mFirestore;
     private DocumentReference mServiceRef;
     private FirebaseAuth mFirebaseAuth;
-    private String senderId;
+    private String reipientId;
     private CircleImageView profile_image;
     private ImageButton btn_send;
     private EditText text_send;
@@ -82,7 +82,7 @@ public class ChatFragment extends Fragment {
 
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-        senderId = mFirebaseAuth.getUid();
+        reipientId = mFirebaseAuth.getUid();
 
 
         recyclerView = mRoot.findViewById(R.id.recycler_view);
@@ -107,7 +107,7 @@ public class ChatFragment extends Fragment {
             if (!msg.equals("")) {
 
 
-                Message message = new Message(msg, senderId, mFirebaseAuth.getUid());
+                Message message = new Message(msg, mFirebaseAuth.getUid(), reipientId);
 
                 webSocketClient.send(message.toString());
                 text_send.setText("");
@@ -143,12 +143,12 @@ public class ChatFragment extends Fragment {
 
     // to retrieve historuy of conversaations
     public void retrieveCustomerCode(ServiceProvided serviceProvided) {
-        senderId = serviceProvided.getCreator();
+        reipientId = serviceProvided.getCreator();
 
         String URL = "http://10.0.2.2:8080/%s/%s/";
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(String.format(URL, senderId, mFirebaseAuth.getUid()))
+                .baseUrl(String.format(URL, reipientId, mFirebaseAuth.getUid()))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
