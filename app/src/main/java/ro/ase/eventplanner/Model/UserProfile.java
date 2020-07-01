@@ -9,7 +9,6 @@ public class UserProfile {
 
     private String email;
     private String username;
-    private List<String> ballrooms;
 
 
     public UserProfile() {
@@ -20,7 +19,6 @@ public class UserProfile {
     public UserProfile(String email, String username) {
         this.email = email;
         this.username = username;
-        this.ballrooms = null;
 
     }
 
@@ -41,11 +39,5 @@ public class UserProfile {
         this.username = username;
     }
 
-    public List<String> getBallrooms() {
-        return ballrooms;
-    }
 
-    public void setBallrooms(List<String> ballrooms) {
-        this.ballrooms = ballrooms;
-    }
 }

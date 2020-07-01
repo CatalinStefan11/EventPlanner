@@ -102,8 +102,6 @@ public class ChatFragment extends Fragment {
         recyclerView.setAdapter(messageAdapter);
 
 
-
-
         btn_send.setOnClickListener(v -> {
             String msg = text_send.getText().toString().replace("(\\r|\\n|\\r\\n)+", "\\\\n");
             if (!msg.equals("")) {
@@ -164,51 +162,14 @@ public class ChatFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
                 if (!response.body().isEmpty()) {
-
                     messageAdapter = new MessageAdapter(getContext(), response.body());
                     recyclerView.setAdapter(messageAdapter);
-//                    response.body().forEach(el -> {
-//
-//
-//                        chatHistory.append(el.getMessage());
-//                        chatHistory.append("\n");
-//                    });
+
                 }
             }
 
             @Override
             public void onFailure(Call<List<Message>> call, Throwable t) {
-                Log.i("RETRIEVE HISTORY", "no history to retrieve");
-            }
-        });
-    }
-
-    public void getAllConversationMissed(ServiceProvided serviceProvided) {
-
-        String URL = "http://10.0.2.2:8080/%s/";
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(String.format(URL, mFirebaseAuth.getUid()))
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-
-        Call<List<String>> contactedPersons = jsonPlaceHolderApi.getPersonsWhoContactedMe();
-
-        //TODO it should be paginated
-        contactedPersons.enqueue(new Callback<List<String>>() {
-            @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-                if (!response.body().isEmpty()) {
-                    //iaici e lista de stringuri
-                    System.out.println(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
                 Log.i("RETRIEVE HISTORY", "no history to retrieve");
             }
         });

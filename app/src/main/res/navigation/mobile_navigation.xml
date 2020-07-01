@@ -52,7 +52,7 @@
 
     <fragment
         android:id="@+id/nav_share"
-        android:name="ro.ase.eventplanner.Activity.ui.share.ShareFragment"
+        android:name="ro.ase.eventplanner.Fragment.ChatHistoryFragment"
         android:label="@string/menu_share"
         tools:layout="@layout/fragment_share">
 
