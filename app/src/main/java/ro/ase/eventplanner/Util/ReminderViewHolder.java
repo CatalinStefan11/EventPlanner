@@ -94,13 +94,5 @@ public class ReminderViewHolder extends SwappingHolder implements
     }
   }
 
-  public void setSelected(boolean selected) {
-    if (selected) {
-      mCardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(),
-          R.color.itemSelected));
-    } else {
-      mCardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(),
-          R.color.white));
-    }
-  }
+
 }

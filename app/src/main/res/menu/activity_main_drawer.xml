@@ -6,41 +6,41 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_ballrooms"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_local_bar_24px"
             android:title="@string/navigation_ballrooms" />
         <item
             android:id="@+id/nav_photographers"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_camera_alt_black_24dp"
             android:title="@string/navigation_photographers" />
         <item
             android:id="@+id/nav_decorations"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_format_paint_24px"
             android:title="@string/navigation_decorations" />
 
-             />
-        <item
-            android:id="@+id/nav_tools"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_notes" />
-
-        <item
-            android:id="@+id/nav_alarms"
-            android:icon="@drawable/ic_bell_ring_grey_18dp"
-            android:title="@string/navigation_alarms" />
 
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Account">
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_share" />
+                android:icon="@drawable/ic_email_black_24dp"
+                android:title="@string/menu_my_messages" />
+<!--            <item-->
+<!--                android:id="@+id/nav_slideshow"-->
+<!--                android:icon="@drawable/ic_menu_slideshow"-->
+<!--                android:title="@string/menu_slideshow"-->
+<!--                />-->
+
             <item
-                android:id="@+id/nav_slideshow"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="@string/menu_slideshow"
-                />
+                android:id="@+id/nav_tools"
+                android:icon="@drawable/ic_speaker_notes_24px"
+                android:title="@string/menu_notes" />
+
+            <item
+                android:id="@+id/nav_alarms"
+                android:icon="@drawable/ic_notifications_active_24px"
+                android:title="@string/navigation_alarms" />
 
         </menu>
     </item>

@@ -46,10 +46,8 @@ import tech.gusavila92.websocketclient.WebSocketClient;
 public class ChatFragment extends Fragment {
 
     private View mRoot;
-    private Button send;
-    private TextView chatHistory;
+
     private WebSocketClient webSocketClient;
-    private EditText inputText;
     private GsonBuilder builder = new GsonBuilder();
     private Gson gson = builder.create();
     private FirebaseFirestore mFirestore;
@@ -66,7 +64,13 @@ public class ChatFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getCurentClientId();
+        Bundle bundle = this.getArguments();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        if (null == bundle.getString("service_id")){
+            retrieveCustomerCode2();
+        } else {
+            getCurentClientId();
+        }
 
     }
 
@@ -75,13 +79,6 @@ public class ChatFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         mRoot = inflater.inflate(R.layout.chat_fragment, container, false);
-
-//        send = mRoot.findViewById(R.id.start);
-//        chatHistory = mRoot.findViewById(R.id.chatHistory);
-//        inputText = mRoot.findViewById(R.id.inputText);
-
-
-        mFirebaseAuth = FirebaseAuth.getInstance();
         reipientId = mFirebaseAuth.getUid();
 
 
@@ -138,6 +135,42 @@ public class ChatFragment extends Fragment {
                     retrieveCustomerCode(service);
                 }
         );
+    }
+
+    public void retrieveCustomerCode2() {
+        Bundle bundle = this.getArguments();
+
+
+        String user_id = bundle.getString("user_id");
+
+        String URL = "http://10.0.2.2:8080/%s/%s/";
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(String.format(URL, user_id, mFirebaseAuth.getUid()))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+
+        Call<List<Message>> call = jsonPlaceHolderApi.getMessages();
+
+        //TODO it should be paginated
+        call.enqueue(new Callback<List<Message>>() {
+            @Override
+            public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
+                if (!response.body().isEmpty()) {
+                    messageAdapter = new MessageAdapter(getContext(), response.body());
+                    recyclerView.setAdapter(messageAdapter);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Message>> call, Throwable t) {
+                Log.i("RETRIEVE HISTORY", "no history to retrieve");
+            }
+        });
     }
 
 

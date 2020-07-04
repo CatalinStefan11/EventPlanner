@@ -70,13 +70,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-//        user = mFirebaseAuth.getCurrentUser();
-//        if(user != null) {
-//            finish();
-//            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//
-//        }
+
+        user = mFirebaseAuth.getCurrentUser();
+        if(user != null) {
+            finish();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+        }
     }
 
 

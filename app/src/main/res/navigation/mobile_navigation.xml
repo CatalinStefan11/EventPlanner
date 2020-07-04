@@ -53,7 +53,7 @@
     <fragment
         android:id="@+id/nav_share"
         android:name="ro.ase.eventplanner.Fragment.ChatHistoryFragment"
-        android:label="@string/menu_share"
+        android:label="@string/menu_my_messages"
         tools:layout="@layout/fragment_share">
 
     </fragment>
@@ -88,6 +88,7 @@
         android:name="ro.ase.eventplanner.Fragment.ChatFragment"
         android:label="chat_fragment"
         tools:layout="@layout/chat_fragment" /><action android:id="@+id/action_global_chatFragment" app:destination="@id/chatFragment"/>
+
 
 
 </navigation>

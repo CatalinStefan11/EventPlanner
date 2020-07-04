@@ -5,32 +5,32 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseAuth;
+import com.shreyaspatil.material.navigationview.MaterialNavigationView;
 
 import ro.ase.eventplanner.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseFirestore mFirestore;
     private AppBarConfiguration mAppBarConfiguration;
 
     private static final String TAG = "MainActivity";
     private NavController mNavController;
-    private NavigationView mNavigationView;
+    private MaterialNavigationView mNavigationView;
     private FloatingActionMenu mFloatingActionMenu;
 
     @Override
@@ -48,8 +48,14 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
+        View header = mNavigationView.getHeaderView(0);
+        TextView textEmail = header.findViewById(R.id.drawer_header_email);
+        textEmail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+        
+
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_ballrooms, R.id.nav_photographers, R.id.nav_alarms,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_decorations, R.id.fragment_container_view_tag)
@@ -72,20 +78,14 @@ public class MainActivity extends AppCompatActivity {
         }));
 
 
-        addNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mFloatingActionMenu.close(false);
-                mNavController.navigate(R.id.action_global_noteFragment);
-            }
+        addNote.setOnClickListener(v -> {
+            mFloatingActionMenu.close(false);
+            mNavController.navigate(R.id.action_global_noteFragment);
         });
 
-        addAlert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mFloatingActionMenu.close(false);
-                mNavController.navigate(R.id.action_global_alarmFragment);
-            }
+        addAlert.setOnClickListener(v -> {
+            mFloatingActionMenu.close(false);
+            mNavController.navigate(R.id.action_global_alarmFragment);
         });
 
         Intent intent = getIntent();
