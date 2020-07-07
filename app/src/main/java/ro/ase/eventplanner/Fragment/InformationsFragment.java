@@ -41,9 +41,9 @@ public class InformationsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_info, container, false);
         Log.d(TAG, "onCreateView: started.");
 
-        mTextInfoName = view.findViewById(R.id.text1_name);
-        mTextInfoDescription = view.findViewById(R.id.text3_description);
-        mTextInfoLocation = view.findViewById(R.id.text2_location);
+//        mTextInfoName = view.findViewById(R.id.text1_name);
+//        mTextInfoDescription = view.findViewById(R.id.text3_description);
+//        mTextInfoLocation = view.findViewById(R.id.text2_location);
         mSpinnerService = view.findViewById(R.id.spinner_service_type);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item,

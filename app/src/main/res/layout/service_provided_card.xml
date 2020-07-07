@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ballroomCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="4dp"
     android:animateLayoutChanges="true"
     android:clickable="true"
     android:clipToPadding="false"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="6dp"
-    android:layout_margin="3dp"
     app:cardElevation="4dp">
 
 
@@ -20,7 +20,6 @@
         android:orientation="vertical">
 
 
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -28,8 +27,8 @@
             <ImageView
                 android:id="@+id/ballroomImage"
                 android:layout_width="match_parent"
-                android:scaleType="centerCrop"
-                android:layout_height="180dp" />
+                android:layout_height="180dp"
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,10 +37,10 @@
                 android:background="@drawable/horizontal_line" />
 
             <TextView
+                android:id="@+id/ratings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:id="@+id/ratings"
                 android:background="@drawable/rounded_linear_layout"
 
                 android:drawableRight="@drawable/ic_24px_star"
@@ -50,7 +49,7 @@
                 android:padding="5dp"
                 android:text="4.5"
                 android:textColor="@android:color/white"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
         </RelativeLayout>
 
@@ -74,10 +73,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="109dp"
-                android:layout_marginLeft="58dp"
-                android:layout_marginTop="11dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/serviceRatings"
+                android:gravity="center_horizontal"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 tools:text="asdasd" />
 
 
@@ -85,4 +86,4 @@
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

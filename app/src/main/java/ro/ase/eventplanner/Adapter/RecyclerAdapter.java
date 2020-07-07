@@ -21,6 +21,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.text.DecimalFormat;
 
 import ro.ase.eventplanner.Model.ServiceProvided;
 import ro.ase.eventplanner.R;
@@ -80,7 +81,9 @@ public class RecyclerAdapter extends FirestoreAdapter<RecyclerAdapter.ViewHolder
 
             ballroomName.setText(service.getName());
             ratingNum.setText(String.valueOf(service.getNumRatings()) + "\nRatings");
-            ballroomRatings.setText(String.valueOf(new BigDecimal(service.getAvgRating()).round(MathContext.DECIMAL32)));
+            DecimalFormat decimalFormat = new DecimalFormat("#.#");
+
+            ballroomRatings.setText( decimalFormat.format(service.getAvgRating()));
             mStorageReference = FirebaseStorage
                     .getInstance()
                     .getReference(service.getImages_links().get(0));

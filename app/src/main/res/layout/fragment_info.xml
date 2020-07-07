@@ -13,44 +13,71 @@
         android:spinnerMode="dropdown"
         android:textSize="20sp"/>
 
-    <com.google.android.material.textfield.TextInputLayout
+
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:hintAnimationEnabled="true"
-        android:layout_marginTop="20dp">
+        android:layout_height="wrap_content"
+        android:id="@+id/username"
+        android:layout_marginTop="10dp"
+        app:met_floatingLabel="normal"
+        android:hint="@string/hint_offer_name"
+        />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text1_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_offer_name"
-            />
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/email"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="10dp"
+        app:met_floatingLabel="normal"
+        android:hint="@string/hint_offer_location"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:hintAnimationEnabled="true">
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/password"
+        android:layout_marginTop="10dp"
+        app:met_floatingLabel="normal"
+        android:hint="@string/hint_offer_description"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text2_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_offer_location" />
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:hintAnimationEnabled="true"-->
+<!--        android:layout_marginTop="20dp">-->
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:hintAnimationEnabled="true">
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/text1_name"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="@string/hint_offer_name"-->
+<!--            />-->
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/text3_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="168dp"
-                    android:hint="@string/hint_offer_description"
-                    android:inputType="textMultiLine"
-                    android:gravity="top|left"/>
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            app:hintAnimationEnabled="true">-->
 
-            </com.google.android.material.textfield.TextInputLayout>
-        </com.google.android.material.textfield.TextInputLayout>
-    </com.google.android.material.textfield.TextInputLayout>
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/text2_location"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="@string/hint_offer_location" />-->
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                app:hintAnimationEnabled="true">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:id="@+id/text3_description"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="168dp"-->
+<!--                    android:hint="@string/hint_offer_description"-->
+<!--                    android:inputType="textMultiLine"-->
+<!--                    android:gravity="top|left"/>-->
+
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
 </LinearLayout>

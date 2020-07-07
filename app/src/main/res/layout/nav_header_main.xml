@@ -21,4 +21,12 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/drawer_header_log_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/header_log_out"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
 </LinearLayout>

@@ -6,10 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -51,9 +48,18 @@ public class MainActivity extends AppCompatActivity {
 
         View header = mNavigationView.getHeaderView(0);
         TextView textEmail = header.findViewById(R.id.drawer_header_email);
+        TextView logOut = header.findViewById(R.id.drawer_header_log_out);
+
         textEmail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
-        
+
+        logOut.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(this, LoginActivity.class);
+            finish();
+            startActivity(intent);
+
+        });
 
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(

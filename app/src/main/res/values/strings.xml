@@ -73,7 +73,7 @@
     <string name="action_bar_edit_alert">Edit Alert</string>
     <string name="action_bar_create_note">Create Note</string>
     <string name="action_bar_edit_note">Edit Note</string>
-
+    <string name="header_log_out">Log out</string>
 
 
     <string-array name="spinnerServicesArray">

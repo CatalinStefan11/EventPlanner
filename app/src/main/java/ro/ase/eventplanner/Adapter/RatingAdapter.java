@@ -26,6 +26,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.Query;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import ro.ase.eventplanner.Model.Rating;
 import ro.ase.eventplanner.R;
@@ -54,12 +58,16 @@ public class RatingAdapter extends FirestoreAdapter<RatingAdapter.ViewHolder> {
         TextView nameView;
         MaterialRatingBar ratingBar;
         TextView textView;
+        TextView textDate;
 
         public ViewHolder(View itemView) {
             super(itemView);
             nameView = itemView.findViewById(R.id.rating_item_name);
             ratingBar = itemView.findViewById(R.id.rating_item_rating);
             textView = itemView.findViewById(R.id.rating_item_text);
+            textDate = itemView.findViewById(R.id.rating_item_date);
+
+
 
         }
 
@@ -67,6 +75,13 @@ public class RatingAdapter extends FirestoreAdapter<RatingAdapter.ViewHolder> {
             nameView.setText(rating.getUserName());
             ratingBar.setRating((float) rating.getRating());
             textView.setText(rating.getText());
+            Date date = rating.getTimestamp();
+            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Bucharest"));
+            cal.setTime(date);
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            textDate.setText(day + "/" + month + "/" + year);
         }
     }
 

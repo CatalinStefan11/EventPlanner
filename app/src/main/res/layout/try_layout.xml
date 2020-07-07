@@ -89,37 +89,6 @@
             android:textColor="@android:color/white"
             tools:text="Constanta" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/restaurant_city_divider"-->
-<!--            style="@style/AppTheme.TextDivider"-->
-<!--            android:layout_alignTop="@+id/restaurant_category"-->
-<!--            android:layout_toRightOf="@+id/restaurant_category"-->
-<!--            android:text="@string/divider_bullet"-->
-<!--            android:textColor="@android:color/white" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/restaurant_city"-->
-<!--            style="@style/AppTheme.Subheader"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignTop="@+id/restaurant_category"-->
-<!--            android:layout_below="@+id/restaurant_category"-->
-<!--            android:layout_toRightOf="@+id/restaurant_city_divider"-->
-<!--            android:textColor="@android:color/white"-->
-<!--            tools:text="San Francisco" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/restaurant_price"-->
-<!--            style="@style/AppTheme.Body1"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_alignTop="@+id/restaurant_name"-->
-<!--            android:layout_marginRight="8dp"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:textColor="@android:color/white"-->
-<!--            android:textStyle="bold"-->
-<!--            tools:text="$$$" />-->
 
     </RelativeLayout>
 
@@ -142,29 +111,31 @@
         android:layout_below="@+id/service_top_card"
         android:background="@drawable/white_grey_border_bottom"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="10dp">
 
 
-
+        <Button
+            android:id="@+id/start_chat"
+            android:layout_width="207dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/colorPrimary"
+            android:text="Send us a message"
+            android:textColor="#fff" />
 
 
         <TextView
             android:id="@+id/description"
-            android:layout_width="match_parent"
+            android:layout_width="391dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center|center_horizontal|left|center_vertical"
             android:text="Description"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/start_chat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="CHAT!"
-            android:layout_marginTop="40dp"
-            android:textSize="17sp"/>
+
 
 
     </LinearLayout>
