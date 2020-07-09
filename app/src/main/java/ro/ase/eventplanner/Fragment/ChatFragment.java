@@ -5,10 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,8 +25,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +40,11 @@ import ro.ase.eventplanner.Util.Constants;
 import ro.ase.eventplanner.retrofit.JsonPlaceHolderApi;
 import tech.gusavila92.websocketclient.WebSocketClient;
 
+import static ro.ase.eventplanner.Util.Util.EMPTY_STRING;
+import static ro.ase.eventplanner.Util.Util.MESSAGE_HISTORY_ENDPOINT;
+import static ro.ase.eventplanner.Util.Util.WEBSOCKET_ENDPOINT;
+import static ro.ase.eventplanner.Util.Util.removeEndlines;
+
 
 public class ChatFragment extends Fragment {
 
@@ -54,7 +57,6 @@ public class ChatFragment extends Fragment {
     private DocumentReference mServiceRef;
     private FirebaseAuth mFirebaseAuth;
     private String reipientId;
-    private CircleImageView profile_image;
     private ImageButton btn_send;
     private EditText text_send;
     private MessageAdapter messageAdapter;
@@ -66,12 +68,8 @@ public class ChatFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         mFirebaseAuth = FirebaseAuth.getInstance();
-        if (null == bundle.getString("service_id")){
-            retrieveCustomerCode2();
-        } else {
-            getCurentClientId();
-        }
-
+        Optional.ofNullable(bundle.getString("service_id")).ifPresent((string) -> chatFragmentEntryPoint());
+        Optional.ofNullable(bundle.getString("user_id")).ifPresent((string) -> listOConversationsMissedEntryPoint());
     }
 
     @Nullable
@@ -79,8 +77,6 @@ public class ChatFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         mRoot = inflater.inflate(R.layout.chat_fragment, container, false);
-//        reipientId = mFirebaseAuth.getUid();
-
 
         recyclerView = mRoot.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -89,29 +85,20 @@ public class ChatFragment extends Fragment {
 
         recyclerView.setLayoutManager(linearLayoutManager);
 
-
-        profile_image = mRoot.findViewById(R.id.profile_image);
         btn_send = mRoot.findViewById(R.id.btn_send);
         text_send = mRoot.findViewById(R.id.text_send);
 
-
-        messageAdapter = new MessageAdapter(getContext(), new ArrayList<Message>());
+        messageAdapter = new MessageAdapter(getContext(), new ArrayList<>());
         recyclerView.setAdapter(messageAdapter);
 
-
         btn_send.setOnClickListener(v -> {
-            String msg = text_send.getText().toString().replace("(\\r|\\n|\\r\\n)+", "\\\\n");
-            if (!msg.equals("")) {
-
-
-                Message message = new Message(msg, mFirebaseAuth.getUid(), reipientId);
-
+            String messagePayload = removeEndlines(text_send.getText().toString());
+            if (!messagePayload.equals(EMPTY_STRING)) {
+                Message message = new Message(messagePayload, mFirebaseAuth.getUid(), reipientId);
                 webSocketClient.send(message.toString());
-                text_send.setText("");
-                messageAdapter.appendMessage(message);
+                messageAdapter.appendMessage(new Message(text_send.getText().toString(), mFirebaseAuth.getUid(), reipientId));
+                text_send.setText(EMPTY_STRING);
                 Log.i("WEBSOCKET", text_send.getText().toString());
-
-
             } else {
                 Toast.makeText(getContext(), "You can't send empty message", Toast.LENGTH_SHORT).show();
             }
@@ -121,7 +108,7 @@ public class ChatFragment extends Fragment {
     }
 
 
-    public void getCurentClientId() {
+    public void chatFragmentEntryPoint() {
         Bundle bundle = this.getArguments();
 
         String collection_path = bundle.getString(Constants.PATH_TAG);
@@ -132,32 +119,24 @@ public class ChatFragment extends Fragment {
         mServiceRef = mFirestore.collection(collection_path).document(service_id);
         mServiceRef.addSnapshotListener((x, y) -> {
                     ServiceProvided service = x.toObject(ServiceProvided.class);
-                    retrieveCustomerCode(service);
+                    retrieveConversationHistory(service);
                 }
         );
     }
 
-    public void retrieveCustomerCode2() {
+    public void listOConversationsMissedEntryPoint() {
         Bundle bundle = this.getArguments();
-
-
         String user_id = bundle.getString("user_id");
-
-        String URL = "http://10.0.2.2:8080/%s/%s/";
+        reipientId = user_id;
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(String.format(URL, user_id, mFirebaseAuth.getUid()))
+                .baseUrl(String.format(MESSAGE_HISTORY_ENDPOINT, user_id, mFirebaseAuth.getUid()))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        reipientId=user_id;
-
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-
         Call<List<Message>> call = jsonPlaceHolderApi.getMessages();
 
-        //TODO it should be paginated
         call.enqueue(new Callback<List<Message>>() {
             @Override
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
@@ -175,31 +154,22 @@ public class ChatFragment extends Fragment {
         });
     }
 
-
-    // to retrieve historuy of conversaations
-    public void retrieveCustomerCode(ServiceProvided serviceProvided) {
+    public void retrieveConversationHistory(ServiceProvided serviceProvided) {
         reipientId = serviceProvided.getCreator();
 
-        String URL = "http://10.0.2.2:8080/%s/%s/";
-
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(String.format(URL, reipientId, mFirebaseAuth.getUid()))
+                .baseUrl(String.format(MESSAGE_HISTORY_ENDPOINT, reipientId, mFirebaseAuth.getUid()))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-
         Call<List<Message>> call = jsonPlaceHolderApi.getMessages();
 
-        //TODO it should be paginated
         call.enqueue(new Callback<List<Message>>() {
             @Override
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
                 if (!response.body().isEmpty()) {
                     messageAdapter = new MessageAdapter(getContext(), response.body());
                     recyclerView.setAdapter(messageAdapter);
-
                 }
             }
 
@@ -209,13 +179,11 @@ public class ChatFragment extends Fragment {
             }
         });
     }
-
 
     private void createWebSocketClient() {
         URI uri;
         try {
-            // Connect to local host
-            uri = new URI("ws://10.0.2.2:8080/websocket");
+            uri = new URI(WEBSOCKET_ENDPOINT);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return;
@@ -224,7 +192,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onOpen() {
                 Log.i("WebSocket", "Session is starting");
-                webSocketClient.send(new Message("Connected", mFirebaseAuth.getUid(), "").toString());
+                webSocketClient.send(new Message("Connected", mFirebaseAuth.getUid(), EMPTY_STRING).toString());
             }
 
             @Override
@@ -235,10 +203,9 @@ public class ChatFragment extends Fragment {
                     @Override
                     public void run() {
                         try {
-
                             Message msg = gson.fromJson(message, Message.class);
                             messageAdapter.appendMessage(msg);
-//                            System.out.println(msg.toString());
+                            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -271,8 +238,6 @@ public class ChatFragment extends Fragment {
         };
         webSocketClient.setConnectTimeout(Integer.MAX_VALUE);
         webSocketClient.setReadTimeout(Integer.MAX_VALUE);
-        //TODO think about it
-//        webSocketClient.enableAutomaticReconnection(5000);
         webSocketClient.connect();
     }
 

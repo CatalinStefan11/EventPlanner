@@ -2,6 +2,8 @@ package ro.ase.eventplanner.Model;
 
 import com.google.gson.annotations.Expose;
 
+import static ro.ase.eventplanner.Util.Util.EMPTY_STRING;
+
 public class Message {
     String message;
     String senderId;
@@ -13,39 +15,15 @@ public class Message {
         this.message = message;
         this.senderId = senderId;
         this.recipientId = recipientId;
-        this.uuid = "";
+        this.uuid = EMPTY_STRING;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
-    }
-
     public String getRecipientId() {
         return recipientId;
-    }
-
-    public void setRecipientId(String recipientId) {
-        this.recipientId = recipientId;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 
     @Override
