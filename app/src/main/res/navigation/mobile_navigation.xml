@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="ro.ase.eventplanner.Activity.ui.slideshow.SlideshowFragment"
+        android:name="ro.ase.eventplanner.Fragment.NewOfferFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow">
 
@@ -77,12 +77,14 @@
             android:defaultValue="@null" />
     </fragment>
     <action android:id="@+id/action_global_noteFragment" app:destination="@id/noteFragment" />
+
     <fragment
         android:id="@+id/alarmFragment"
         android:name="ro.ase.eventplanner.Fragment.AlarmFragment"
         android:label="Reminder"
         tools:layout="@layout/alert_fragment" />
     <action android:id="@+id/action_global_alarmFragment" app:destination="@id/alarmFragment" />
+
     <fragment
         android:id="@+id/chatFragment"
         android:name="ro.ase.eventplanner.Fragment.ChatFragment"

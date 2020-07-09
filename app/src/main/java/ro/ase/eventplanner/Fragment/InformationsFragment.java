@@ -19,20 +19,35 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
+import com.dev.materialspinner.MaterialSpinner;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import ro.ase.eventplanner.R;
 
 
 
-public class InformationsFragment extends Fragment {
+public class InformationsFragment extends Fragment implements OnMapReadyCallback{
     private static final String TAG = "InfoFragment";
 
     //constant
     public static EditText mTextInfoName;
     public static EditText mTextInfoDescription;
     public static EditText mTextInfoLocation;
-    public Spinner mSpinnerService;
+    public MaterialSpinner mSpinnerService;
     public static int mServiceStringPosition = 0;
 
+    private GoogleMap mMap;
+
+    public static InformationsFragment newInstance() {
+        InformationsFragment fragment = new InformationsFragment();
+        return fragment;
+    }
 
 
     @Nullable
@@ -50,7 +65,7 @@ public class InformationsFragment extends Fragment {
                 getResources().getStringArray(R.array.spinnerServicesArray));
         mSpinnerService.setAdapter(adapter);
 
-        mSpinnerService.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSpinnerService.setItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 parent.setSelection(position);
@@ -63,8 +78,29 @@ public class InformationsFragment extends Fragment {
                 parent.setSelection(mServiceStringPosition);
             }
         });
+
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+
+
+
         return view;
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+
 
 
 }

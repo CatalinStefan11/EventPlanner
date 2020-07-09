@@ -37,8 +37,7 @@ public class FirebaseMethods {
     private static String userId;
     private static FirebaseStorage mStorageReference;
     private static Context mContext;
-    private String TAG = "FirebaseMethods";
-
+    
 
     public static FirebaseMethods getInstance(Context context) {
 

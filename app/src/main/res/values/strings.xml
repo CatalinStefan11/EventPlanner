@@ -81,4 +81,5 @@
         <item>Photographer</item>
         <item>Decorations</item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
 </resources>

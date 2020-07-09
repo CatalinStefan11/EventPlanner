@@ -16,7 +16,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import java.util.ArrayList;
 
-import ro.ase.eventplanner.Activity.NewOfferActivity;
+import ro.ase.eventplanner.Fragment.NewOfferFragment;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.SquareImageView;
 
@@ -78,7 +78,7 @@ public class GridImageAdapter extends ArrayAdapter<String> {
 
 
 
-        NewOfferActivity.sImageLoader.displayImage(mAppend + imgURL, holder.image, new ImageLoadingListener() {
+        NewOfferFragment.sImageLoader.displayImage(mAppend + imgURL, holder.image, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 if(holder.mProgressBar != null){

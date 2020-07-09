@@ -16,12 +16,18 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.shreyaspatil.material.navigationview.MaterialNavigationView;
 
 import ro.ase.eventplanner.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -29,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private NavController mNavController;
     private MaterialNavigationView mNavigationView;
     private FloatingActionMenu mFloatingActionMenu;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_ballrooms, R.id.nav_photographers, R.id.nav_alarms,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_decorations, R.id.fragment_container_view_tag)
+                R.id.nav_tools, R.id.nav_share, R.id.nav_decorations, R.id.fragment_container_view_tag,
+                R.id.nav_slideshow)
                 .setDrawerLayout(drawer)
                 .build();
 
@@ -142,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = savedInstanceState.getBundle("state");
         mNavController.restoreState(bundle);
     }
+
 
 
 }
