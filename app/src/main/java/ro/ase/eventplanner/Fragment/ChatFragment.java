@@ -79,7 +79,7 @@ public class ChatFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         mRoot = inflater.inflate(R.layout.chat_fragment, container, false);
-        reipientId = mFirebaseAuth.getUid();
+//        reipientId = mFirebaseAuth.getUid();
 
 
         recyclerView = mRoot.findViewById(R.id.recycler_view);
@@ -149,6 +149,8 @@ public class ChatFragment extends Fragment {
                 .baseUrl(String.format(URL, user_id, mFirebaseAuth.getUid()))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
+        reipientId=user_id;
 
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
