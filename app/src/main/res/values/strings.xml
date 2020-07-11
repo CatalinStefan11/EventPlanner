@@ -30,7 +30,8 @@
     <string name="navigation_ballrooms">Ballrooms</string>
     <string name="navigation_photographers">Photographers</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_notes">My Notes</string>
+    <string name="menu_new_offer">Add new offer</string>
+    <string name="menu_notes">Notes</string>
     <string name="menu_my_messages">My messages</string>
     <string name="navigation_decorations">Decorations</string>
 
@@ -45,8 +46,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
-    <string name="information">INFO</string>
-    <string name="photos">PHOTOS</string>
+    <string name="my_ballrooms">Ballrooms</string>
+    <string name="my_photographers">Photographers</string>
+    <string name="my_decorations">Decorations</string>
     <string name="divider_bullet">•</string>
     <string name="message_no_reviews">Be the first to leave a review!</string>
 
@@ -82,4 +84,7 @@
         <item>Decorations</item>
     </string-array>
     <string name="title_activity_maps">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

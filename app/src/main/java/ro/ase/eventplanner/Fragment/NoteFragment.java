@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.ActionOnlyNavDirections;
 
 import ro.ase.eventplanner.Model.ReminderItem;
 import ro.ase.eventplanner.R;
@@ -33,7 +32,7 @@ public class NoteFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.activity_create_or_edit_note, container, false);
+        View root = inflater.inflate(R.layout.fragment_create_or_edit_note, container, false);
 
 
         mContentResolver = getActivity().getContentResolver();

@@ -37,7 +37,7 @@ public class FirebaseMethods {
     private static String userId;
     private static FirebaseStorage mStorageReference;
     private static Context mContext;
-    
+
 
     public static FirebaseMethods getInstance(Context context) {
 
@@ -50,7 +50,6 @@ public class FirebaseMethods {
             mStorageReference = FirebaseStorage.getInstance();
 
 
-
             if (mFirebaseAuth.getCurrentUser() != null) {
                 userId = mFirebaseAuth.getCurrentUser().getUid();
             }
@@ -60,25 +59,26 @@ public class FirebaseMethods {
     }
 
 
-    public void addNewService(ServiceProvided serviceProvided, final List<String> imageUrls,
+    public void addNewService(Context context, ServiceProvided serviceProvided, final List<String> imageUrls,
                               final String path_collection_tag) {
-
 
         serviceProvided.setImages_links(null);
         mFirestore.collection(path_collection_tag)
                 .add(serviceProvided)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                .addOnSuccessListener(documentReference -> {
 
-                        String serviceId = documentReference.getId();
-                        DocumentReference userRef = mFirestore.collection("users")
-                                .document(userId);
-                        userRef.update(path_collection_tag, FieldValue.arrayUnion(serviceId));
 
-                        uploadPhotos(path_collection_tag, serviceId, imageUrls);
-                    }
-                });
+                    String serviceId = documentReference.getId();
+                    DocumentReference userRef = mFirestore.collection("users")
+                            .document(userId);
+                    userRef.update(path_collection_tag, FieldValue.arrayUnion(serviceId));
+
+                    uploadPhotos(path_collection_tag, serviceId, imageUrls);
+
+                    Toast.makeText(context, "Upload successfully", Toast.LENGTH_LONG).show();
+                }).addOnFailureListener(e -> {
+            Toast.makeText(context, "Failed to upload", Toast.LENGTH_LONG).show();
+        });
 
     }
 
@@ -96,14 +96,11 @@ public class FirebaseMethods {
             StorageReference storageReference = mStorageReference.getReference(tag).child(path);
             uploadTask = storageReference.putBytes(bytes);
 
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            uploadTask.addOnSuccessListener(taskSnapshot ->  {
                     DocumentReference ballroomRef =
                             mFirestore.collection(tag).document(offerId);
                     ballroomRef.update("images_links", FieldValue.arrayUnion(tag + path));
 
-                }
             });
         }
     }

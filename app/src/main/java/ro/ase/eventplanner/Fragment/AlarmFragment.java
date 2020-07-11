@@ -81,7 +81,7 @@ public class AlarmFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.alert_fragment, container, false);
+        View root = inflater.inflate(R.layout.fragment_creade_or_edit_alert, container, false);
 
 
         mContentResolver = getActivity().getContentResolver();

@@ -78,7 +78,7 @@ public class GridImageAdapter extends ArrayAdapter<String> {
 
 
 
-        NewOfferFragment.sImageLoader.displayImage(mAppend + imgURL, holder.image, new ImageLoadingListener() {
+        NewOfferFragment.mImageLoader.displayImage(mAppend + imgURL, holder.image, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 if(holder.mProgressBar != null){

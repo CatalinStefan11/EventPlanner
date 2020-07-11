@@ -19,8 +19,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.text.DecimalFormat;
 
 import ro.ase.eventplanner.Model.ServiceProvided;
@@ -49,7 +47,7 @@ public class RecyclerAdapter extends FirestoreAdapter<RecyclerAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new ViewHolder(inflater.inflate(R.layout.service_provided_card, parent, false));
+        return new ViewHolder(inflater.inflate(R.layout.card_service_provided, parent, false));
     }
 
     @Override

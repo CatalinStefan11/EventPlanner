@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="ro.ase.eventplanner.Fragment.NewOfferFragment"
+        android:name="ro.ase.eventplanner.Fragment.MyServicesFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow">
 
@@ -69,7 +69,7 @@
         android:id="@+id/noteFragment"
         android:name="ro.ase.eventplanner.Fragment.NoteFragment"
         android:label="Note"
-        tools:layout="@layout/activity_create_or_edit_note" >
+        tools:layout="@layout/fragment_create_or_edit_note" >
         <argument
             android:name="reminder"
             app:argType="ro.ase.eventplanner.Model.ReminderItem"
@@ -82,15 +82,19 @@
         android:id="@+id/alarmFragment"
         android:name="ro.ase.eventplanner.Fragment.AlarmFragment"
         android:label="Reminder"
-        tools:layout="@layout/alert_fragment" />
+        tools:layout="@layout/fragment_creade_or_edit_alert" />
     <action android:id="@+id/action_global_alarmFragment" app:destination="@id/alarmFragment" />
 
     <fragment
         android:id="@+id/chatFragment"
         android:name="ro.ase.eventplanner.Fragment.ChatFragment"
-        android:label="chat_fragment"
-        tools:layout="@layout/chat_fragment" /><action android:id="@+id/action_global_chatFragment" app:destination="@id/chatFragment"/>
-
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat" /><action android:id="@+id/action_global_chatFragment" app:destination="@id/chatFragment"/>
+    <fragment
+        android:id="@+id/nav_new_offer"
+        android:name="ro.ase.eventplanner.Fragment.NewOfferFragment"
+        android:label="Add a new offer"
+        tools:layout="@layout/fragment_new_offer" />
 
 
 </navigation>

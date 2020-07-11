@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -27,15 +28,13 @@ import com.shreyaspatil.material.navigationview.MaterialNavigationView;
 
 import ro.ase.eventplanner.R;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
-    private static final String TAG = "MainActivity";
     private NavController mNavController;
     private MaterialNavigationView mNavigationView;
     private FloatingActionMenu mFloatingActionMenu;
-
 
 
     @Override
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity{
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_ballrooms, R.id.nav_photographers, R.id.nav_alarms,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_decorations, R.id.fragment_container_view_tag,
-                R.id.nav_slideshow)
+                R.id.nav_slideshow, R.id.nav_new_offer)
                 .setDrawerLayout(drawer)
                 .build();
 
@@ -86,6 +85,8 @@ public class MainActivity extends AppCompatActivity{
             if (destination.getId() == R.id.chatFragment) {
                 mFloatingActionMenu.setVisibility(View.INVISIBLE);
             } else if (destination.getId() == R.id.viewService) {
+                mFloatingActionMenu.setVisibility(View.INVISIBLE);
+            } else if (destination.getId() == R.id.nav_new_offer) {
                 mFloatingActionMenu.setVisibility(View.INVISIBLE);
             } else {
                 mFloatingActionMenu.setVisibility(View.VISIBLE);
@@ -112,24 +113,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == R.id.action_add_service) {
-            startActivity(new Intent(MainActivity.this, NewOfferActivity.class));
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -151,7 +134,6 @@ public class MainActivity extends AppCompatActivity{
         Bundle bundle = savedInstanceState.getBundle("state");
         mNavController.restoreState(bundle);
     }
-
 
 
 }

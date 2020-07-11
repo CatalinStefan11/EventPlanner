@@ -4,19 +4,23 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_ballrooms"
-            android:icon="@drawable/ic_local_bar_24px"
-            android:title="@string/navigation_ballrooms" />
-        <item
-            android:id="@+id/nav_photographers"
-            android:icon="@drawable/ic_camera_alt_black_24dp"
-            android:title="@string/navigation_photographers" />
-        <item
-            android:id="@+id/nav_decorations"
-            android:icon="@drawable/ic_format_paint_24px"
-            android:title="@string/navigation_decorations" />
 
+        <item android:title="Marketplace">
+            <menu>
+                <item
+                    android:id="@+id/nav_ballrooms"
+                    android:icon="@drawable/ic_local_bar_24px"
+                    android:title="@string/navigation_ballrooms" />
+                <item
+                    android:id="@+id/nav_photographers"
+                    android:icon="@drawable/ic_camera_alt_black_24dp"
+                    android:title="@string/navigation_photographers" />
+                <item
+                    android:id="@+id/nav_decorations"
+                    android:icon="@drawable/ic_format_paint_24px"
+                    android:title="@string/navigation_decorations" />
+            </menu>
+        </item>
 
     </group>
 
@@ -26,11 +30,6 @@
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_email_black_24dp"
                 android:title="@string/menu_my_messages" />
-            <item
-                android:id="@+id/nav_slideshow"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="@string/menu_slideshow"
-                />
 
             <item
                 android:id="@+id/nav_tools"
@@ -41,6 +40,24 @@
                 android:id="@+id/nav_alarms"
                 android:icon="@drawable/ic_notifications_active_24px"
                 android:title="@string/navigation_alarms" />
+
+        </menu>
+    </item>
+
+    <item android:title="Your offers">
+        <menu>
+
+            <item
+                android:id="@+id/nav_slideshow"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="@string/menu_slideshow" />
+
+
+            <item
+                android:id="@+id/nav_new_offer"
+                android:icon="@drawable/ic_add_box_24px"
+                android:title="@string/menu_new_offer" />
+
 
         </menu>
     </item>

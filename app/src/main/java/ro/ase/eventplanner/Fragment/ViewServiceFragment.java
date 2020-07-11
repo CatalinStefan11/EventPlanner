@@ -95,12 +95,7 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
 
 
 
-        mRoot.findViewById(R.id.fab_show_rating_dialog).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onAddRatingClicked(v);
-            }
-        });
+        mRoot.findViewById(R.id.fab_show_rating_dialog).setOnClickListener(v -> onAddRatingClicked());
 
 
         initUI();
@@ -132,7 +127,7 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
     }
 
 
-    public void onAddRatingClicked(View view) {
+    public void onAddRatingClicked() {
         mRatingDialog.show(ViewServiceFragment.this.getChildFragmentManager(), RatingDialogFragment.TAG);
     }
 
@@ -260,21 +255,18 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
 
     @Override
     public void onRating(Rating rating) {
-        // In a transaction, add the new rating and update the aggregate totals
+
         addRating(mServiceRef, rating)
-                .addOnSuccessListener(getActivity(), new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
+                .addOnSuccessListener(getActivity(), x -> {
+
                         Log.d(TAG, "Rating added");
 
                         // Hide keyboard and scroll to top
                         hideKeyboard();
                         mRatingsRecycler.smoothScrollToPosition(0);
-                    }
+
                 })
-                .addOnFailureListener(getActivity(), new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                .addOnFailureListener(getActivity(), e -> {
                         Log.w(TAG, "Add rating failed", e);
 
                         // Show failure message and hide keyboard
@@ -282,6 +274,6 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
                         Snackbar.make(mRoot.findViewById(android.R.id.content), "Failed to add rating",
                                 Snackbar.LENGTH_SHORT).show();
                     }
-                });
+                );
     }
 }

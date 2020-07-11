@@ -43,27 +43,19 @@ public class LoginActivity extends AppCompatActivity {
 
         initializeUI();
         mProgressBar.setVisibility(View.GONE);
-        mButtonSingIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mButtonSingIn.setOnClickListener(v -> {
 
-                String emailFromText = mEmail.getText().toString();
-                String passFromText = mPassword.getText().toString();
+            String emailFromText = mEmail.getText().toString();
+            String passFromText = mPassword.getText().toString();
 
-                if(isValid(emailFromText,passFromText)){
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    singIn(emailFromText, passFromText);
-                }
+            if(isValid(emailFromText,passFromText)){
+                mProgressBar.setVisibility(View.VISIBLE);
+                singIn(emailFromText, passFromText);
             }
         });
 
 
-        mSingUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-            }
-        });
+        mSingUp.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
 
     }
 
@@ -83,20 +75,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private void singIn(String email, String password){
 
-        mFirebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+        mFirebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
 
-
-                    Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
-                    mProgressBar.setVisibility(View.GONE);
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                }
-                else{
-                    Toast.makeText(LoginActivity.this,"Invalid email or password",Toast.LENGTH_SHORT).show();
-                    mProgressBar.setVisibility(View.GONE);
-                }
+                Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
+                mProgressBar.setVisibility(View.GONE);
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
+            else{
+                Toast.makeText(LoginActivity.this,"Invalid email or password",Toast.LENGTH_SHORT).show();
+                mProgressBar.setVisibility(View.GONE);
             }
         });
 

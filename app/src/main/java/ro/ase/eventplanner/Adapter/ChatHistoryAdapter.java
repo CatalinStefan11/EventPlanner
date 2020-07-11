@@ -30,7 +30,7 @@ public class ChatHistoryAdapter extends RecyclerView.Adapter<ChatHistoryAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.user_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.card_user_item, parent, false);
         return new ChatHistoryAdapter.ViewHolder(view);
     }
 

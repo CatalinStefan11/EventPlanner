@@ -76,7 +76,7 @@ public class ChatFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        mRoot = inflater.inflate(R.layout.chat_fragment, container, false);
+        mRoot = inflater.inflate(R.layout.fragment_chat, container, false);
 
         recyclerView = mRoot.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+
+    <RelativeLayout
+        android:id="@+id/relLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/snippet_top_photostoolbar" />
+
+    </RelativeLayout>
+
+
+    <com.dev.materialspinner.MaterialSpinner
+        android:id="@+id/spinner_service_type"
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+
+        android:outlineSpotShadowColor="@color/colorAccent"
+        android:spinnerMode="dialog"
+        android:textSize="20sp"></com.dev.materialspinner.MaterialSpinner>
+
+
+    <AutoCompleteTextView
+        android:id="@+id/text_service_name"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/rounded_rect"
+        android:drawableStart="@drawable/ic_article_24px"
+        android:drawableLeft="@drawable/ic_article_24px"
+        android:drawablePadding="10dp"
+        android:hint="@string/hint_offer_name"
+        android:inputType="text"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray"
+        android:textSize="15sp" />
+
+
+    <AutoCompleteTextView
+        android:id="@+id/text_service_location"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/rounded_rect"
+        android:drawableStart="@drawable/ic_location_on_24px"
+        android:drawableLeft="@drawable/ic_location_on_24px"
+        android:drawablePadding="10dp"
+        android:hint="@string/hint_offer_location"
+        android:inputType="text"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray"
+        android:textSize="15sp" />
+
+
+    <!--        <com.rengwuxian.materialedittext.MaterialEditText-->
+    <!--            android:id="@+id/text_service_name"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            -->
+    <!--            android:background="@drawable/rounded_edit_text"-->
+    <!--            -->
+    <!--            app:met_floatingLabel="normal" />-->
+
+
+    <!--        <com.rengwuxian.materialedittext.MaterialEditText-->
+    <!--            android:id="@+id/text_service_location"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--    -->
+    <!--            android:background="@drawable/rounded_edit_text"-->
+    <!--            android:hint="@string/hint_offer_location"-->
+    <!--            app:met_floatingLabel="normal" />-->
+
+
+    <AutoCompleteTextView
+        android:id="@+id/text_service_description"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/rounded_rect"
+        android:drawableStart="@drawable/ic_description_12px"
+        android:drawableLeft="@drawable/ic_description_12px"
+        android:drawablePadding="10dp"
+        android:hint="@string/hint_offer_description"
+        android:inputType="textMultiLine"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray"
+        android:textSize="15sp" />
+
+
+    <!--        <com.rengwuxian.materialedittext.MaterialEditText-->
+    <!--            android:id="@+id/text_service_description"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginLeft="15dp"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:layout_marginRight="15dp"-->
+    <!--            android:background="@drawable/rounded_edit_text"-->
+    <!--            android:focusable="true"-->
+    <!--            android:gravity="top|left"-->
+    <!--            android:hint="@string/hint_offer_description"-->
+    <!--            android:inputType="textMultiLine"-->
+    <!--            android:maxLines="3"-->
+    <!--            android:scrollbars="vertical"-->
+    <!--            app:met_floatingLabel="normal" />-->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+
+        <GridView
+            android:id="@+id/gridView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_weight="100"
+            android:gravity="center"
+            android:horizontalSpacing="1.5dp"
+            android:numColumns="4"
+            android:stretchMode="none"
+            android:verticalSpacing="1.5dp">
+
+        </GridView>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+

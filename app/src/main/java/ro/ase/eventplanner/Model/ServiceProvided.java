@@ -20,6 +20,16 @@ public class ServiceProvided{
 
     }
 
+    public ServiceProvided(String name, String description, String location, String creator) {
+        this.name = name;
+        this.description = description;
+        this.location = location;
+        this.creator = creator;
+        this.images_links = null;
+        this.numRatings = 0;
+        this.avgRating = 0;
+    }
+
 
     public ServiceProvided(String name, String description, String location, String creator, List<String> images_links) {
         this.name = name;

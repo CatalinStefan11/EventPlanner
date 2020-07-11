@@ -11,27 +11,23 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
+
 import android.widget.Spinner;
-import android.widget.TextView;
+
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import ro.ase.eventplanner.Activity.NewOfferActivity;
 import ro.ase.eventplanner.Adapter.GridImageAdapter;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.FilePaths;
 import ro.ase.eventplanner.Util.FileSearch;
-import ro.ase.eventplanner.Util.FirebaseMethods;
-import ro.ase.eventplanner.Util.FirebaseTag;
 
 
-public class PhotosFragment extends Fragment {
-    private static final String TAG = "PhotosFragment";
+public class MyPhotographersFragment extends Fragment {
+    private static final String TAG = "MyPhotographersFragment";
 
 
     //constants
@@ -66,39 +62,39 @@ public class PhotosFragment extends Fragment {
         Log.d(TAG, "onCreateView: started.");
 
 
-
-        ImageView shareClose = (ImageView) view.findViewById(R.id.ivCloseShare);
-        shareClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: closing the photos fragment.");
-                getActivity().finish();
-            }
-        });
-
-        final FirebaseMethods firebaseMethods= FirebaseMethods.getInstance(getContext());
-
-        TextView nextScreen = view.findViewById(R.id.tvNext);
-
-        nextScreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: save object to firebase.");
-
-                int mStringPosition = NewOfferActivity.mStringPosition;
-
-                if(mStringPosition == 0){
-                    firebaseMethods.addNewService(NewOfferActivity.sServiceProvided, mSelected,FirebaseTag.TAG_BALLROOM);
-                }else if(mStringPosition == 1){
-                    firebaseMethods.addNewService(NewOfferActivity.sServiceProvided, mSelected,FirebaseTag.TAG_PHOTOGRAPHERS);
-                }else if(mStringPosition == 2){
-                    firebaseMethods.addNewService(NewOfferActivity.sServiceProvided, mSelected,FirebaseTag.TAG_DECORATIONS);
-                }
-            }
-        });
-
-
-        init();
+//
+//        ImageView shareClose = (ImageView) view.findViewById(R.id.ivCloseShare);
+//        shareClose.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: closing the photos fragment.");
+//                getActivity().finish();
+//            }
+//        });
+//
+//        final FirebaseMethods firebaseMethods= FirebaseMethods.getInstance(getContext());
+//
+//        TextView nextScreen = view.findViewById(R.id.tvNext);
+//
+//        nextScreen.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: save object to firebase.");
+//
+//                int mStringPosition = NewOfferActivity.mStringPosition;
+//
+//                if(mStringPosition == 0){
+//                    firebaseMethods.addNewService(this.sServiceProvided, mSelected,FirebaseTag.TAG_BALLROOM);
+//                }else if(mStringPosition == 1){
+//                    firebaseMethods.addNewService(NewOfferActivity.sServiceProvided, mSelected,FirebaseTag.TAG_PHOTOGRAPHERS);
+//                }else if(mStringPosition == 2){
+//                    firebaseMethods.addNewService(NewOfferActivity.sServiceProvided, mSelected,FirebaseTag.TAG_DECORATIONS);
+//                }
+//            }
+//        });
+//
+//
+//        init();
 
 
 

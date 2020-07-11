@@ -40,27 +40,19 @@ public class RegisterActivity extends AppCompatActivity {
         initializeUI();
         mProgressBar.setVisibility(View.GONE);
 
-        mButtonSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String inputName = mUsername.getText().toString().trim();
-                final String inputPw = mPassword.getText().toString().trim();
-                final String inputEmail = mEmail.getText().toString().trim();
+        mButtonSignUp.setOnClickListener(v -> {
+            final String inputName = mUsername.getText().toString().trim();
+            final String inputPw = mPassword.getText().toString().trim();
+            final String inputEmail = mEmail.getText().toString().trim();
 
-                if (isValid(inputName, inputPw, inputEmail)) {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    register(inputName, inputPw, inputEmail);
-                }
+            if (isValid(inputName, inputPw, inputEmail)) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                register(inputName, inputPw, inputEmail);
             }
         });
 
 
-        mTextSingIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-            }
-        });
+        mTextSingIn.setOnClickListener(v -> startActivity(new Intent(RegisterActivity.this, LoginActivity.class)));
     }
 
 
@@ -79,28 +71,25 @@ public class RegisterActivity extends AppCompatActivity {
                           final String inputEmail) {
 
         mFirebaseAuth.createUserWithEmailAndPassword(inputEmail, inputPass)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
 
-                            String userId = task.getResult().getUser().getUid();
-                            Toast.makeText(RegisterActivity.this,
-                                    "You've been registered successfully.",
-                                    Toast.LENGTH_SHORT).show();
+                        String userId = task.getResult().getUser().getUid();
+                        Toast.makeText(RegisterActivity.this,
+                                "You've been registered successfully.",
+                                Toast.LENGTH_SHORT).show();
 
-                            mProgressBar.setVisibility(View.GONE);
-                            sendUserData(userId, inputEmail, inputUsername);
-                            startActivity(new Intent(RegisterActivity.this,
-                                    LoginActivity.class));
-                        } else {
-                            Toast.makeText(RegisterActivity.this,
-                                    "Email already exists.", Toast.LENGTH_SHORT).show();
-                            mProgressBar.setVisibility(View.GONE);
-                        }
-
-
+                        mProgressBar.setVisibility(View.GONE);
+                        sendUserData(userId, inputEmail, inputUsername);
+                        startActivity(new Intent(RegisterActivity.this,
+                                LoginActivity.class));
+                    } else {
+                        Toast.makeText(RegisterActivity.this,
+                                "Email already exists.", Toast.LENGTH_SHORT).show();
+                        mProgressBar.setVisibility(View.GONE);
                     }
+
+
                 });
     }
 
@@ -111,12 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mFirestore.collection("users")
                 .document(userId).set(user)
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
     private boolean isValid(String username, String password, String email) {

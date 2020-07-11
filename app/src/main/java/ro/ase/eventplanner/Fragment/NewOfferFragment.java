@@ -2,121 +2,266 @@ package ro.ase.eventplanner.Fragment;
 
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-import com.google.android.material.tabs.TabLayout;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.dev.materialspinner.MaterialSpinner;
 import com.google.firebase.auth.FirebaseAuth;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+import ro.ase.eventplanner.Adapter.GridImageAdapter;
 import ro.ase.eventplanner.Model.ServiceProvided;
 import ro.ase.eventplanner.R;
+import ro.ase.eventplanner.Util.FilePaths;
+import ro.ase.eventplanner.Util.FileSearch;
+import ro.ase.eventplanner.Util.FirebaseMethods;
+import ro.ase.eventplanner.Util.FirebaseTag;
 import ro.ase.eventplanner.Util.Permissons;
-import ro.ase.eventplanner.Util.SectionsPagerAdapter;
+
 
 public class NewOfferFragment extends Fragment {
 
 
+    private static final String TAG = "NewOfferFragment";
+
     private static final int VERIFY_PERMISSIONS_REQUEST = 1;
-    private ViewPager mViewPager;
-    public static ImageLoader sImageLoader;
-    public static ServiceProvided sServiceProvided = new ServiceProvided();
-    public static int mStringPosition;
+
+    private EditText mTextInfoName;
+    private EditText mTextInfoDescription;
+    private EditText mTextInfoLocation;
+    private MaterialSpinner mSpinnerService;
+    private int mServiceStringPosition = 0;
     private FirebaseAuth mFirebaseAuth;
-    private View mRoot;
+    public static ImageLoader mImageLoader;
+    private ServiceProvided mServiceProvided;
 
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    //constants
+    private static final int NUM_GRID_COLUMNS = 3;
 
-        mRoot = inflater.inflate(R.layout.fragment_slideshow, container, false);
 
+    private GridView gridView;
+    private Spinner directorySpinner;
+
+
+    private ArrayList<String> directories;
+    private String mAppend = "file:/";
+    private List<String> mSelected = new ArrayList<>();
+    private TextView mSaveText;
+    private View mView;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-        sServiceProvided.setCreator(mFirebaseAuth.getCurrentUser().getUid());
-        sImageLoader = ImageLoader.getInstance();
-        sImageLoader.init(ImageLoaderConfiguration.createDefault(getContext()));
+        directories = new ArrayList<>();
 
-        if(checkPermissionsArray(Permissons.PERMISSIONS)){
-            setupViewPager();
-        }else{
+
+        if (!checkPermissionsArray(Permissons.PERMISSIONS)) {
             verifyPermissions(Permissons.PERMISSIONS);
         }
 
-
-        return mRoot;
     }
 
-    public int getCurrentTabNumber(){
-        return mViewPager.getCurrentItem();
-    }
+    @Nullable
+    @Override
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mView = inflater.inflate(R.layout.fragment_new_offer, container, false);
 
-    /**
-     * setup viewpager for manager the tabs
-     */
-    private void setupViewPager(){
-        SectionsPagerAdapter adapter =  new SectionsPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new InformationsFragment());
-        adapter.addFragment(new PhotosFragment());
-
-        mViewPager = mRoot.findViewById(R.id.viewpager_container);
-        mViewPager.setOffscreenPageLimit(2);
-        mViewPager.setAdapter(adapter);
+        initUi();
 
 
-
-
-
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mSpinnerService.setItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                parent.setSelection(position);
+                mServiceStringPosition = position;
 
             }
 
             @Override
-            public void onPageSelected(int position) {
-                if(position == 1){
-
-                    sServiceProvided.setName(InformationsFragment.mTextInfoName.getText().toString());
-                    sServiceProvided.setDescription(InformationsFragment.mTextInfoDescription.getText().toString());
-                    sServiceProvided.setLocation(InformationsFragment.mTextInfoLocation.getText().toString());
-                    mStringPosition  = InformationsFragment.mServiceStringPosition;
-                    Log.d("INFO", sServiceProvided.toString());
-
-                }else if( position == 0){
-
-                    Log.d("INFO", sServiceProvided.toString());
-                }
-                Log.d("VIEW_PAGER", String.valueOf(position));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public void onNothingSelected(AdapterView<?> parent) {
+                parent.setSelection(mServiceStringPosition);
             }
         });
 
-        TabLayout tabLayout = (TabLayout) mRoot.findViewById(R.id.tabsBottom);
 
-        tabLayout.setupWithViewPager(mViewPager);
+        Log.d(TAG, "onCreateView: started.");
 
-        tabLayout.getTabAt(0).setText(getString(R.string.information));
-        tabLayout.getTabAt(1).setText(getString(R.string.photos));
+        ImageView shareClose = mView.findViewById(R.id.ivCloseShare);
+
+        shareClose.setOnClickListener(v -> {
+            Log.d(TAG, "onClick: closing the photos fragment.");
+            Navigation.findNavController(getView()).popBackStack();
+        });
+
+        final FirebaseMethods firebaseMethods = FirebaseMethods.getInstance(getContext());
+
+        mSaveText.setOnClickListener(v -> {
+            if (isValid()) {
+                mServiceProvided = new ServiceProvided(mTextInfoName.getText().toString(),
+                        mTextInfoDescription.getText().toString(),
+                        mTextInfoLocation.getText().toString(),
+                        mFirebaseAuth.getCurrentUser().getUid());
+
+                if (mServiceStringPosition == 0) {
+                    firebaseMethods.addNewService(getContext(), mServiceProvided, mSelected, FirebaseTag.TAG_BALLROOM);
+                } else if (mServiceStringPosition == 1) {
+                    firebaseMethods.addNewService(getContext(), mServiceProvided, mSelected, FirebaseTag.TAG_PHOTOGRAPHERS);
+                } else if (mServiceStringPosition == 2) {
+                    firebaseMethods.addNewService(getContext(), mServiceProvided, mSelected, FirebaseTag.TAG_DECORATIONS);
+                }
+                Navigation.findNavController(getView()).popBackStack();
+            }
+        });
 
 
+        init();
+
+
+        return mView;
+    }
+
+
+    private boolean isValid() {
+
+        if (mTextInfoName.getText().toString().isEmpty()) {
+            mTextInfoName.setError("Error! Name is empty!");
+            return false;
+        } else if (mTextInfoDescription.getText().toString().isEmpty()) {
+            mTextInfoDescription.setError("Error! Description is empty.");
+            return false;
+        } else if (mTextInfoLocation.getText().toString().isEmpty()) {
+            mTextInfoLocation.setError("Error! Location is empty.");
+            return false;
+        } else if(mSelected.size() == 0){
+            Toast.makeText(getContext(), "Error! You need to select at least one image!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
+    }
+
+
+    private void initUi() {
+        mTextInfoName = mView.findViewById(R.id.text_service_name);
+        mTextInfoDescription = mView.findViewById(R.id.text_service_description);
+        mTextInfoLocation = mView.findViewById(R.id.text_service_location);
+        mSpinnerService = mView.findViewById(R.id.spinner_service_type);
+        mSaveText = mView.findViewById(R.id.tvNext);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.spinnerServicesArray));
+        mSpinnerService.setAdapter(adapter);
+
+
+        gridView = mView.findViewById(R.id.gridView);
+        gridView.setSmoothScrollbarEnabled(true);
+        gridView.setNestedScrollingEnabled(true);
+        directorySpinner = mView.findViewById(R.id.spinnerDirectory);
+
+        mImageLoader = ImageLoader.getInstance();
+        mImageLoader.init(ImageLoaderConfiguration.createDefault(getContext()));
+    }
+
+
+    private void init() {
+        FilePaths filePaths = new FilePaths();
+
+        //check for other folders indide "/storage/emulated/0/pictures"
+        if (FileSearch.getDirectoryPaths(filePaths.PICTURES) != null) {
+            directories = FileSearch.getDirectoryPaths(filePaths.PICTURES);
+        }
+
+        ArrayList<String> directoryNames = new ArrayList<>();
+        for (int i = 0; i < directories.size(); i++) {
+            Log.d(TAG, "init: directory: " + directories.get(i));
+            int index = directories.get(i).lastIndexOf("/");
+            String string = directories.get(i).substring(index);
+            directoryNames.add(string);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, directoryNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        directorySpinner.setAdapter(adapter);
+
+        directorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "onItemClick: selected: " + directories.get(position));
+                setupGridView(directories.get(position));
+                mSelected = new ArrayList<>();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+
+    private void setupGridView(String selectedDirectory) {
+
+        Log.d(TAG, "setupGridView: directory chosen: " + selectedDirectory);
+
+        final ArrayList<String> imgURLs = FileSearch.getFilePaths(selectedDirectory);
+        int gridWidth = getResources().getDisplayMetrics().widthPixels;
+        int imageWidth = gridWidth / NUM_GRID_COLUMNS;
+        gridView.setColumnWidth(imageWidth);
+
+        GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview, mAppend, imgURLs);
+        gridView.setAdapter(adapter);
+
+        gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+
+        gridView.setOnItemClickListener((parent, view, position, id) -> {
+            Log.d(TAG, "onItemClick: selected an image: " + imgURLs.get(position));
+
+            if (mSelected.contains(imgURLs.get(position))) {
+                mSelected.remove(imgURLs.get(position));
+                view.setAlpha(1.0F);
+                view.setPadding(0, 0, 0, 0);
+                view.setBackgroundColor(Color.WHITE);
+            } else {
+                mSelected.add(imgURLs.get(position));
+                view.setAlpha(0.5F);
+                view.setPadding(10, 10, 10, 10);
+                view.setBackgroundColor(Color.BLACK);
+            }
+        });
 
     }
 
 
-
-
-    public void verifyPermissions(String[] permissions){
+    private void verifyPermissions(String[] permissions) {
 
         ActivityCompat.requestPermissions(
                 getActivity(),
@@ -125,11 +270,12 @@ public class NewOfferFragment extends Fragment {
         );
     }
 
-    public boolean checkPermissionsArray(String[] permissions){
+    private boolean checkPermissionsArray(String[] permissions) {
 
-        for(int i = 0; i< permissions.length; i++){
+
+        for (int i = 0; i < permissions.length; i++) {
             String check = permissions[i];
-            if(!checkPermissions(check)){
+            if (!checkPermissions(check)) {
                 return false;
             }
         }
@@ -137,14 +283,13 @@ public class NewOfferFragment extends Fragment {
     }
 
 
-    public boolean checkPermissions(String permission){
+    private boolean checkPermissions(String permission) {
 
         int permissionRequest = ActivityCompat.checkSelfPermission(getContext(), permission);
 
-        if(permissionRequest != PackageManager.PERMISSION_GRANTED){
+        if (permissionRequest != PackageManager.PERMISSION_GRANTED) {
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
