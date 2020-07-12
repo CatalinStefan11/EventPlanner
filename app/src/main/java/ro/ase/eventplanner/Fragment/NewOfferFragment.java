@@ -56,7 +56,7 @@ public class NewOfferFragment extends Fragment {
     private MaterialSpinner mSpinnerService;
     private int mServiceStringPosition = 0;
     private FirebaseAuth mFirebaseAuth;
-    public static ImageLoader mImageLoader;
+    private  ImageLoader mImageLoader;
     private ServiceProvided mServiceProvided;
 
 
@@ -237,7 +237,7 @@ public class NewOfferFragment extends Fragment {
         int imageWidth = gridWidth / NUM_GRID_COLUMNS;
         gridView.setColumnWidth(imageWidth);
 
-        GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview, mAppend, imgURLs);
+        GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview, mImageLoader, mAppend, imgURLs);
         gridView.setAdapter(adapter);
 
         gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);

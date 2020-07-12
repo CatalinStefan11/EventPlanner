@@ -55,7 +55,7 @@ public class EditOfferFragment extends Fragment {
     private MaterialSpinner mSpinnerService;
     private int mServiceStringPosition = 0;
     private FirebaseAuth mFirebaseAuth;
-    public static ImageLoader mImageLoader;
+    private ImageLoader mImageLoader;
     private ServiceProvided mServiceProvided;
 
 
@@ -73,6 +73,7 @@ public class EditOfferFragment extends Fragment {
     private TextView mSaveText;
     private View mView;
     private String documentId;
+    private String pathTag;
 
 
     @Override
@@ -85,6 +86,15 @@ public class EditOfferFragment extends Fragment {
         Bundle bundle = this.getArguments();
 
         Optional.ofNullable(bundle.getString("document_id")).ifPresent((string) -> documentId = string);
+        Optional.ofNullable(bundle.getString("path_tag")).ifPresent((string) -> pathTag = string);
+
+        if(pathTag.equalsIgnoreCase("ballrooms")){
+            mServiceStringPosition = 0;
+        }else if(pathTag.equalsIgnoreCase("photographers")){
+            mServiceStringPosition = 1;
+        }else if(pathTag.equalsIgnoreCase("decorations")){
+            mServiceStringPosition = 2;
+        }
 
         if (!checkPermissionsArray(Permissons.PERMISSIONS)) {
             verifyPermissions(Permissons.PERMISSIONS);
@@ -98,7 +108,6 @@ public class EditOfferFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_edit_service, container, false);
 
         initUi();
-
 
         mSpinnerService.setItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -134,11 +143,11 @@ public class EditOfferFragment extends Fragment {
                         mFirebaseAuth.getCurrentUser().getUid());
 
                 if (mServiceStringPosition == 0) {
-                    firebaseMethods.addNewService(getContext(), mServiceProvided, mSelected, FirebaseTag.TAG_BALLROOM);
+                    firebaseMethods.editService(getContext(), mServiceProvided, mSelected, FirebaseTag.TAG_BALLROOM, documentId);
                 } else if (mServiceStringPosition == 1) {
-                    firebaseMethods.addNewService(getContext(), mServiceProvided, mSelected, FirebaseTag.TAG_PHOTOGRAPHERS);
+                    firebaseMethods.editService(getContext(), mServiceProvided, mSelected, FirebaseTag.TAG_PHOTOGRAPHERS, documentId);
                 } else if (mServiceStringPosition == 2) {
-                    firebaseMethods.addNewService(getContext(), mServiceProvided, mSelected, FirebaseTag.TAG_DECORATIONS);
+                    firebaseMethods.editService(getContext(), mServiceProvided, mSelected, FirebaseTag.TAG_DECORATIONS, documentId);
                 }
                 Navigation.findNavController(getView()).popBackStack();
             }
@@ -184,6 +193,16 @@ public class EditOfferFragment extends Fragment {
         mSpinnerService.setAdapter(adapter);
 
 
+        FirebaseFirestore.getInstance().collection(FirebaseTag.TAG_BALLROOM).document(documentId).addSnapshotListener(((snapshot, e) -> {
+            mTextInfoName.setText(snapshot.get("name").toString());
+            mTextInfoDescription.setText(snapshot.get("description").toString());
+            mTextInfoLocation.setText(snapshot.get("location").toString());
+
+        }));
+
+
+
+
         gridView = mView.findViewById(R.id.gridView);
         gridView.setSmoothScrollbarEnabled(true);
         gridView.setNestedScrollingEnabled(true);
@@ -192,7 +211,7 @@ public class EditOfferFragment extends Fragment {
         mImageLoader = ImageLoader.getInstance();
         mImageLoader.init(ImageLoaderConfiguration.createDefault(getContext()));
 
-        
+
     }
 
 
@@ -242,7 +261,7 @@ public class EditOfferFragment extends Fragment {
         int imageWidth = gridWidth / NUM_GRID_COLUMNS;
         gridView.setColumnWidth(imageWidth);
 
-        GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview, mAppend, imgURLs);
+        GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview, mImageLoader, mAppend, imgURLs);
         gridView.setAdapter(adapter);
 
         gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);

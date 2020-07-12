@@ -22,6 +22,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
 
 import ro.ase.eventplanner.Adapter.MyRecyclerAdapter;
 import ro.ase.eventplanner.Adapter.RecyclerAdapter;
@@ -97,8 +98,10 @@ public class MyBallroomsFragment extends Fragment implements MyRecyclerAdapter.o
     @Override
     public void onEditButton(DocumentSnapshot restaurant) {
 
+        mRecyclerAdapter.stopListening();
         Bundle bundle = new Bundle();
         bundle.putString("document_id", restaurant.getId());
+        bundle.putString("path_tag", FirebaseTag.TAG_BALLROOM);
         Navigation.findNavController(getView()).navigate(R.id.action_global_fragment_edit_service, bundle);
 
     }
@@ -114,7 +117,10 @@ public class MyBallroomsFragment extends Fragment implements MyRecyclerAdapter.o
                 .setTitle(R.string.confirm)
                 .setMessage(R.string.delete_prompt)
                 .setPositiveButton(R.string.yes, (dialog, i) -> {
-                    FirebaseFirestore.getInstance().collection(FirebaseTag.TAG_BALLROOM).document(service.getId()).delete();
+                    String id = service.getId();
+                    FirebaseFirestore.getInstance().collection(FirebaseTag.TAG_BALLROOM).document(id).delete().addOnSuccessListener(v -> {
+                        FirebaseStorage.getInstance().getReference(id).delete();
+                    });
                     dialog.dismiss();
                 })
                 .setNegativeButton(R.string.no, (dialog, i) -> dialog.dismiss())

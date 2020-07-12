@@ -10,4 +10,5 @@ public class Util {
     public static String removeEndlines(String message) {
         return message.replaceAll("(\\r|\\n|\\r\\n)+", "\\\\n");
     }
+
 }

@@ -24,7 +24,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ro.ase.eventplanner.Model.Rating;
 import ro.ase.eventplanner.Model.ServiceProvided;
@@ -74,6 +76,30 @@ public class FirebaseMethods {
                     userRef.update(path_collection_tag, FieldValue.arrayUnion(serviceId));
 
                     uploadPhotos(path_collection_tag, serviceId, imageUrls);
+
+                    Toast.makeText(context, "Upload successfully", Toast.LENGTH_LONG).show();
+                }).addOnFailureListener(e -> {
+            Toast.makeText(context, "Failed to upload", Toast.LENGTH_LONG).show();
+        });
+
+    }
+
+
+    public void editService(Context context, ServiceProvided serviceProvided, final List<String> imageUrls,
+                              final String path_collection_tag, String documentId) {
+
+        serviceProvided.setImages_links(null);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("name",serviceProvided.getName());
+        map.put("description",serviceProvided.getDescription());
+        map.put("location", serviceProvided.getLocation());
+
+        mFirestore.collection(path_collection_tag).document(documentId)
+                .update(map)
+                .addOnSuccessListener(documentReference -> {
+
+                    uploadPhotos(path_collection_tag, documentId, imageUrls);
 
                     Toast.makeText(context, "Upload successfully", Toast.LENGTH_LONG).show();
                 }).addOnFailureListener(e -> {

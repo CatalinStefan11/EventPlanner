@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import java.util.ArrayList;
@@ -32,15 +33,17 @@ public class GridImageAdapter extends ArrayAdapter<String> {
     private int layoutResource;
     private String mAppend;
     private ArrayList<String> imgURLs;
+    public  ImageLoader mImageLoader;
 
 
-    public GridImageAdapter(Context context, int layoutResource, String append, ArrayList<String> imgURLs) {
+    public GridImageAdapter(Context context, int layoutResource, ImageLoader imageLoader, String append, ArrayList<String> imgURLs) {
         super(context, layoutResource, imgURLs);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = context;
         this.layoutResource = layoutResource;
         mAppend = append;
         this.imgURLs = imgURLs;
+        mImageLoader = imageLoader;
 
     }
 
@@ -75,10 +78,7 @@ public class GridImageAdapter extends ArrayAdapter<String> {
 
 
 
-
-
-
-        NewOfferFragment.mImageLoader.displayImage(mAppend + imgURL, holder.image, new ImageLoadingListener() {
+        mImageLoader.displayImage(mAppend + imgURL, holder.image, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 if(holder.mProgressBar != null){
