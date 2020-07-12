@@ -96,6 +96,11 @@
         android:name="ro.ase.eventplanner.Fragment.NewOfferFragment"
         android:label="Add a new offer"
         tools:layout="@layout/fragment_new_offer" />
+    <fragment
+        android:id="@+id/fragment_edit_service"
+        android:name="ro.ase.eventplanner.Fragment.EditOfferFragment"
+        android:label="Edit"
+        tools:layout="@layout/fragment_edit_service" /><action android:id="@+id/action_global_fragment_edit_service" app:destination="@id/fragment_edit_service"/>
 
 
 </navigation>

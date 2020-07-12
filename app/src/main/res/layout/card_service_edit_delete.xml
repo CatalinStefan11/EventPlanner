@@ -37,7 +37,7 @@
                 android:background="@drawable/horizontal_line" />
 
             <TextView
-                android:id="@+id/ratings"
+                android:id="@+id/ratings_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -54,45 +54,12 @@
         </RelativeLayout>
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:orientation="horizontal"
-            android:padding="12dp">
-
-            <TextView
-                android:id="@+id/serviceRatings"
-                android:layout_width="61dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="5dp"
-
-                android:gravity="center"
-                android:text="0\nRatings" />
-
-            <TextView
-                android:id="@+id/serviceName"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="5dp"
-                android:layout_toEndOf="@+id/serviceRatings"
-                android:gravity="center_horizontal"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                tools:text="asdasd" />
-
-
-        </RelativeLayout>
-
 
         <RelativeLayout
             android:id="@+id/RelativeLayout01"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:padding="10dp">
+            android:padding="3dp">
 
             <Button
                 android:id="@+id/edit_service_button"
@@ -101,11 +68,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/button_margin"
                 android:text="@string/edit"
-                android:textSize="18sp" />
+                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/delete_service_button"
@@ -114,12 +81,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="150dp"
+                android:layout_marginStart="130dp"
                 android:background="@drawable/button_margin"
                 android:layout_marginTop="2dp"
                 android:layout_toEndOf="@+id/edit_service_button"
                 android:text="@string/delete"
-                android:textSize="18sp" />
+                android:textSize="25sp" />
 
 
         </RelativeLayout>

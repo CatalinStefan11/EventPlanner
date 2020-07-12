@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.Query;
 
 import ro.ase.eventplanner.Adapter.MyRecyclerAdapter;
 import ro.ase.eventplanner.Adapter.RecyclerAdapter;
+import ro.ase.eventplanner.Model.ReminderItem;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.Constants;
 import ro.ase.eventplanner.Util.FirebaseTag;
@@ -48,8 +50,7 @@ public class MyBallroomsFragment extends Fragment implements MyRecyclerAdapter.o
 
 
         mFirestore = FirebaseFirestore.getInstance();
-        Query query = mFirestore.collection(FirebaseTag.TAG_BALLROOM).whereEqualTo("creator", FirebaseAuth.getInstance().getUid())
-                .orderBy("avgRating", Query.Direction.DESCENDING);
+        Query query = mFirestore.collection(FirebaseTag.TAG_BALLROOM).whereEqualTo("creator", FirebaseAuth.getInstance().getUid());
 
         mRecyclerAdapter = new MyRecyclerAdapter(query, this, this, Glide.with(this)) {
 
@@ -96,12 +97,34 @@ public class MyBallroomsFragment extends Fragment implements MyRecyclerAdapter.o
     @Override
     public void onEditButton(DocumentSnapshot restaurant) {
 
+        Bundle bundle = new Bundle();
+        bundle.putString("document_id", restaurant.getId());
+        Navigation.findNavController(getView()).navigate(R.id.action_global_fragment_edit_service, bundle);
+
     }
 
     @Override
-    public void onDeleteButton(DocumentSnapshot restaurant) {
-      FirebaseFirestore.getInstance().collection(FirebaseTag.TAG_BALLROOM).document(restaurant.getId()).delete();
+    public void onDeleteButton(DocumentSnapshot service) {
+        deleteDialog(service).show();
     }
+
+
+    private AlertDialog deleteDialog(final DocumentSnapshot service) {
+        return new AlertDialog.Builder(getContext())
+                .setTitle(R.string.confirm)
+                .setMessage(R.string.delete_prompt)
+                .setPositiveButton(R.string.yes, (dialog, i) -> {
+                    FirebaseFirestore.getInstance().collection(FirebaseTag.TAG_BALLROOM).document(service.getId()).delete();
+                    dialog.dismiss();
+                })
+                .setNegativeButton(R.string.no, (dialog, i) -> dialog.dismiss())
+                .create();
+
+    }
+
+
+
+
 }
 
 

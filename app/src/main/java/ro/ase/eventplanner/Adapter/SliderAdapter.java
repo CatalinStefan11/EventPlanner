@@ -52,27 +52,19 @@ public class SliderAdapter extends
                     .getInstance()
                     .getReference(image_link);
 
-            mStorageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    RequestOptions options = new RequestOptions();
-                    options.centerCrop();
-                    Uri downloadUri = task.getResult();
+            mStorageReference.getDownloadUrl().addOnCompleteListener(task -> {
+                RequestOptions options = new RequestOptions();
+                options.centerCrop();
+                Uri downloadUri = task.getResult();
 
-                    Glide.with(viewHolder.itemView)
-                            .load(downloadUri)
-                            .into(viewHolder.imageViewBackground);
-                }
+                Glide.with(viewHolder.itemView)
+                        .load(downloadUri)
+                        .into(viewHolder.imageViewBackground);
             });
 
 
 
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "This is item in position " + position, Toast.LENGTH_SHORT).show();
-            }
-        });
+        viewHolder.itemView.setOnClickListener(v -> Toast.makeText(context, "This is item in position " + position, Toast.LENGTH_SHORT).show());
     }
 
     @Override

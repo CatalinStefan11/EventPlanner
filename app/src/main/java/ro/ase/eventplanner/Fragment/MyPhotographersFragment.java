@@ -18,17 +18,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import ro.ase.eventplanner.Adapter.MyRecyclerAdapter;
 import ro.ase.eventplanner.Adapter.RecyclerAdapter;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.FirebaseTag;
 
 
-public class MyPhotographersFragment extends Fragment implements RecyclerAdapter.OnServiceSelectedListener{
+public class MyPhotographersFragment extends Fragment implements MyRecyclerAdapter.onDeleteButton, MyRecyclerAdapter.onEditButton {
 
 
     private RecyclerView mPhotographersRecycler;
     private FirebaseFirestore mFirestore;
-    private RecyclerAdapter mRecyclerAdapter;
+    private MyRecyclerAdapter mRecyclerAdapter;
     private ViewGroup mEmptyView;
 
 
@@ -43,10 +44,9 @@ public class MyPhotographersFragment extends Fragment implements RecyclerAdapter
 
 
         mFirestore = FirebaseFirestore.getInstance();
-        Query query = mFirestore.collection(FirebaseTag.TAG_PHOTOGRAPHERS).whereEqualTo("creator", FirebaseAuth.getInstance().getUid())
-                .orderBy("avgRating", Query.Direction.DESCENDING);
+        Query query = mFirestore.collection(FirebaseTag.TAG_PHOTOGRAPHERS).whereEqualTo("creator", FirebaseAuth.getInstance().getUid());
 
-        mRecyclerAdapter = new RecyclerAdapter(query,this, Glide.with(this)){
+        mRecyclerAdapter = new MyRecyclerAdapter(query, this, this, Glide.with(this)) {
             @Override
             protected void onDataChanged() {
                 if (getItemCount() == 0) {
@@ -64,17 +64,15 @@ public class MyPhotographersFragment extends Fragment implements RecyclerAdapter
         mPhotographersRecycler.setAdapter(mRecyclerAdapter);
 
 
-
         return view;
     }
-
 
 
     @Override
     public void onStart() {
         super.onStart();
 
-        if(mRecyclerAdapter != null){
+        if (mRecyclerAdapter != null) {
             mRecyclerAdapter.startListening();
         }
     }
@@ -83,21 +81,21 @@ public class MyPhotographersFragment extends Fragment implements RecyclerAdapter
     @Override
     public void onPause() {
         super.onPause();
-        if(mRecyclerAdapter != null){
+        if (mRecyclerAdapter != null) {
             mRecyclerAdapter.stopListening();
         }
     }
 
+
     @Override
-    public void onServiceSelected(DocumentSnapshot service) {
-//        Bundle bundle = new Bundle();
-//        bundle.putString(Constants.PATH_TAG, FirebaseTag.TAG_BALLROOM);
-//        bundle.putString("service_id", service.getId());
-//        Navigation.findNavController(getView()).
-//                navigate(R.id.action_global_viewService, bundle);
+    public void onEditButton(DocumentSnapshot restaurant) {
+
     }
 
-
+    @Override
+    public void onDeleteButton(DocumentSnapshot restaurant) {
+        FirebaseFirestore.getInstance().collection(FirebaseTag.TAG_PHOTOGRAPHERS).document(restaurant.getId()).delete();
+    }
 }
 
 

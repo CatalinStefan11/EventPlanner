@@ -221,33 +221,29 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
                 .document();
 
         // In a transaction, add the new rating and update the aggregate totals
-        return mFirestore.runTransaction(new Transaction.Function<Void>() {
-            @Override
-            public Void apply(Transaction transaction)
-                    throws FirebaseFirestoreException {
+        return mFirestore.runTransaction(transaction -> {
 
-                ServiceProvided serviceProvided = transaction.get(documentReference)
-                        .toObject(ServiceProvided.class);
+            ServiceProvided serviceProvided = transaction.get(documentReference)
+                    .toObject(ServiceProvided.class);
 
-                // Compute new number of ratings
-                int newNumRatings = serviceProvided.getNumRatings() + 1;
+            // Compute new number of ratings
+            int newNumRatings = serviceProvided.getNumRatings() + 1;
 
-                // Compute new average rating
-                double oldRatingTotal = serviceProvided.getAvgRating() *
-                        serviceProvided.getNumRatings();
-                double newAvgRating = (oldRatingTotal + rating.getRating()) /
-                        newNumRatings;
+            // Compute new average rating
+            double oldRatingTotal = serviceProvided.getAvgRating() *
+                    serviceProvided.getNumRatings();
+            double newAvgRating = (oldRatingTotal + rating.getRating()) /
+                    newNumRatings;
 
-                // Set new restaurant info
-                serviceProvided.setNumRatings(newNumRatings);
-                serviceProvided.setAvgRating(newAvgRating);
+            // Set new restaurant info
+            serviceProvided.setNumRatings(newNumRatings);
+            serviceProvided.setAvgRating(newAvgRating);
 
-                // Commit to Firestore
-                transaction.set(documentReference, serviceProvided);
-                transaction.set(ratingRef, rating);
+            // Commit to Firestore
+            transaction.set(documentReference, serviceProvided);
+            transaction.set(ratingRef, rating);
 
-                return null;
-            }
+            return null;
         });
     }
 

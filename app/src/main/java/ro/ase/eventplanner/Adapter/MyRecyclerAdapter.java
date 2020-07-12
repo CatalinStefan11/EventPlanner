@@ -65,16 +65,14 @@ public class MyRecyclerAdapter extends FirestoreAdapter<MyRecyclerAdapter.ViewHo
 
 
         ImageView ballroomImage;
-        TextView ballroomRatings, ballroomName, ratingNum;
+        TextView ballroomRatings;
         Button btnEdit, btnDelete;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ballroomImage = itemView.findViewById(R.id.ballroomImage);
-            ballroomRatings = itemView.findViewById(R.id.ratings);
-            ballroomName = itemView.findViewById(R.id.serviceName);
-            ratingNum = itemView.findViewById(R.id.serviceRatings);
+            ballroomRatings = itemView.findViewById(R.id.ratings_edit);
             btnEdit = itemView.findViewById(R.id.edit_service_button);
             btnDelete = itemView.findViewById(R.id.delete_service_button);
 
@@ -85,8 +83,7 @@ public class MyRecyclerAdapter extends FirestoreAdapter<MyRecyclerAdapter.ViewHo
 
             ServiceProvided service = snapshot.toObject(ServiceProvided.class);
 
-            ballroomName.setText(service.getName());
-            ratingNum.setText(String.valueOf(service.getNumRatings()) + "\nRatings");
+
             DecimalFormat decimalFormat = new DecimalFormat("#.#");
 
             ballroomRatings.setText( decimalFormat.format(service.getAvgRating()));
@@ -104,12 +101,14 @@ public class MyRecyclerAdapter extends FirestoreAdapter<MyRecyclerAdapter.ViewHo
             btnEdit.setOnClickListener(v -> {
                 if(listenerEdit != null){
                     listenerEdit.onEditButton(snapshot);
+                    notifyDataSetChanged();
                 }
             });
 
             btnDelete.setOnClickListener(v -> {
                 if(listenerDelete != null){
                     listenerDelete.onDeleteButton(snapshot);
+                    notifyDataSetChanged();
                 }
             });
 
