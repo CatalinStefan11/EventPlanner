@@ -9,13 +9,13 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/my_ballrooms_recycler"
+        android:id="@+id/my_photographers_recycler"
         />
 
 
     <!-- View for empty ratings -->
     <LinearLayout
-        android:id="@+id/view_empty_ballrooms"
+        android:id="@+id/view_empty_photographers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"

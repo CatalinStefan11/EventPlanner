@@ -48,9 +48,9 @@
         <menu>
 
             <item
-                android:id="@+id/nav_slideshow"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="@string/menu_slideshow" />
+                android:id="@+id/nav_my_services"
+                android:icon="@drawable/ic_work_24px"
+                android:title="@string/menu_my_services" />
 
 
             <item

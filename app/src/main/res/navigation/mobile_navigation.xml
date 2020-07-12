@@ -37,10 +37,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_my_services"
         android:name="ro.ase.eventplanner.Fragment.MyServicesFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow">
+        android:label="@string/menu_my_services"
+        tools:layout="@layout/fragment_my_services">
 
     </fragment>
 
@@ -63,7 +63,7 @@
         android:id="@+id/viewService"
         android:name="ro.ase.eventplanner.Fragment.ViewServiceFragment"
         android:label="@string/Details"
-        tools:layout="@layout/try_layout" /><action android:id="@+id/action_global_viewService" app:destination="@id/viewService"/>
+        tools:layout="@layout/fragment_view_service" /><action android:id="@+id/action_global_viewService" app:destination="@id/viewService"/>
 
     <fragment
         android:id="@+id/noteFragment"
@@ -77,6 +77,7 @@
             android:defaultValue="@null" />
     </fragment>
     <action android:id="@+id/action_global_noteFragment" app:destination="@id/noteFragment" />
+
 
     <fragment
         android:id="@+id/alarmFragment"

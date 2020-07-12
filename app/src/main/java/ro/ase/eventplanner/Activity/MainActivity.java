@@ -2,8 +2,6 @@ package ro.ase.eventplanner.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,12 +15,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.shreyaspatil.material.navigationview.MaterialNavigationView;
 
@@ -72,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_ballrooms, R.id.nav_photographers, R.id.nav_alarms,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_decorations, R.id.fragment_container_view_tag,
-                R.id.nav_slideshow, R.id.nav_new_offer)
+                R.id.nav_my_services, R.id.nav_new_offer)
                 .setDrawerLayout(drawer)
                 .build();
 
@@ -88,7 +80,9 @@ public class MainActivity extends AppCompatActivity {
                 mFloatingActionMenu.setVisibility(View.INVISIBLE);
             } else if (destination.getId() == R.id.nav_new_offer) {
                 mFloatingActionMenu.setVisibility(View.INVISIBLE);
-            } else {
+            } else if (destination.getId() == R.id.nav_my_services) {
+                mFloatingActionMenu.setVisibility(View.INVISIBLE);
+            }else {
                 mFloatingActionMenu.setVisibility(View.VISIBLE);
             }
         }));

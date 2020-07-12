@@ -21,8 +21,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
@@ -78,7 +76,7 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        mRoot = inflater.inflate(R.layout.try_layout, container, false);
+        mRoot = inflater.inflate(R.layout.fragment_view_service, container, false);
 
         sliderView = mRoot.findViewById(R.id.service_image_slider);
         textName = mRoot.findViewById(R.id.service_name);

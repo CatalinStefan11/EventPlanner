@@ -1,11 +1,9 @@
 package ro.ase.eventplanner.Fragment;
 
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,11 +20,10 @@ import ro.ase.eventplanner.Adapter.RecyclerAdapter;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.FirebaseTag;
 
+public class MyDecorationsFragment extends Fragment implements RecyclerAdapter.OnServiceSelectedListener {
 
-public class MyPhotographersFragment extends Fragment implements RecyclerAdapter.OnServiceSelectedListener{
 
-
-    private RecyclerView mPhotographersRecycler;
+    private RecyclerView mDecorationsFragment;
     private FirebaseFirestore mFirestore;
     private RecyclerAdapter mRecyclerAdapter;
     private ViewGroup mEmptyView;
@@ -35,46 +32,44 @@ public class MyPhotographersFragment extends Fragment implements RecyclerAdapter
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_photographers, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_decorations, container, false);
 
 
-        mPhotographersRecycler = view.findViewById(R.id.my_photographers_recycler);
-        mEmptyView = view.findViewById(R.id.view_empty_photographers);
+        mDecorationsFragment = view.findViewById(R.id.my_decorations_recycler);
+        mEmptyView = view.findViewById(R.id.view_empty_decorations);
 
 
         mFirestore = FirebaseFirestore.getInstance();
-        Query query = mFirestore.collection(FirebaseTag.TAG_PHOTOGRAPHERS).whereEqualTo("creator", FirebaseAuth.getInstance().getUid())
+        Query query = mFirestore.collection(FirebaseTag.TAG_DECORATIONS).whereEqualTo("creator", FirebaseAuth.getInstance().getUid())
                 .orderBy("avgRating", Query.Direction.DESCENDING);
 
-        mRecyclerAdapter = new RecyclerAdapter(query,this, Glide.with(this)){
+        mRecyclerAdapter = new RecyclerAdapter(query, this, Glide.with(this)) {
             @Override
             protected void onDataChanged() {
                 if (getItemCount() == 0) {
-                    mPhotographersRecycler.setVisibility(View.GONE);
+                    mDecorationsFragment.setVisibility(View.GONE);
                     mEmptyView.setVisibility(View.VISIBLE);
 
                 } else {
-                    mPhotographersRecycler.setVisibility(View.VISIBLE);
+                    mDecorationsFragment.setVisibility(View.VISIBLE);
                     mEmptyView.setVisibility(View.GONE);
 
                 }
             }
         };
-        mPhotographersRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        mPhotographersRecycler.setAdapter(mRecyclerAdapter);
-
+        mDecorationsFragment.setLayoutManager(new LinearLayoutManager(getContext()));
+        mDecorationsFragment.setAdapter(mRecyclerAdapter);
 
 
         return view;
     }
 
 
-
     @Override
     public void onStart() {
         super.onStart();
 
-        if(mRecyclerAdapter != null){
+        if (mRecyclerAdapter != null) {
             mRecyclerAdapter.startListening();
         }
     }
@@ -83,13 +78,14 @@ public class MyPhotographersFragment extends Fragment implements RecyclerAdapter
     @Override
     public void onPause() {
         super.onPause();
-        if(mRecyclerAdapter != null){
+        if (mRecyclerAdapter != null) {
             mRecyclerAdapter.stopListening();
         }
     }
 
     @Override
     public void onServiceSelected(DocumentSnapshot service) {
+
 //        Bundle bundle = new Bundle();
 //        bundle.putString(Constants.PATH_TAG, FirebaseTag.TAG_BALLROOM);
 //        bundle.putString("service_id", service.getId());
@@ -99,19 +95,5 @@ public class MyPhotographersFragment extends Fragment implements RecyclerAdapter
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

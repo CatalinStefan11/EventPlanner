@@ -1,28 +1,19 @@
 package ro.ase.eventplanner.Fragment;
 
-import android.os.AsyncTask;
+
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import com.google.android.gms.stats.GCoreWakefulBroadcastReceiver;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-
-
-import java.lang.ref.WeakReference;
-
 import ro.ase.eventplanner.Adapter.RecyclerAdapter;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.Constants;
@@ -34,6 +25,7 @@ public class BallroomsFragment extends Fragment implements RecyclerAdapter.OnSer
     private FirebaseFirestore mFirestore;
     private RecyclerAdapter mRecyclerAdapter;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -42,8 +34,7 @@ public class BallroomsFragment extends Fragment implements RecyclerAdapter.OnSer
 
         mFirestore = FirebaseFirestore.getInstance();
         Query query = mFirestore.collection(FirebaseTag.TAG_BALLROOM)
-                .orderBy("avgRating", Query.Direction.DESCENDING)
-                .limit(10);
+                .orderBy("avgRating", Query.Direction.DESCENDING);
         mRecyclerAdapter = new RecyclerAdapter(query,this, Glide.with(this)){
             @Override
             protected void onDataChanged() {
@@ -63,10 +54,6 @@ public class BallroomsFragment extends Fragment implements RecyclerAdapter.OnSer
         return root;
 
     }
-
-
-
-
 
 
     @Override

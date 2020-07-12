@@ -87,6 +87,43 @@
 
         </RelativeLayout>
 
+
+        <RelativeLayout
+            android:id="@+id/RelativeLayout01"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:padding="10dp">
+
+            <Button
+                android:id="@+id/edit_service_button"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/button_margin"
+                android:text="@string/edit"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/delete_service_button"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:layout_width="113dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="150dp"
+                android:background="@drawable/button_margin"
+                android:layout_marginTop="2dp"
+                android:layout_toEndOf="@+id/edit_service_button"
+                android:text="@string/delete"
+                android:textSize="18sp" />
+
+
+        </RelativeLayout>
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

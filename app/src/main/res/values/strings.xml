@@ -29,7 +29,7 @@
 
     <string name="navigation_ballrooms">Ballrooms</string>
     <string name="navigation_photographers">Photographers</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_my_services">My offerts</string>
     <string name="menu_new_offer">Add new offer</string>
     <string name="menu_notes">Notes</string>
     <string name="menu_my_messages">My messages</string>
@@ -51,6 +51,7 @@
     <string name="my_decorations">Decorations</string>
     <string name="divider_bullet">•</string>
     <string name="message_no_reviews">Be the first to leave a review!</string>
+    <string name="message_no_data">Nothing to show!</string>
 
     <string name="string_next">Save</string>
     <string name="hint_offer_name">Name of your brand</string>
@@ -87,4 +88,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit">Edit</string>
+    <string name="delete_service">Delete</string>
 </resources>
