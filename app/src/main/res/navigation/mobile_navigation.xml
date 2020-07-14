@@ -54,7 +54,7 @@
         android:id="@+id/nav_share"
         android:name="ro.ase.eventplanner.Fragment.ChatHistoryFragment"
         android:label="@string/menu_my_messages"
-        tools:layout="@layout/fragment_share">
+        tools:layout="@layout/fragment_chat_history">
 
     </fragment>
 

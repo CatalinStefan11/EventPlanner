@@ -83,9 +83,7 @@ public class NewOfferFragment extends Fragment {
         directories = new ArrayList<>();
 
 
-        if (!checkPermissionsArray(Permissons.PERMISSIONS)) {
-            verifyPermissions(Permissons.PERMISSIONS);
-        }
+
 
     }
 
@@ -93,6 +91,12 @@ public class NewOfferFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_new_offer, container, false);
+
+
+        if (!checkPermissionsArray(Permissons.PERMISSIONS)) {
+            verifyPermissions(Permissons.PERMISSIONS);
+        }
+
 
         initUi();
 
@@ -142,8 +146,9 @@ public class NewOfferFragment extends Fragment {
         });
 
 
-        init();
 
+
+        init();
 
         return mView;
     }

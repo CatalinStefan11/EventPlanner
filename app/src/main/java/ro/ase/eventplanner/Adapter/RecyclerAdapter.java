@@ -76,32 +76,31 @@ public class RecyclerAdapter extends FirestoreAdapter<RecyclerAdapter.ViewHolder
 
             ServiceProvided service = snapshot.toObject(ServiceProvided.class);
 
+            if(service.getImages_links() != null){
+                ballroomName.setText(service.getName());
+                ratingNum.setText(String.valueOf(service.getNumRatings()) + "\nRatings");
+                DecimalFormat decimalFormat = new DecimalFormat("#.#");
 
-            ballroomName.setText(service.getName());
-            ratingNum.setText(String.valueOf(service.getNumRatings()) + "\nRatings");
-            DecimalFormat decimalFormat = new DecimalFormat("#.#");
+                ballroomRatings.setText( decimalFormat.format(service.getAvgRating()));
 
-            ballroomRatings.setText( decimalFormat.format(service.getAvgRating()));
-            
-            mStorageReference = FirebaseStorage
-                    .getInstance()
-                    .getReference(service.getImages_links().get(0));
-            
-            
-            mStorageReference.getDownloadUrl().addOnCompleteListener(task -> {
-                RequestOptions options = new RequestOptions();
-                Uri downloadUri = task.getResult();
-                glide.load(downloadUri).apply(options).into(ballroomImage);
-            });
-
-            
-            itemView.setOnClickListener(v -> {
-                if(listener != null){
-                    listener.onServiceSelected(snapshot);
-                }
-            });
+                mStorageReference = FirebaseStorage
+                        .getInstance()
+                        .getReference(service.getImages_links().get(0));
 
 
+                mStorageReference.getDownloadUrl().addOnCompleteListener(task -> {
+                    RequestOptions options = new RequestOptions();
+                    Uri downloadUri = task.getResult();
+                    glide.load(downloadUri).apply(options).into(ballroomImage);
+                });
+
+
+                itemView.setOnClickListener(v -> {
+                    if(listener != null){
+                        listener.onServiceSelected(snapshot);
+                    }
+                });
+            }
 
         }
     }

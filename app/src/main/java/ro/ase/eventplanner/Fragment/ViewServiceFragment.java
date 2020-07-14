@@ -141,8 +141,7 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
         mFirestore = FirebaseFirestore.getInstance();
         mServiceRef = mFirestore.collection(collection_path).document(service_id);
         Query raitingsQuery = mServiceRef.collection("ratings")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-                .limit(3);
+                .orderBy("timestamp", Query.Direction.DESCENDING);
 
 
         startChat.setOnClickListener(v -> Navigation.findNavController(getView()).
@@ -164,6 +163,8 @@ public class ViewServiceFragment extends Fragment implements EventListener<Docum
                 super.onDataChanged();
             }
         };
+
+
 
 
         mRatingsRecycler.setLayoutManager(new LinearLayoutManager(ViewServiceFragment.this.getContext()));

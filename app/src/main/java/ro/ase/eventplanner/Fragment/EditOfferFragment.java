@@ -88,13 +88,7 @@ public class EditOfferFragment extends Fragment {
         Optional.ofNullable(bundle.getString("document_id")).ifPresent((string) -> documentId = string);
         Optional.ofNullable(bundle.getString("path_tag")).ifPresent((string) -> pathTag = string);
 
-        if(pathTag.equalsIgnoreCase("ballrooms")){
-            mServiceStringPosition = 0;
-        }else if(pathTag.equalsIgnoreCase("photographers")){
-            mServiceStringPosition = 1;
-        }else if(pathTag.equalsIgnoreCase("decorations")){
-            mServiceStringPosition = 2;
-        }
+
 
         if (!checkPermissionsArray(Permissons.PERMISSIONS)) {
             verifyPermissions(Permissons.PERMISSIONS);
@@ -109,12 +103,19 @@ public class EditOfferFragment extends Fragment {
 
         initUi();
 
+        if(pathTag.equalsIgnoreCase("ballrooms")){
+            mServiceStringPosition = 0;
+        }else if(pathTag.equalsIgnoreCase("photographers")){
+            mServiceStringPosition = 1;
+        }else if(pathTag.equalsIgnoreCase("decorations")){
+            mServiceStringPosition = 2;
+        }
+
+
         mSpinnerService.setItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                parent.setSelection(position);
-                mServiceStringPosition = position;
-
+                parent.setSelection(mServiceStringPosition);
             }
 
             @Override
@@ -122,6 +123,8 @@ public class EditOfferFragment extends Fragment {
                 parent.setSelection(mServiceStringPosition);
             }
         });
+
+        mSpinnerService.setEnabled(false);
 
 
         Log.d(TAG, "onCreateView: started.");
@@ -193,7 +196,8 @@ public class EditOfferFragment extends Fragment {
         mSpinnerService.setAdapter(adapter);
 
 
-        FirebaseFirestore.getInstance().collection(FirebaseTag.TAG_BALLROOM).document(documentId).addSnapshotListener(((snapshot, e) -> {
+
+        FirebaseFirestore.getInstance().collection(pathTag).document(documentId).get().addOnSuccessListener((snapshot -> {
             mTextInfoName.setText(snapshot.get("name").toString());
             mTextInfoDescription.setText(snapshot.get("description").toString());
             mTextInfoLocation.setText(snapshot.get("location").toString());

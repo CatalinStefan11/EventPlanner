@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,9 +17,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
 
 import ro.ase.eventplanner.Adapter.MyRecyclerAdapter;
 import ro.ase.eventplanner.Adapter.RecyclerAdapter;
+import ro.ase.eventplanner.Model.ServiceProvided;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.FirebaseTag;
 
@@ -86,12 +90,41 @@ public class MyDecorationsFragment extends Fragment implements MyRecyclerAdapter
 
     @Override
     public void onEditButton(DocumentSnapshot restaurant) {
-
+        mRecyclerAdapter.stopListening();
+        Bundle bundle = new Bundle();
+        bundle.putString("document_id", restaurant.getId());
+        bundle.putString("path_tag", FirebaseTag.TAG_DECORATIONS);
+        Navigation.findNavController(getView()).navigate(R.id.action_global_fragment_edit_service, bundle);
     }
 
     @Override
-    public void onDeleteButton(DocumentSnapshot restaurant) {
-        FirebaseFirestore.getInstance().collection(FirebaseTag.TAG_DECORATIONS).document(restaurant.getId()).delete();
+    public void onDeleteButton(DocumentSnapshot service) {
+        deleteDialog(service).show();
+    }
+
+
+    private AlertDialog deleteDialog(final DocumentSnapshot service) {
+        return new AlertDialog.Builder(getContext())
+                .setTitle(R.string.confirm)
+                .setMessage(R.string.delete_prompt)
+                .setPositiveButton(R.string.yes, (dialog, i) -> {
+                    String id = service.getId();
+
+                    ServiceProvided serviceProvided = service.toObject(ServiceProvided.class);
+                    FirebaseFirestore.getInstance().collection(FirebaseTag.TAG_DECORATIONS).document(id).delete().addOnSuccessListener(v -> {
+
+                        for(int j = 0; j < serviceProvided.getImages_links().size(); j++){
+                            String path = serviceProvided.getImages_links().get(j);
+                            FirebaseStorage.getInstance().getReference(path).delete();
+                        }
+
+
+                    });
+                    dialog.dismiss();
+                })
+                .setNegativeButton(R.string.no, (dialog, i) -> dialog.dismiss())
+                .create();
+
     }
 
 

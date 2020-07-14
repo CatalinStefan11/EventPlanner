@@ -24,9 +24,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.util.List;
+
 import ro.ase.eventplanner.Adapter.MyRecyclerAdapter;
 import ro.ase.eventplanner.Adapter.RecyclerAdapter;
 import ro.ase.eventplanner.Model.ReminderItem;
+import ro.ase.eventplanner.Model.ServiceProvided;
 import ro.ase.eventplanner.R;
 import ro.ase.eventplanner.Util.Constants;
 import ro.ase.eventplanner.Util.FirebaseTag;
@@ -118,8 +121,16 @@ public class MyBallroomsFragment extends Fragment implements MyRecyclerAdapter.o
                 .setMessage(R.string.delete_prompt)
                 .setPositiveButton(R.string.yes, (dialog, i) -> {
                     String id = service.getId();
+
+                    ServiceProvided serviceProvided = service.toObject(ServiceProvided.class);
                     FirebaseFirestore.getInstance().collection(FirebaseTag.TAG_BALLROOM).document(id).delete().addOnSuccessListener(v -> {
-                        FirebaseStorage.getInstance().getReference(id).delete();
+
+                        for(int j = 0; j < serviceProvided.getImages_links().size(); j++){
+                            String path = serviceProvided.getImages_links().get(j);
+                            FirebaseStorage.getInstance().getReference(path).delete();
+                        }
+
+
                     });
                     dialog.dismiss();
                 })

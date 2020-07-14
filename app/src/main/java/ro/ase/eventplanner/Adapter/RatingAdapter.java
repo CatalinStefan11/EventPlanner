@@ -51,9 +51,10 @@ public class RatingAdapter extends FirestoreAdapter<RatingAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bind(getSnapshot(position).toObject(Rating.class));
+
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView nameView;
         MaterialRatingBar ratingBar;
@@ -66,7 +67,6 @@ public class RatingAdapter extends FirestoreAdapter<RatingAdapter.ViewHolder> {
             ratingBar = itemView.findViewById(R.id.rating_item_rating);
             textView = itemView.findViewById(R.id.rating_item_text);
             textDate = itemView.findViewById(R.id.rating_item_date);
-
 
 
         }
@@ -82,6 +82,7 @@ public class RatingAdapter extends FirestoreAdapter<RatingAdapter.ViewHolder> {
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DAY_OF_MONTH);
             textDate.setText(day + "/" + month + "/" + year);
+
         }
     }
 
